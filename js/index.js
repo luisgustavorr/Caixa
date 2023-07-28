@@ -411,11 +411,38 @@ $("#valor_recebido_input").keyup(function () {
     $("#valor_calculado_input").val(valor_calculado);
   }
 });
+$('.finalizar_venda').click(function(){
+  let valor_compra = parseFloat(
+    $("#valor_compra").text().replace("R$", "").replace(",", ".")
+  );
+  let produtos = [];
+  $(".venda_preview_body .quantidade_produto").each(function (index) {
+    let produto_info = {
+      id: $(this).attr("id_produto"),
+      quantidade: $(this).text().replace("x", ""),
+      preco: $(this).attr("preco_produto"),
+    };
+    produtos[index] = produto_info;
+  });
+  data = {
+    colaborador:$('#codigo_colaborador_venda').val(),
+    valor: valor_compra,
+    caixa: caixa,
+    produtos: produtos,
+    pagamento: $("#metodo_pagamento_princip").val(),
+  };
 
-$("#finalizar_venda_modal_button").click(function () {
-  //$('#valor_compra').text().replace('R$','') == valor sem R$
+  $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+    if(ret !=''){
+      alert(ret)
+    }else{
+      location.reload()
+    }
+  });
+})
+$(".finalizar_venda_button").click(function () {
   $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
-  if ($("#metodo_pagamento").val() == "Dinheiro") {
+  if ($("#metodo_pagamento_princip").val() == "Dinheiro"  && $(this).attr("first") == 'sim') {
     $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
     $(".modal_troco").css("display", "block");
     $(".modal_pagamento").css("display", "none");
@@ -437,11 +464,16 @@ $("#finalizar_venda_modal_button").click(function () {
       valor: valor_compra,
       caixa: caixa,
       produtos: produtos,
-      pagamento: $("#metodo_pagamento").val(),
+      pagamento: $("#metodo_pagamento_princip").val(),
     };
 
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+      if(ret !=''){
+        alert(ret)
+      }else{
       location.reload()
+
+      }
     });
   }
 });
