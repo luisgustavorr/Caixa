@@ -15,7 +15,6 @@
 
 if( \Painel::logado()==false){
     if(isset($_POST['logar'])){
-
     $user = $_POST['login'];
     $senha = $_POST['senha'];
 
@@ -23,14 +22,12 @@ if( \Painel::logado()==false){
     $logar->execute(array($user));
     $logar = $logar->fetch();
     if($logar['codigo'] == $senha){
+        echo 'AQUI';
         $_SESSION['login'] = true;
         $_SESSION['user'] = $user;
         $_SESSION['password'] = $senha;
-        
+        echo$_SESSION['login'];
         echo"<script>location.href='RelatorioABC'</script>";
-
-    }else{
-    $GLOBALS['display'] = 'block';
 
     }
     }

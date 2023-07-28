@@ -1,16 +1,16 @@
 <?php 
 namespace Controllers;
-class RelatorioABCController
+class LoginController
 {
     
     public function __construct()
     {
 
-        $this->view = new \View\MainView('painel_controle');
+        $this->view = new \View\MainView('login');
     }
     public function executar()
     {
-        $this->view = new \View\MainView('painel_controle');
+        if( \Painel::logado() ==true){ echo"<script>location.href='RelatorioABC'</script>";}else{$this->view = new \View\MainView('login');}
         
       
        

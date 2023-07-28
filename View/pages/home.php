@@ -65,7 +65,8 @@ $data_formatada = date('d/m/Y', $timestamp);
       </div>
       <div class="input_select">
         <span>Método de Pagamento:</span>
-        <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento">
+        <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento
+">
           <option value="Cartão Crédito">Cartão Crédito</option>
           <option value="Dinheiro">Dinheiro</option>
           <option value="Cartão Débito">Cartão Débito</option>
@@ -227,7 +228,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       <h3>Pagamento:</h3>
       <div class="input_select">
         <span>Método de Pagamento:</span>
-        <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento">
+        <select name="metodo_pagamento_princip" class="pagamento_input" id="metodo_pagamento_princip">
           <option value="Cartão Crédito">Cartão Crédito</option>
 
           <option value="Dinheiro">Dinheiro</option>
@@ -274,7 +275,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       <h4 id="metodo_pagamento_text">Dinheiro</h4>
       <p>Total da Compra:</p>
       <h2 id="valor_compra">R$00,00</h2>
-      <button id="finalizar_venda_modal_button" class="finalizar_venda_button">Finalizar Venda</button>
+      <button id="finalizar_venda_modal_button" first="sim" class="finalizar_venda_button">Finalizar Venda</button>
     </div>
   </div>
 
