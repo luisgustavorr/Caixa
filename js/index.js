@@ -21,7 +21,6 @@ $('#abrir_lista_pedidos').click(function(){
 $(".modal_anotar_pedido tbody").children().remove();
 
 $(".tags_produto_name").keyup(function () {
-  console.log("a");
   data = {
     pesquisa: $(this).val(),
   };
@@ -67,7 +66,6 @@ $(".tags_produto_name").keyup(function () {
             produto[0] +
             '" class="remove_item_pedido ">-</td>'
         );
-        console.log();
         $(".tags_produto_name").val("");
         $("#quantidade_produto_pedido").val("1");
         $(".remove_item_pedido").click(function () {
@@ -118,7 +116,6 @@ $("#desc_produto").on("keyup", function () {
 });
 $("#codigo_produto").on("keyup", function () {
   if ($(this).val() === "") {
-    console.log("a");
     $(".search_results_by_barcode").css("display", "none");
   } else {
     $(".search_results_by_barcode").css("display", "block");
@@ -128,7 +125,6 @@ $("#codigo_produto").on("keyup", function () {
     };
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
       row = JSON.parse(ret)
-      console.log(row)
 
       if(row.length ==0){
         $(".search_results_by_barcode").css("display", "none");
@@ -301,7 +297,6 @@ function valorCaixa() {
 
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
-    console.log(ret);
     $("#valor_sangria").val(valor.toFixed(2).replace(".", ","));
     $(".valor_caixa_father red").text(
       "R$" + valor.toFixed(2).replace(".", ",")
@@ -328,7 +323,6 @@ $(".modal_sangria").submit(function (e) {
   };
 
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
-    console.log(ret);
     let vazio = ret;
     if (!vazio) {
       location.reload();
@@ -431,7 +425,6 @@ $("#finalizar_venda_modal_button").click(function () {
     );
     let produtos = [];
     $(".venda_preview_body .quantidade_produto").each(function (index) {
-      console.log($(this).attr("id_produto") + $(this).text().replace("x", ""));
       let produto_info = {
         id: $(this).attr("id_produto"),
         quantidade: $(this).text().replace("x", ""),
@@ -448,7 +441,7 @@ $("#finalizar_venda_modal_button").click(function () {
     };
 
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
-      console.log(ret)
+      location.reload()
     });
   }
 });
@@ -456,7 +449,6 @@ $(document).keyup(function (event) {
   if (event.code.includes("Digit") && condicao_favoravel && window.location.href.includes('http://localhost/MixSalgados/Caixa/' )) {
     var key = event.keyCode || event.which;
     key = String.fromCharCode(key);
-    console.log(event.code);
 
     if (input_codigo_focado == false) {
       $("#codigo_produto").val($("#codigo_produto").val() + key);
@@ -515,7 +507,6 @@ function pesquisarProduto(barcode) {
       $.post("Models/post_receivers/select_produto.php", data, function (ret) {
         pesquisarProdutoPorCodigoDeBarras(ret);
       });
-      console.log("Código de barras lido:", barcode);
       $("#codigo_produto").val("");
       $("#desc_produto").val("");
     }
