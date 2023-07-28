@@ -88,7 +88,7 @@ $("#desc_produto").on("keyup", function () {
     
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
       row = JSON.parse(ret);
-     
+      $(".search_results").empty();
       row.forEach((element) => {
         $(".search_results").append(
           '<span produto="' +
@@ -128,8 +128,14 @@ $("#codigo_produto").on("keyup", function () {
     };
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
       row = JSON.parse(ret)
+      console.log(row)
+
+      if(row.length ==0){
+        $(".search_results_by_barcode").css("display", "none");
+      }
       row.forEach((element) => {
-        $(".search_results_by_barcode").empty();
+      $(".search_results_by_barcode").empty();
+        
 
         $(".search_results_by_barcode").append(
           '<span produto="' +
@@ -162,10 +168,18 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
   darker ? (darker_class = "darker") : (darker_class = "");
   row = JSON.parse(ret);
-  console.log(row);
+  quantidade = 0
+  
+  if(parseInt($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) > 0){
+     quantidade = parseInt($("#quantidade_produto").val()) + parseInt($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) 
+  }else{
+     quantidade = parseInt($("#quantidade_produto").val())
+  }
+  $(".row_id_"+row.id).remove()
+
   if (typeof row === "boolean") return;
   $("#desc_produto").val(row.nome);
-  $("#quantidade_produto").val(1);
+
   $("#tabela_produtos tbody").append(
     "   <tr class='row_id_" +
       row.id +
@@ -177,20 +191,21 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       row.codigo +
       "</td><td>170.99.00</td><td>" +
       row.nome +
-      "</td><td id_produto='" +
+      "</td><td quantidade_produto = '"+
+      quantidade
+      +"' id_produto='" +
       row.id +
       "' nome_produto='" +
       row.nome +
       "' class='preco_produto'>" +
       row.preco +
-      "</td><td>" +
-      1 +
+      "</td><td >" +
+      quantidade +
       "</td><td>0</td><td>A P</td><td>0,00</td></tr>"
   );
-  $(".valor_unitario strong").text("R$:" + row.preco);
   $("#tabela_produtos .preco_produto").each(function () {
-    total_valor =
-      parseFloat(total_valor) + parseFloat($(this).text().replace(",", "."));
+    
+    total_valor =parseFloat(total_valor) + parseFloat($(this).text().replace(",", ".")) * quantidade;
     $(".tiny_row_id" + $(this).attr("id_produto")).remove();
     $(".venda_preview_body tbody").append(
       '<tr class="tiny_row_id' +
@@ -201,15 +216,15 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         parseFloat($(this).text().toString().replace(",", ".")) +
         "' id_produto='" +
         $(this).attr("id_produto") +
-        "'>" +
-        $(".row_id_" + $(this).attr("id_produto")).length +
+        "'>" + $(this).attr("quantidade_produto")
+        +
         "x</td><td>R$" +
         $(this).text() +
         "</td><td>R$" +
         parseFloat(
           (
             parseFloat($(this).text().toString().replace(",", ".")) *
-            parseFloat($(".row_id_" + $(this).attr("id_produto")).length)
+            parseInt($(this).attr("quantidade_produto"))
           ).toFixed(2)
         ) +
         '</td><td><i class="fa-regular fa-trash-can trash_inactive remove_item" row="tiny_row_id' +
@@ -238,6 +253,8 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
 
   darker = !darker;
   $("#codigo_produto").val('')
+  $("#quantidade_produto").val(1);
+
   $(".search_results").css("display", "none");
   $(".search_results_by_barcode").css("display", "none");
 }
