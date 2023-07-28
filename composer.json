@@ -1,6 +1,5 @@
 {
     "require": {
-        "mike42/escpos-php": "^2.2",
-        "cboden/ratchet": "^0.4.4"
+        "mike42/escpos-php": "^2.2"
     }
 }
