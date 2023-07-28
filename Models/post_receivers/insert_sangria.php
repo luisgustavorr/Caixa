@@ -43,6 +43,9 @@ $printer->cut();
 $printer->close();
     $sangria = \MySql::conectar()->prepare("INSERT INTO `tb_sangrias` (`id`, `colaborador`, `caixa`, `mensagem`, `valor`, `data`) VALUES (NULL,?,?,?,?,?)");
     $sangria->execute(array($_POST['colaborador'],$_POST['caixa'],$_POST['mensagem'],$_POST['valor_sangria'],date("Y-m-d h:i:sa")));
+
+    $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` - ? WHERE `tb_caixas`.`caixa` = ? ");
+    $atualizar_db->execute(array($_POST['valor_sangria'],$_POST['caixa']));
     
 
   
