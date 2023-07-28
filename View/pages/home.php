@@ -297,7 +297,7 @@ $data_formatada = date('d/m/Y', $timestamp);
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Quantidade:</span>
+          <span style="margin: 0;">Quantidade/g:</span>
           <input class="oders_inputs" min="0" type="number" name="quantidade_produto" id="quantidade_produto" value="0" />
         </div>
       </div>
