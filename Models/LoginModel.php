@@ -22,17 +22,16 @@ if( \Painel::logado()==false){
     $logar->execute(array($user));
     $logar = $logar->fetch();
     if($logar['codigo'] == $senha){
-        echo 'AQUI';
-        $_SESSION['login'] = true;
+        setcookie("login", "true", time()+20*24*60*60);
         $_SESSION['user'] = $user;
         $_SESSION['password'] = $senha;
-        echo$_SESSION['login'];
+        
         echo"<script>location.href='RelatorioABC'</script>";
 
     }
     }
 }else{
-    $_SESSION['login'] = true;
+    setcookie("login", "true", time()+20*24*60*60);
     echo"<script>location.href='RelatorioABC'</script>";
 }
 

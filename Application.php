@@ -6,6 +6,7 @@ class Application
     {
         
         $url = isset($_GET['url']) ? $_GET['url'] : 'Home';
+        $url = $url == 'DashBoard/' ? 'DashBoard/Login' : $_GET['url'];
         $url = ucfirst($url);
         $className = 'Controllers\\' . $url . 'Controller';
         $viewName = strtolower($url);
@@ -23,7 +24,5 @@ class Application
         }
     }
 }
-/*  for ($i=0; $i < 30; $i++) { 
-            echo"(NULL, 'nome', 'descricao', '100.00,00', '0', 'luis', '0', '1'),";
-          }*/
+
 ?>
