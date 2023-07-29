@@ -5,7 +5,7 @@ if(isset($_POST['codigo'])){
   $produto->execute(array($_POST['pesquisa'].'%'));
   $produto = $produto->fetchAll();
 }else{
-  $produto = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `nome` LIKE ?");
+  $produto = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `nome` LIKE ? AND preco > 0");
   $produto->execute(array('%'.$_POST['pesquisa'].'%'));
   $produto = $produto->fetchAll();
 }

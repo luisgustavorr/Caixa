@@ -1,8 +1,7 @@
 <?php 
 include('../../MySql.php');
 date_default_timezone_set('America/Sao_Paulo');
-$let =$_POST['path'].'vendor\\autoload.php';
-require_once $let;
+
 require __DIR__ . '/../../vendor/autoload.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -11,10 +10,13 @@ $user = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores`  WHERE `co
 $user->execute(array($_POST['colaborador']));
 $user = $user->fetch();
 print_r(empty($user));
+$caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+$caixa->execute(array($_POST['caixa']));
+$caixa = $caixa ->fetch();
 if(!empty($user)){
 
   try{
-    $connector = new WindowsPrintConnector(dest:"TM-T20X");
+    $connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
     $printer = new Printer($connector);
 $printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
