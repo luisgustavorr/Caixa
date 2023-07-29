@@ -9,6 +9,9 @@ date_default_timezone_set('America/Sao_Paulo');
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($_POST['colaborador']));
 $colab = $colab->fetch();
+$caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+$caixa->execute(array($_POST['caixa']));
+$caixa = $caixa ->fetch();
 if(!empty($colab)){
   foreach ($_POST['produtos'] as $key => $value) {
     $produto = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`) VALUES (NULL, ?, ?, ?, ?,?,?); ");
@@ -18,7 +21,7 @@ if(!empty($colab)){
   
   }
 
-$connector = new WindowsPrintConnector(dest:"TM-T20X");
+$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
 $printer = new Printer($connector);
   $drawerCommand = "\x1B\x70\x00\x19\xFA";
