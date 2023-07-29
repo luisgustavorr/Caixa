@@ -10,7 +10,7 @@ class RelatorioABCController
     }
     public function executar()
     {
-        $this->view = new \View\MainView('painel_controle');
+       isset($_COOKIE['login']) ?  $this->view = new \View\MainView('painel_controle') :  $this->view = new \View\MainView('login');
         
       
        

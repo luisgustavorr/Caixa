@@ -10,7 +10,7 @@ class LoginController
     }
     public function executar()
     {
-        if( \Painel::logado() ==true){ echo"<script>location.href='RelatorioABC'</script>";}else{$this->view = new \View\MainView('login');}
+        isset($_COOKIE['login']) ?  $this->view = new \View\MainView('painel_controle') :  $this->view = new \View\MainView('login');
         
       
        
