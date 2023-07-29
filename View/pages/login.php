@@ -13,7 +13,6 @@
                   <span class="show">Mostrar</span>
                </div>
                <div class="pass">
-                  <a href="#">Esqueceu a senha?</a>
                </div>
                <div class="field">
                   <input type="submit" name="logar" value="LOGIN">
@@ -21,10 +20,7 @@
             </form>
        
            
-            <div class="signup">
-               Não tem uma conta?
-               <a href="#">Cadastre-se</a>
-            </div>
+           
          </div>
       </div>
   <?php \Models\LoginModel::enviarFormulario()?>
