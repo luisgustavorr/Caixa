@@ -129,8 +129,9 @@ $("#codigo_produto").on("keyup", function () {
       if(row.length ==0){
         $(".search_results_by_barcode").css("display", "none");
       }
-      row.forEach((element) => {
       $(".search_results_by_barcode").empty();
+      row.forEach((element) => {
+   
         
 
         $(".search_results_by_barcode").append(
