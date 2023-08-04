@@ -65,8 +65,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       </div>
       <div class="input_select">
         <span>Método de Pagamento:</span>
-        <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento
-">
+        <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento">
           <option value="Cartão Crédito">Cartão Crédito</option>
           <option value="Dinheiro">Dinheiro</option>
           <option value="Cartão Débito">Cartão Débito</option>

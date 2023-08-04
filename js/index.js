@@ -2,6 +2,19 @@ let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
 let caixa = $('#caixa_selecionado').val()
+function setCaixa(code){
+  data = {
+    colaborador: code,
+    blue_sky:true
+  }
+  let caixa_retornado = ''
+  $.post('Models/post_receivers/select_colaborador.php',data,function(ret){
+    console.log(ret)
+    caixa_retornado = ret
+  })
+  return caixa_retornado
+}
+
 $('#abrir_lista_pedidos').click(function(){
   if($('#abrir_lista_pedidos i').attr("class").includes('fa-solid fa-chevron-up')){
   $(".lista_pedidos").animate({'height':'0'},function(){
@@ -20,50 +33,25 @@ $('#abrir_lista_pedidos').click(function(){
 })
 $(".modal_anotar_pedido tbody").children().remove();
 
-$(".tags_produto_name").keyup(function () {
-  data = {
-    pesquisa: $(this).val(),
-  };
-  let pesquisa_bar = [];
+$(".tags_produto_name").keyup(function (e) {
+        let produto = $(this).val().replace('.','')
+        if(e.keyCode == 190){
 
-  $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
-    row = JSON.parse(ret);
-    row.forEach((element) => {
-      pesquisa_bar.push(element.id + "-" + element.nome);
-    });
-  });
-  $(".tags_produto_name").autocomplete({
-    source: pesquisa_bar,
-    select: function (event, ui) {
-      setTimeout(() => {
-        let produto = $(".tags_produto_name").val().split("-");
-        $(".produto_pedido" + produto[0]).remove();
-
-        let produtos_info = row.filter(
-          (Element) => Element.id == parseInt(produto[0])
-        );
+ 
         $(".modal_anotar_pedido tbody").append(
-          '<tr preco_produto="' +
-            produtos_info[0].preco.toString().replace(",", ".") +
-            '" produto="' +
-            produto[0] +
+          '<tr preco_produto="" produto="' +
+            produto.replace(' ','_') +
             '" quantidade="' +
             $("#quantidade_produto_pedido").val() +
             '" class="produto_pedido' +
-            produto[0] +
+            produto.replace(' ','_') +
             '"><td>' +
             $("#quantidade_produto_pedido").val() +
             "</td><td>" +
-            produto[1] +
-            "</td><td>" +
-            produtos_info[0].preco +
-            "</td><td >" +
-            parseFloat(
-              parseFloat(produtos_info[0].preco.replace(",", ".")).toFixed(2) *
-                parseInt($("#quantidade_produto_pedido").val())
-            ).toFixed(2) +
+            produto +
+            "</td><td><input type='text'class='oders_inputs input_valor_pedido_produto' produto='"+produto.replace(' ','_')+"' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_"+produto.replace(' ','_')+"'></td><td id='valor_produto_total_"+produto.replace(' ','_')+"' >" + 100 +
             '</td> <td produto="' +
-            produto[0] +
+            produto.replace(' ','_') +
             '" class="remove_item_pedido ">-</td>'
         );
         $(".tags_produto_name").val("");
@@ -71,9 +59,23 @@ $(".tags_produto_name").keyup(function () {
         $(".remove_item_pedido").click(function () {
           $(".produto_pedido" + $(this).attr("produto")).remove();
         });
-      }, 100);
-    },
-  });
+        verificarCondicoes()
+        $('.input_valor_pedido_produto').keyup(function(){
+          let valor_produto = parseFloat($(this).val().replace('.','').replace(',','.'))
+          let produto = $(this).attr("produto")
+          let novoValor = valor_produto * $('.produto_pedido'+produto).attr("quantidade")
+         const options = {
+            style : "currency",
+            currency : "BRL",
+            minimumFractionDigits : 2,
+            maximumFractionDigits: 5,
+        }
+        $('.produto_pedido'+produto).attr("preco_produto",novoValor.toFixed(2))
+          $('#valor_produto_total_'+produto).text(new Intl.NumberFormat('pt-BR', options).format(novoValor))
+        })
+      }
+    
+  
 });
 $("#desc_produto").on("keyup", function () {
   if ($(this).val() == "") {
@@ -276,7 +278,16 @@ function atualizarHorario() {
   $(".horario_atual_finder").text(dataAtual);
 }
 
-function verificarValorCaixa() {
+function verificarValorCaixa(codigoColab) {
+moment.locale('en');
+const dataAtual = moment();
+const dataFutura = dataAtual.add(30, 'days');
+const GMTstring = dataFutura.utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]');
+
+  document.cookie = "last_codigo_colaborador="+codigoColab+';SameSite=Strict'
+  let dataMoment = moment();
+  var dataNovaAdiantada = dataMoment.add(30, "days");
+
   data = {
     caixa: caixa,
   };
@@ -290,7 +301,7 @@ function verificarValorCaixa() {
     }
   });
 }
-verificarValorCaixa();
+verificarValorCaixa(1)
 function valorCaixa() {
   data = {
     caixa: caixa,
@@ -313,7 +324,7 @@ $(".modal_sangria").submit(function (e) {
   e.preventDefault();
   data = {
     path: $('#include_path').val(),
-    caixa: caixa,
+    caixa: setCaixa($("#colaborador_input").val()),
     valor: $(".valor_caixa_apos_father red")
       .text()
       .replace("R$", "")
@@ -352,7 +363,7 @@ $("#valor_sangria").keyup(function () {
   }
 });
 $("#whatsapp_cliente").mask("(00) 0 0000-0000");
-$("#codigo_produto").focus(function () {
+function verificarCondicoes (){$("#codigo_produto").focus(function () {
   input_codigo_focado = true;
 });
 $("#codigo_produto").blur(function () {
@@ -363,7 +374,8 @@ $(".oders_inputs").focus(function () {
 });
 $(".oders_inputs").blur(function () {
   condicao_favoravel = true;
-});
+});}
+verificarCondicoes()
 $(".pagamento_input").change(function () {
   if (
     $(this).val() == "Cartão Crédito" ||
@@ -434,6 +446,7 @@ $('.finalizar_venda').click(function(){
   };
 
   $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+    verificarValorCaixa();
     if(ret !=''){
       alert(ret)
     }else{

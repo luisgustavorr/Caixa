@@ -1,6 +1,18 @@
 $(".datas").change(function () {
   alterarTabela();
 });
+function setCaixa(code){
+  data = {
+    colaborador: code,
+    blue_sky:true
+  }
+  let caixa_retornado = ''
+  $.post('Models/post_receivers/select_colaborador.php',data,function(ret){
+    console.log(ret)
+    caixa_retornado = ret
+  })
+  return caixa_retornado
+}
 $('#add_produto_opener').click(function(){
   data ={
   
@@ -171,11 +183,12 @@ $(".modal_anotar_pedido").submit(function (e) {
       };
       produtos[index] = produto;
     });
+    
   console.log($("#data_pedido").val());
   data = {
     pedido:$('#pedido_id').val(),
     path: $('#include_path').val(),
-    caixa: $('#select_caixa').val(),
+    caixa: setCaixa($("#codigo_colaborador_input").val()),
     endereco:$('#endereco_cliente_input').val(),
     pagamento: $('#metodo_pagamento').val(),
     produtos: produtos,
@@ -212,26 +225,18 @@ function editarPedido(esse) {
   $('#data_entrega').val(pedido.data_entrega);
   console.log(pedido)
 
-  console.log(pedido.produtos)
+
   let produtos = JSON.parse(pedido.produtos);
   produtos.forEach(produto => {
-    const data = {
-      editando_pedido: true,
-      produto: produto.id,
-      caixa: $('#select_caixa').val(),
-    };
-
-    $.post("Models/post_receivers/select_produto.php", data, function(ret) {
-      console.log(ret);
-      let produtoData = JSON.parse(ret);
-
+  
+      
       // Construir a linha da tabela da modal com as informações do produto
-      const newRow = `4
+      const newRow = `
         <tr preco_produto="${produto.preco.toString().replace(",", ".")}" produto="${produto.id}" quantidade="${$("#quantidade_produto_pedido").val()}" class="produto_pedido${produto.id}">
           <td>${$("#quantidade_produto_pedido").val()}</td>
-          <td>${produtoData.nome}</td>
-          <td>${produtoData.preco}</td>
-          <td>${(parseFloat(produtoData.preco.replace(",", ".")) * parseFloat(produto.quantidade)).toFixed(2)}</td>
+          <td>${produto.id}</td>
+          <td>${produto.preco}</td>
+          <td>${(parseFloat(produto.preco.replace(",", ".")) * parseFloat(produto.quantidade)).toFixed(2)}</td>
           <td produto="${produto.id}" class="remove_item_pedido">-</td>
         </tr>
       `;
@@ -241,7 +246,6 @@ function editarPedido(esse) {
           $(".produto_pedido" + $(this).attr("produto")).remove();
         });
       
-    });
   });
 }
 
