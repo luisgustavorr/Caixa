@@ -1,6 +1,7 @@
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
+console.log("teste")
 function getCookie(name) {
   let cookie = {};
   
