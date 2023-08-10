@@ -59,7 +59,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       <input required type="text" name="endereco_cliente_input" class="oders_inputs" id="endereco_cliente_input" placeholder="Insira o endereço do cliente">
       </div>
       <div class="input_select">
-        <span>Método de Pagament:</span>
+        <span>Método de Pagamento:</span>
         <select name="metodo_pagamento" class="pagamento_input" id="metodo_pagamento">
           <option value="Cartão Crédito">Cartão Crédito</option>
           <option value="Dinheiro">Dinheiro</option>
