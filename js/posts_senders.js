@@ -55,7 +55,7 @@ $(".pedido_feito").change(function(){
     pedido:pedido
   }
   $.post("Models/post_receivers/update_pedido_feito.php", data, function(ret) {
-    console.log(ret)
+    location.reload()
    })
 })
 $(".modal_funcionarios").submit(function(e){
@@ -64,10 +64,14 @@ $(".modal_funcionarios").submit(function(e){
     adm:$('input[name="add_funcionario"]:checked').val(),
     nome:$('#input_add_usuario_nome').val(),
     codigo:$('#input_add_usuario_codigo').val(),
+    caixa : $('#select_caixa_add_usuario').val()
   }
   $.post('../Models/post_receivers/insert_colaborador.php',data,function(ret){
     	console.log(ret)
     if(ret != 'ERROR'){
+      $('.modal_adicionar_produto input').each(function(){
+        console.log($(this).val())
+      })
       location.reload()
     }else{
       alert('Código já cadastrado')
@@ -201,20 +205,24 @@ $(".modal_anotar_pedido").submit(function (e) {
   if($('#editando').val() == 'true'){
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret)
+      location.reload()
     });
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
+      location.reload()
+
     });
   }
 
 });
 function editarPedido(esse) {
   // Exibir o fundo e a modal
+  console.log(esse)
   $('.modal_anotar_pedido tbody').empty()
   exibirModalAnotarPedido();
 	$('#editando').val("true")
-
+console.log($(esse).attr('pedido'))
   let pedido = JSON.parse($(esse).attr('pedido'));
   $('#pedido_id').val(pedido.id)
   // Preencher os campos da modal com os dados do pedido
@@ -235,8 +243,8 @@ function editarPedido(esse) {
         <tr preco_produto="${produto.preco.toString().replace(",", ".")}" produto="${produto.id}" quantidade="${$("#quantidade_produto_pedido").val()}" class="produto_pedido${produto.id}">
           <td>${$("#quantidade_produto_pedido").val()}</td>
           <td>${produto.id}</td>
-          <td>${produto.preco}</td>
-          <td>${(parseFloat(produto.preco.replace(",", ".")) * parseFloat(produto.quantidade)).toFixed(2)}</td>
+          <td><input value='${produto.preco}' type='text'class='oders_inputs input_valor_pedido_produto' produto='${produto.id.replace(' ','_') }' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_${produto.id.replace(' ','_') }'></td>
+          <td id='valor_produto_total_${produto.id}'>R$ ${(parseFloat(produto.preco.replace(",", ".")) * parseFloat(produto.quantidade)).toFixed(2).toString().replace(".",',')}</td>
           <td produto="${produto.id}" class="remove_item_pedido">-</td>
         </tr>
       `;
@@ -246,6 +254,19 @@ function editarPedido(esse) {
           $(".produto_pedido" + $(this).attr("produto")).remove();
         });
       
+        $('.input_valor_pedido_produto').keyup(function(){
+          let valor_produto = parseFloat($(this).val().replace('.','').replace(',','.'))
+          let produto = $(this).attr("produto")
+          let novoValor = valor_produto * $('.produto_pedido'+produto).attr("quantidade")
+         const options = {
+            style : "currency",
+            currency : "BRL",
+            minimumFractionDigits : 2,
+            maximumFractionDigits: 5,
+        }
+        $('.produto_pedido'+produto).attr("preco_produto",novoValor.toFixed(2))
+          $('#valor_produto_total_'+produto).text(new Intl.NumberFormat('pt-BR', options).format(novoValor))
+        })
   });
 }
 
@@ -256,9 +277,7 @@ function exibirModalAnotarPedido() {
 function mudarTempo(esse){
   var dataNaTabela = moment($("#data_minima").val(), "YYYY-MM-DD");
   var dataAtual = moment();
-  dataNaTabela = dataNaTabela.add(1, "days")
-  console.log(dataAtual.format("DD/MM/YYYY"))
-  console.log(dataNaTabela.format("DD/MM/YYYY"))
+  dataNaTabela = dataNaTabela.add(1, "days") 
   if (dataNaTabela.format("DD/MM/YYYY") == dataAtual.format("DD/MM/YYYY") && $(esse).attr('id') == 'adiantar_semana') {
     $("#adiantar_semana").css("visibility", "hidden");
   } else {
@@ -293,7 +312,7 @@ function alterarTabela() {
     $(".pagamento_recorrente").text(row.formaPagamentoMaisRepetida);
     $(".quant_vendas").text(row.quantidadeVendas);
     $(".top_produto").text(row.produtoMaisVendido);
-    $(".valor_total").text(row.valorTotal);
+    $(".valor_total").text('R$',row.totalValor);
 
   });
   if ($("dot").attr("style").includes("left")) {

@@ -30,7 +30,5 @@ class Application
         }
     }
 }
-/*  for ($i=0; $i < 30; $i++) { 
-            echo"(NULL, 'nome', 'descricao', '100.00,00', '0', 'luis', '0', '1'),";
-          }*/
+
 ?>

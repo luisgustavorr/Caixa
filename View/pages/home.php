@@ -15,25 +15,20 @@
 </aside>
 <input type="hidden" id="include_path" value="<?php echo BASE_DIR_PAINEL.'\\'?>" disabled>
 <aside id="sidebar">
-  <span class="princip_span"> Caixa Selecionado</span>
-  <input class="princip_span" value="<?php 
-  if(isset($_COOKIE['caixa'])){
-    echo $_COOKIE['caixa'];
-  }
-  ?>" type="text" id="caixa_selecionado" style="height: 30px; text-align:center; border:none; cursor:text;"><button class="princip_span" id="salvar_caixa">Salvar</button>
+
   <span class="princip_span" onclick="abrirModal('modal_anotar_pedido')">Anotar Pedido</span>
 
-  <span class="princip_span"id="abrir_lista_pedidos">Pedidos</span>
+  <span class="princip_span"id="abrir_lista_pedidos"><i class="fa-solid fa-chevron-down"></i> Pedidos</span>
   <div class="lista_pedidos">
     <?php
     $pedidos = \MySql::conectar()->prepare("SELECT * FROM `tb_pedidos` WHERE `caixa` = ? AND `entregue` = 0");
-    $pedidos->execute(array('principal'));
+    $pedidos->execute(array(''));
     $pedidos = $pedidos->fetchAll();
     foreach ($pedidos as $key => $value) {
       $timestamp = strtotime($value['data_pedido']); // Converte a string para um timestamp Unix
 $data_formatada = date('d/m/Y', $timestamp);
       echo "
-       <span  pedido='".json_encode($value)."'> <input class='pedido_feito' type='checkbox' pedido='".$value['id']."'><label onclick='editarPedido(this)'> ".$value['cliente']."-".$data_formatada."</label></span>
+       <span > <input class='pedido_feito ' type='checkbox' pedido='".$value['id']."'><label onclick='editarPedido(this)' pedido='".json_encode($value)."'> ".$value['cliente']."-".$data_formatada."</label></span>
       ";
     }
     ?>
@@ -54,7 +49,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       <div class="subdivision">
 
       <span>Seu código:</span>
-      <input required type="text" name="codigo_colaborador" class="oders_inputs" id="codigo_colaborador_input" placeholder="Insira o seu código">
+      <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs" id="codigo_colaborador_input" placeholder="Insira o seu código">
       </div>
 
     </div>
@@ -171,7 +166,7 @@ $data_formatada = date('d/m/Y', $timestamp);
   <div class="first_row">
     <div class="colaborador_father input_father">
       <span>Colaborador:</span>
-      <input required type="text" name="colaborador" class="oders_inputs" id="colaborador_input" placeholder="Insira seu código">
+      <input required value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>"type="text" name="colaborador" class="oders_inputs" id="colaborador_input" placeholder="Insira seu código">
     </div>
     <div class="horario_father input_father">
       <span>Horário da Sangria:</span>
@@ -207,7 +202,7 @@ $data_formatada = date('d/m/Y', $timestamp);
 
     <div class="inputs_pagamento_father">
       <span>Seu Código:</span>
-      <input type="text" class="oders_inputs" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
+      <input type="text" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
 
     </div>
 
@@ -298,9 +293,10 @@ $data_formatada = date('d/m/Y', $timestamp);
         </div>
         <div class="input quantidade_produto_input">
           <span style="margin: 0;">Quantidade/g:</span>
-          <input class="oders_inputs" min="1" type="number" name="quantidade_produto" id="quantidade_produto" value="1" />
+          <input class="oders_inputs" min="1" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
+      <div class="second_inputs">
       <div class="input desc_produto_input">
         <span>Descrição do Produto:</span>
         <div class="desc_produto_input_mask">
@@ -312,19 +308,18 @@ $data_formatada = date('d/m/Y', $timestamp);
           <span produto="" class="resultado_pesquisa"></span>
         </div>
       </div>
+      <button id="add_produto">Adicionar Produto</button>
+      </div>
+
     </div>
     <table id="tabela_produtos">
       <thead>
         <tr>
           <th>Código</th>
           <th>Código Barras</th>
-          <th>NCM</th>
           <th>Descrição</th>
           <th>Preço</th>
           <th>UN</th>
-          <th>Estoque</th>
-          <th>TA PD</th>
-          <th>ICMS</th>
         </tr>
       </thead>
       <tbody>
