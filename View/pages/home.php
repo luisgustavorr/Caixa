@@ -33,6 +33,7 @@ $data_formatada = date('d/m/Y', $timestamp);
     }
     ?>
   </div>
+  <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
 
 </aside>
 <form class="modal modal_anotar_pedido">
@@ -379,6 +380,8 @@ $data_formatada = date('d/m/Y', $timestamp);
 </div>
 
 <script src="<?php echo INCLUDE_PATH ?>js/index.js"></script>
+<script src="<?php echo INCLUDE_PATH ?>js/atualizar_sistema.js"></script>
+
 <script src="<?php echo INCLUDE_PATH ?>js/posts_senders.js"></script>
 <script src="<?php echo INCLUDE_PATH ?>js/procurar_pedidos_proximos.js"></script>
 
