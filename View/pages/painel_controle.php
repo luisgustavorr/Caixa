@@ -62,26 +62,16 @@
 
                                 <td>' . ucfirst($value['nome']) . '</td>
                                 <td>' . $adm . '</td>
+                                <td>' . $value["caixa"] . '</td>
 
                                 <td><i pessoa="' . $value['id'] . '" class="fa-solid fa-trash-can"></i></td>
-                                <td>' . $$value["caixa"] . '</td>
 
                                 </tr>';
             }
             ?>
         </tbody>
     </table>
-    <span class="princip_span">Caixa(s) Selecionado(s) : <select name="select_caixa" id="select_caixa">
-            <option value="todos">Todos</option>
-            <?php
-            $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_caixas`");
-            $caixas->execute();
-            $caixas = $caixas->fetchAll();
-            foreach ($caixas as $key => $value) {
-                echo '<option value="' . $value['caixa'] . '">' . ucfirst($value['caixa']) . '</option>';
-            }
-            ?>
-        </select></span>
+ 
     <div class="inputs_add_usuario">
         <div class="inputs_father_user">
             <label for="input_add_usuario_codigo">Código:</label>
@@ -91,7 +81,17 @@
             <label for="input_add_usuario_nome">Nome:</label>
             <input type="text" name="input_add_usuario_nome" required id="input_add_usuario_nome" class="oders_inputs">
         </div>
-
+        <span >Caixa(s) Selecionado(s) : <select name="select_caixa_add_usuario" id="select_caixa_add_usuario">
+     
+            <?php
+            $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_caixas`");
+            $caixas->execute();
+            $caixas = $caixas->fetchAll();
+            foreach ($caixas as $key => $value) {
+                echo '<option value="' . $value['caixa'] . '">' . ucfirst($value['caixa']) . '</option>';
+            }
+            ?>
+        </select></span>
         <div class=" input_por_peso">
             <label for="">Administrador?</label><br />
             <div class="inputs_radio_father">

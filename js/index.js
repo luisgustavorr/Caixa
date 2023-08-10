@@ -1,19 +1,42 @@
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
-let caixa = $('#caixa_selecionado').val()
-function setCaixa(code){
-  data = {
-    colaborador: code,
-    blue_sky:true
-  }
-  let caixa_retornado = ''
-  $.post('Models/post_receivers/select_colaborador.php',data,function(ret){
-    console.log(ret)
-    caixa_retornado = ret
+function getCookie(name) {
+  let cookie = {};
+  
+  document.cookie.split(';').forEach(function(el) {
+    let [k,v] = el.split('=');
+    cookie[k.trim()] = v;
   })
-  return caixa_retornado
+  
+  return cookie[name];
+  
 }
+
+let caixa = getCookie('last_codigo_colaborador')
+console.log(caixa)
+let produto_object = {};
+$('#notification i').click(function(){
+  $('#notification').css("display",'none')
+})
+
+function setCaixa(code, callback) {
+  console.log(code);
+  var data = {
+    colaborador: code,
+    blue_sky: true
+  };
+
+  $.post('Models/post_receivers/select_colaborador.php', data, function(ret) {
+    console.log(ret);
+    // Chama a função de retorno de chamada e passa o valor retornado
+    callback(ret);
+  });
+}
+setCaixa(caixa, function(caixa_retornado) {
+  console.log(caixa_retornado);
+  caixa = caixa_retornado
+});
 
 $('#abrir_lista_pedidos').click(function(){
   if($('#abrir_lista_pedidos i').attr("class").includes('fa-solid fa-chevron-up')){
@@ -25,7 +48,7 @@ $('#abrir_lista_pedidos').click(function(){
   $('#abrir_lista_pedidos i').attr("class",'fa-solid fa-chevron-down')
   }else{
     $(".lista_pedidos").animate({'height':'200px'})
-  $(".lista_pedidos").css('display','block')
+  $(".lista_pedidos").css('display','flex')
 
     $('#abrir_lista_pedidos i').attr("class",'fa-solid fa-chevron-up')
 
@@ -37,7 +60,6 @@ $(".tags_produto_name").keyup(function (e) {
         let produto = $(this).val().replace('.','')
         if(e.keyCode == 190){
 
- 
         $(".modal_anotar_pedido tbody").append(
           '<tr preco_produto="" produto="' +
             produto.replace(' ','_') +
@@ -87,6 +109,7 @@ $("#desc_produto").on("keyup", function () {
     };
     
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
+      alert('a')
       row = JSON.parse(ret);
       $(".search_results").empty();
       row.forEach((element) => {
@@ -107,16 +130,25 @@ $("#desc_produto").on("keyup", function () {
           "Models/post_receivers/select_produto.php",
           data,
           function (ret) {
-            pesquisarProdutoPorCodigoDeBarras(ret);
-            $(".search_results").css("display", "none");
-            $("#desc_produto").val("");
+            produto_object = ret
+
+            let row = JSON.parse(ret)
+            console.log(row.nome)
+            $('#desc_produto').val(row.nome)
+
           }
         );
       });
     });
   }
 });
+$('#add_produto').click(function(){
+  pesquisarProdutoPorCodigoDeBarras(produto_object)
+})
+let executando = false
 $("#codigo_produto").on("keyup", function () {
+  if(executando) return 
+  executando = true
   if ($(this).val() === "") {
     $(".search_results_by_barcode").css("display", "none");
   } else {
@@ -125,7 +157,9 @@ $("#codigo_produto").on("keyup", function () {
       pesquisa: $(this).val(),
       codigo: true,
     };
+
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
+    
       row = JSON.parse(ret)
 
       if(row.length ==0){
@@ -153,26 +187,29 @@ $("#codigo_produto").on("keyup", function () {
           "Models/post_receivers/select_produto.php",
           data,
           function (ret) {
-            pesquisarProdutoPorCodigoDeBarras(ret);
+            produto_object = ret
             $(".search_results_by_barcode").css("display", "none");
-            $("#desc_produto").val("");
+            let row = JSON.parse(ret)
+            console.log(row.nome)
+            $('#desc_produto').val(row.nome)
+
           }
         );
       });
     });
   }
 });
-
 function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
+
   darker ? (darker_class = "darker") : (darker_class = "");
   row = JSON.parse(ret);
   quantidade = 0
   
-  if(parseInt($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) > 0){
-     quantidade = parseInt($("#quantidade_produto").val()) + parseInt($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) 
+  if(parseFloat($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) > 0){
+     quantidade = parseFloat($("#quantidade_produto").val()) + parseFloat($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) 
   }else{
-     quantidade = parseInt($("#quantidade_produto").val())
+     quantidade = parseFloat($("#quantidade_produto").val())
   }
   $(".row_id_"+row.id).remove()
 
@@ -188,9 +225,9 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       row.id +
       "</td><td>" +
       row.codigo +
-      "</td><td>170.99.00</td><td>" +
+      "</td><td>" +
       row.nome +
-      "</td><td quantidade_produto = '"+
+      "</td><td "+row.id+" quantidade_produto = '"+
       quantidade
       +"' id_produto='" +
       row.id +
@@ -200,11 +237,18 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       row.preco +
       "</td><td >" +
       quantidade +
-      "</td><td>0</td><td>A P</td><td>0,00</td></tr>"
+      "</td></tr>"
   );
   $("#tabela_produtos .preco_produto").each(function () {
     
-    total_valor =parseFloat(total_valor) + parseFloat($(this).text().replace(",", ".")) * quantidade;
+    console.log('valor antigo :',parseFloat(total_valor))
+    console.log('quant :',$(this).attr("quantidade_produto"))
+    console.log('id :',$(this).attr('id_produto'))
+    total_valor = parseFloat(total_valor) + parseFloat($(this).text().replace(",", ".")) * $(this).attr("quantidade_produto");
+    total_valor = isNaN(total_valor) ? 0 : total_valor
+    console.log(total_valor)
+    console.log('-------------------------')
+
     $(".tiny_row_id" + $(this).attr("id_produto")).remove();
     $(".venda_preview_body tbody").append(
       '<tr class="tiny_row_id' +
@@ -218,12 +262,12 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         "'>" + $(this).attr("quantidade_produto")
         +
         "x</td><td>R$" +
-        $(this).text() +
+        isNaN($(this).text()) ? 0 : $(this).text() +
         "</td><td>R$" +
         parseFloat(
           (
             parseFloat($(this).text().toString().replace(",", ".")) *
-            parseInt($(this).attr("quantidade_produto"))
+            parseFloat($(this).attr("quantidade_produto"))
           ).toFixed(2)
         ) +
         '</td><td><i class="fa-regular fa-trash-can trash_inactive remove_item" row="tiny_row_id' +
@@ -252,6 +296,7 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
 
   darker = !darker;
   $("#codigo_produto").val('')
+  $("#desc_produto").val('')
   $("#quantidade_produto").val(1);
 
   $(".search_results").css("display", "none");
@@ -306,8 +351,9 @@ function valorCaixa() {
   data = {
     caixa: caixa,
   };
-
+  console.log(caixa)
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
+    console.log(ret)
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
     $("#valor_sangria").val(valor.toFixed(2).replace(".", ","));
     $(".valor_caixa_father red").text(
@@ -322,9 +368,13 @@ setInterval(function () {
 
 $(".modal_sangria").submit(function (e) {
   e.preventDefault();
+  setCaixa($("#colaborador_input").val(), function(caixa_retornado) {
+    console.log(caixa_retornado);
+    caixa = caixa_retornado
+  });
   data = {
     path: $('#include_path').val(),
-    caixa: setCaixa($("#colaborador_input").val()),
+    caixa: caixa,
     valor: $(".valor_caixa_apos_father red")
       .text()
       .replace("R$", "")
@@ -543,21 +593,28 @@ $(document).keyup(function (event) {
   }
 });
 let darker = false;
-function pesquisarProduto(barcode) {
-  timeoutId = setTimeout(function () {
-    if (barcode.length == 13 || barcode.length == 8) {
-      data = {
-        barcode: barcode,
-      };
 
-      $.post("Models/post_receivers/select_produto.php", data, function (ret) {
-        pesquisarProdutoPorCodigoDeBarras(ret);
+function pesquisarProduto(barcode) {
+  if (barcode.length == 13 || barcode.length == 8) {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(function() {
+      var data = {
+        barcode: barcode
+      };
+      var startTime = performance.now();
+      $.post("Models/post_receivers/select_produto.php", data, function(ret) {
+        var endTime = performance.now();
+        var row = JSON.parse(ret);
+        $("#desc_produto").val(row.nome);
+        var duration = endTime - startTime;
+        console.log("Requisição concluída em " + duration + "ms");
       });
       $("#codigo_produto").val("");
-      $("#desc_produto").val("");
-    }
-  }, 350);
+    }, 350);
+  }
+
 }
+
 //Mascara de moeda
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");

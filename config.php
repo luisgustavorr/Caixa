@@ -1,5 +1,5 @@
 <?php
-
+include('MySql.php');
 define('INCLUDE_PATH', 'http://localhost/MixSalgados/Caixa/');
 define('INCLUDE_PATH_FULL', INCLUDE_PATH.'/View/pages/');
 define('CARGOS_DB_PASSWORD','///senha///');

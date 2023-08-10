@@ -47,7 +47,13 @@
              LIMIT 1) AS produtoMaisVendido");
             $infos->execute();
             $infos = $infos->fetch();
-            print_r($infos[$request]);
+            if($request == 'totalValor'){
+                print_r(number_format($infos[$request],2,',','.'));
+
+            }else{
+                print_r($infos[$request]);
+
+            }
         }
 
         }

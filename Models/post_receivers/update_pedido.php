@@ -73,10 +73,8 @@ try {
                           VALUES (NULL, 'luis', ?, ?, ?, ?, ?, ?)";
     $stmtInsertVendas = $conn->prepare($insertVendasQuery);
     $stmtInsertVendas->execute([date("Y-m-d h:i:sa"), $value['preco'] * $value['quantidade'], $caixa, $value['id'], $forma_pagamento, $pedido_id]);
-    $produto = \MySql::conectar()->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
-    $produto->execute(array($value['id']));
-    $produto = $produto->fetch();
-  $printer->text( $value['quantidade'].'X-'.$produto['nome']." R$".$value['preco']."\n");
+
+  $printer->text($value['quantidade'].'X-'.$value['id']." R$".$value['preco']."\n");
 
   }
 
