@@ -1,19 +1,27 @@
-<?php 
+<?php
 $directory = "C:\\NewerXampp\\htdocs\\MixSalgados\\Caixa"; // Caminho completo para o diretório
-$command = "git pull"; // Comando Git para executar
 
-// Altera o diretório atual para o diretório desejado
-chdir($directory);
+// Comandos para limpar o cache do Git, adicionar todas as mudanças e fazer commit vazio
+$commands = array(
+    "cd $directory",
+    "git rm -r --cached .",
+    "git add .",
+    "git commit -m 'Limpar cache do Git'",
+    "git pull"
+);
 
-// Executa o comando git pull
-exec($command, $output, $returnCode);
-
-// Verifica o código de retorno para determinar se o comando foi bem-sucedido
-if ($returnCode === 0) {
-    echo "Git pull realizado com sucesso no diretório $directory";
-    echo "<pre>" . implode("\n", $output) . "</pre>"; // Exibe a saída do comando Git
-} else {
-    echo "Erro ao tentar realizar o git pull.";
-    print_r($output); // Exibe qualquer saída ou erro retornado pelo comando Git
+// Executa os comandos em sequência
+$output = array();
+$returnCode = 0;
+foreach ($commands as $command) {
+    exec($command, $output, $returnCode);
+    if ($returnCode !== 0) {
+        echo "Erro ao executar o comando: $command<br>";
+        print_r($output);
+        break;
+    }
+    echo "Comando executado: $command<br>";
+    echo "<pre>" . implode("\n", $output) . "</pre>";
+    $output = array(); // Limpa a saída para o próximo comando
 }
 ?>
