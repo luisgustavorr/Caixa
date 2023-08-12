@@ -1,8 +1,6 @@
-<?php require __DIR__ . '/../../vendor/autoload.php';
+<?php 
 
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
-use Mike42\Escpos\Printer;
 
 include('../../MySql.php');
 date_default_timezone_set('America/Sao_Paulo');
@@ -24,15 +22,7 @@ if(!empty($colab)){
   
   }
 
-$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
-$printer = new Printer($connector);
-  $drawerCommand = "\x1B\x70\x00\x19\xFA";
-
-  $connector->write($drawerCommand);
-
-
-$printer->close();
 }else{
   echo 'Código de vendedor inválido';
 }

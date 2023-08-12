@@ -15,12 +15,6 @@ function getCookie(name) {
 }
 
 let caixa = getCookie('last_codigo_colaborador')
-console.log(caixa)
-let produto_object = {};
-$('#notification i').click(function(){
-  $('#notification').css("display",'none')
-})
-
 function setCaixa(code, callback) {
   console.log(code);
   var data = {
@@ -37,7 +31,15 @@ function setCaixa(code, callback) {
 setCaixa(caixa, function(caixa_retornado) {
   console.log(caixa_retornado);
   caixa = caixa_retornado
+  $('#blocked_fazer_sangria').attr('id','fazer_sangria')
 });
+console.log(caixa)
+let produto_object = {};
+$('#notification i').click(function(){
+  $('#notification').css("display",'none')
+})
+
+
 
 $('#abrir_lista_pedidos').click(function(){
   if($('#abrir_lista_pedidos i').attr("class").includes('fa-solid fa-chevron-up')){
@@ -458,9 +460,10 @@ function abrirModal(modal) {
   }
 }
 $("#valor_recebido_input").keyup(function () {
+  console.log('aqui')
   let valor_calculado = parseFloat(
     Math.abs(
-      parseFloat($("#valor_total_input").val().replace(",", ".")) -
+      parseFloat($("#valor_total_input").val().replace('.','').replace(",", ".")) -
         parseFloat($(this).val().replace(",", "."))
     ).toFixed(2)
   )
@@ -629,6 +632,23 @@ function mascaraMoeda(campo, evento) {
   var valor = campo.value.replace(/[^\d]+/gi, "").reverse();
   var resultado = "";
   var mascara = "##.###.###,##".reverse();
+  for (var x = 0, y = 0; x < mascara.length && y < valor.length; ) {
+    if (mascara.charAt(x) != "#") {
+      resultado += mascara.charAt(x);
+      x++;
+    } else {
+      resultado += valor.charAt(y);
+      y++;
+      x++;
+    }
+  }
+  campo.value = resultado.reverse();
+}
+function mascaraPeso(campo, evento) {
+  var tecla = !evento ? window.event.keyCode : evento.which;
+  var valor = campo.value.replace(/[^\d]+/gi, "").reverse();
+  var resultado = "";
+  var mascara = "########.##".reverse();
   for (var x = 0, y = 0; x < mascara.length && y < valor.length; ) {
     if (mascara.charAt(x) != "#") {
       resultado += mascara.charAt(x);

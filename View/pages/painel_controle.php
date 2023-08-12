@@ -147,6 +147,7 @@
     <span id="caixa_remover">
         <red>Remover Caixa <red>
     </span>
+    <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
 </aside>
 <fundo></fundo>
 <form action="" class="modal modal_fechar_caixa">
@@ -318,6 +319,8 @@
 </div>
 
 <script src="<?php echo INCLUDE_PATH ?>js/criar_pdf_tabela.js"></script>
+<script src="<?php echo INCLUDE_PATH ?>js/atualizar_sistema.js"></script>
+
 <script src="<?php echo INCLUDE_PATH ?>js/index.js"></script>
 <script src="<?php echo INCLUDE_PATH ?>js/fechar_caixa.js"></script>
 
