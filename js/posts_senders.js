@@ -312,7 +312,8 @@ function alterarTabela() {
     $(".pagamento_recorrente").text(row.formaPagamentoMaisRepetida);
     $(".quant_vendas").text(row.quantidadeVendas);
     $(".top_produto").text(row.produtoMaisVendido);
-    $(".valor_total").text('R$',row.totalValor);
+    console.log(row.totalValor)
+    $(".right_subdivision .valor_total").text('R$',row.totalValor);
 
   });
   if ($("dot").attr("style").includes("left")) {

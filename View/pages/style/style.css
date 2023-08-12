@@ -903,6 +903,16 @@ overflow-y: scroll;
   margin-top: 20px;
   cursor: pointer;
 }
+#blocked_fazer_sangria {
+  background: rgb(76, 74, 74);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 17px;
+  margin-top: 20px;
+  cursor: pointer;
+}
 .content_right_side {
   height: 87%;
   width: 48%;

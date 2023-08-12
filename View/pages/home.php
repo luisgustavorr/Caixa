@@ -294,7 +294,7 @@ $data_formatada = date('d/m/Y', $timestamp);
         </div>
         <div class="input quantidade_produto_input">
           <span style="margin: 0;">Quantidade/g:</span>
-          <input class="oders_inputs" min="1" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
+          <input class="oders_inputs" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
       <div class="second_inputs">
@@ -327,7 +327,7 @@ $data_formatada = date('d/m/Y', $timestamp);
 
       </tbody>
     </table>
-    <button class="sangria_button" onclick="abrirModal('modal_sangria')" id="fazer_sangria">Fazer Sangria do Caixa</button>
+    <button class="sangria_button" onclick="abrirModal('modal_sangria')" id="blocked_fazer_sangria">Fazer Sangria do Caixa</button>
   </div>
   <div class="content_right_side">
     <div class="valores">
