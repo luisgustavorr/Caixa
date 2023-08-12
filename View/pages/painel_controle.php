@@ -275,11 +275,11 @@
             <h3>Algumas Métricas:</h3>
             <span>Tipo de Pagamento mais recorrente:</span>
             <red class="pagamento_recorrente"><?php \Models\PainelControleModel::buscarDados('formaPagamentoMaisRepetida') ?></red>
-            <span>Quantidade de Vendas no período::</span>
+            <span>Quantidade de Vendas no período:</span>
             <red class="quant_vendas"><?php \Models\PainelControleModel::buscarDados('quantidadeVendas') ?> Vendas</red>
-            <span>Produto Mais vendido no período::</span>
+            <span>Produto Mais vendido no período:</span>
             <red class="top_produto"><?php \Models\PainelControleModel::buscarDados('produtoMaisVendido') ?></red>
-            <span>Total valor de vendas período::</span>
+            <span>Total valor de vendas:</span>
             <red class="valor_total">R$<?php \Models\PainelControleModel::buscarDados('totalValor') ?></red>
         </div>
         <div class="left_subdivision">
