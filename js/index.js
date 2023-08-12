@@ -110,7 +110,6 @@ $("#desc_produto").on("keyup", function () {
     };
     
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
-      alert('a')
       row = JSON.parse(ret);
       $(".search_results").empty();
       row.forEach((element) => {
@@ -147,10 +146,10 @@ $('#add_produto').click(function(){
   pesquisarProdutoPorCodigoDeBarras(produto_object)
 })
 let executando = false
-$("#codigo_produto").on("keyup", function () {
+$("#codigo_produto").on("keyup", function (e) {
   if(executando) return 
   executando = true
-  if ($(this).val() === "") {
+  if ($(this).val() === "" && e.keyCode=="Backspace") {
     $(".search_results_by_barcode").css("display", "none");
   } else {
     $(".search_results_by_barcode").css("display", "block");
@@ -199,10 +198,11 @@ $("#codigo_produto").on("keyup", function () {
       });
     });
   }
+  executando = false
 });
 function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
-
+  console.log(ret)
   darker ? (darker_class = "darker") : (darker_class = "");
   row = JSON.parse(ret);
   quantidade = 0
@@ -263,7 +263,7 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         "'>" + $(this).attr("quantidade_produto")
         +
         "x</td><td>R$" +
-        isNaN($(this).text()) ? 0 : $(this).text() +
+         $(this).text() +
         "</td><td>R$" +
         parseFloat(
           (
@@ -615,7 +615,12 @@ function pesquisarProduto(barcode) {
   }
 
 }
-
+$("#codigo_produto").blur(function(){
+  $(".search_results_by_barcode").css('display','none')
+})
+$("#desc_produto").blur(function(){
+  $(".search_results").css('display','none')
+})
 //Mascara de moeda
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");
