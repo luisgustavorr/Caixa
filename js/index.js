@@ -615,9 +615,7 @@ function pesquisarProduto(barcode) {
   }
 
 }
-$("#codigo_produto").blur(function(){
-  $(".search_results_by_barcode").css('display','none')
-})
+
 $("#desc_produto").blur(function(){
   $(".search_results").css('display','none')
 })
