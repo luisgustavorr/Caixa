@@ -2,6 +2,16 @@ let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
 console.log("teste")
+$('.colab_code').val('') 
+if($('.colab_code').val() == ''){
+  $(this).css("animation", "pulse 3s infinite");
+}
+$('.colab_code').keyup(function(){
+  alert('aa')
+  if($(this).val() == ''){
+    $(this).css("animation", "pulse 3s infinite");
+  }
+})
 function getCookie(name) {
   let cookie = {};
   

@@ -50,7 +50,7 @@ $data_formatada = date('d/m/Y', $timestamp);
       <div class="subdivision">
 
       <span>Seu código:</span>
-      <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs" id="codigo_colaborador_input" placeholder="Insira o seu código">
+      <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs colab_code" id="codigo_colaborador_input" placeholder="Insira o seu código">
       </div>
 
     </div>
@@ -187,7 +187,7 @@ $data_formatada = date('d/m/Y', $timestamp);
   <div class="first_row">
     <div class="colaborador_father input_father">
       <span>Colaborador:</span>
-      <input required value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>"type="text" name="colaborador" class="oders_inputs" id="colaborador_input" placeholder="Insira seu código">
+      <input required value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>"type="text" name="colaborador" class="oders_inputs colab_code" id="colaborador_input" placeholder="Insira seu código">
     </div>
     <div class="horario_father input_father">
       <span>Horário da Sangria:</span>
@@ -223,7 +223,7 @@ $data_formatada = date('d/m/Y', $timestamp);
 
     <div class="inputs_pagamento_father">
       <span>Seu Código:</span>
-      <input type="text" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
+      <input type="text" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs colab_code" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
 
     </div>
 
