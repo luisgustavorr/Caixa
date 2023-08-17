@@ -85,7 +85,27 @@ $data_formatada = date('d/m/Y', $timestamp);
    
     </div>
   </div>
+  <div class="middle_row">
+  <div class="valor_sangria_father input_father">
+      <span>Valor da entrada:</span>
+      <input type="text" value="" class="oders_inputs" name="valor_entrada" id="valor_entrada">
+    </div>
+    <div class="input_select">
+        <span>Pagamento da Entrada:</span>
+        <select name="metodo_pagamento_entrada" class="pagamento_input" id="metodo_pagamento_entrada">
+          <option value="Cartão Crédito">Cartão Crédito</option>
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão Débito">Cartão Débito</option>
+          <option value="Pix">Pix</option>
+
+
+        </select>
+      </div>
+  </div>
+
   <div class="second_row">
+
+
     <div class="valor_sangria_father input_father">
       <span>Data do Pedido:</span>
       <input type="datetime-local" value="<?php echo  date('Y-m-d\TH:i');?>" name="" id="data_pedido">
@@ -98,7 +118,7 @@ $data_formatada = date('d/m/Y', $timestamp);
 
     </div>
     <div class="valor_caixa_father input_father">
-      <span>Quantidade/g:</span>
+      <span>Quantidade/KG:</span>
       <input type="text" class="oders_inputs" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
@@ -293,7 +313,7 @@ $data_formatada = date('d/m/Y', $timestamp);
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Quantidade/g:</span>
+          <span style="margin: 0;">Quantidade/KG:</span>
           <input class="oders_inputs" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
