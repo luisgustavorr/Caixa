@@ -6,8 +6,8 @@
     {
         public static function formarTabela(){
        
-            $row = \MySql::conectar()->prepare("SELECT `tb_vendas`.`forma_pagamento`,`tb_vendas`.`data`, SUM(`tb_vendas`.`valor`) as total_valor, GROUP_CONCAT(`tb_produtos`.`nome` SEPARATOR ', ') as nomes FROM `tb_vendas` INNER JOIN `tb_produtos` ON `tb_vendas`.`produto` = `tb_produtos`.`id` GROUP BY `tb_vendas`.`data`");
-            $row->execute();
+            $row = \MySql::conectar()->prepare("SELECT `tb_vendas`.`forma_pagamento`,`tb_vendas`.`data`, SUM(`tb_vendas`.`valor`) as total_valor, GROUP_CONCAT(`tb_produtos`.`nome` SEPARATOR ', ') as nomes FROM `tb_vendas` INNER JOIN `tb_produtos` ON `tb_vendas`.`produto` = `tb_produtos`.`id`  WHERE `tb_vendas`.`data` = ? GROUP BY `tb_vendas`.`data`");
+            $row->execute(array(date('Y-m-d H:i:s')));
             $row = $row->fetchAll();
          
             foreach ($row as $key => $value) {

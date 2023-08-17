@@ -14,6 +14,7 @@ function setCaixa(code){
   return caixa_retornado
 }
 $('#add_produto_opener').click(function(){
+  $('.modal_produtos').css('display','none')
   data ={
   
   }
@@ -200,17 +201,19 @@ $(".modal_anotar_pedido").submit(function (e) {
     data_entrega: data_entrega,
     data_pedido: data_pedido,
     codigo_colaborador: $("#codigo_colaborador_input").val(),
+    valor_entrada : $('#valor_entrada').val(),
+    metodo_entrada : $("#metodo_pagamento_entrada").val().replace(',','.'),
     retirada: $('input[name="entrega_retirada"]:checked').val(),
   };
   if($('#editando').val() == 'true'){
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret)
-      location.reload()
+      // location.reload()
     });
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
-      location.reload()
+      // location.reload()
 
     });
   }

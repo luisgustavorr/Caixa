@@ -22,12 +22,12 @@
             <input class="oders_inputs" type="text" placeholder="Digite o Código de barras do Produto" name="codigo_produto_add" id="codigo_produto_add" required>
         </div>
         <div class="inputs input_preco_produto_add">
-            <label for="">Valor por UN ou g:</label><br />
+            <label for="">Valor por UN ou KG:</label><br />
             <input class="oders_inputs" type="text" placeholder="Digite o preço do Produto" name="preco_produto_add" id="preco_produto_add" required>
         </div>
 
         <div class="inputs input_por_peso">
-            <label for="">É por grama?</label><br />
+            <label for="">É por quilo?</label><br />
             <div class="inputs_radio_father">
                 <label for="sim">Sim</label>
                 <input class="oders_inputs" type="radio" name="produto_por_peso" required value="1" id="sim">
@@ -71,7 +71,7 @@
             ?>
         </tbody>
     </table>
- 
+
     <div class="inputs_add_usuario">
         <div class="inputs_father_user">
             <label for="input_add_usuario_codigo">Código:</label>
@@ -81,17 +81,17 @@
             <label for="input_add_usuario_nome">Nome:</label>
             <input type="text" name="input_add_usuario_nome" required id="input_add_usuario_nome" class="oders_inputs">
         </div>
-        <span >Caixa(s) Selecionado(s) : <select name="select_caixa_add_usuario" id="select_caixa_add_usuario">
-     
-            <?php
-            $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_caixas`");
-            $caixas->execute();
-            $caixas = $caixas->fetchAll();
-            foreach ($caixas as $key => $value) {
-                echo '<option value="' . $value['caixa'] . '">' . ucfirst($value['caixa']) . '</option>';
-            }
-            ?>
-        </select></span>
+        <span>Caixa(s) Selecionado(s) : <select name="select_caixa_add_usuario" id="select_caixa_add_usuario">
+
+                <?php
+                $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_caixas`");
+                $caixas->execute();
+                $caixas = $caixas->fetchAll();
+                foreach ($caixas as $key => $value) {
+                    echo '<option value="' . $value['caixa'] . '">' . ucfirst($value['caixa']) . '</option>';
+                }
+                ?>
+            </select></span>
         <div class=" input_por_peso">
             <label for="">Administrador?</label><br />
             <div class="inputs_radio_father">
@@ -100,9 +100,50 @@
                 <label for="nao">Não</label>
                 <input class="oders_inputs" type="radio" name="add_funcionario" value="0" id="nao">
             </div>
-
         </div>
         <button id="add_usuario">Adicionar</button>
+    </div>
+</form>
+<form class="modal modal_produtos">
+    <table>
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Nome</th>
+                <th>Código de Barras</th>
+                <th>Preço</th>
+                <th>Por KG ?</th>
+                <th>Excluir</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos`");
+            $caixas->execute();
+            $caixas = $caixas->fetchAll();
+            foreach ($caixas as $key => $value) {
+                $value['por_peso'] == 1 ? $pesado = 'Sim' : $pesado = 'Não';
+                echo '<tr value="' . $value['id'] . '">
+                             <td>' . ucfirst($value['codigo_id']) . '</td>
+
+                                <td>' . ucfirst($value['nome']) . '</td>
+                                <td>' . ucfirst($value['codigo']) . '</td>
+
+                                <td>' . $value["preco"] . '</td>
+                                <td>' . $pesado . '</td>
+
+                                <td><i pessoa="' . $value['id'] . '" class="fa-solid fa-trash-can"></i></td>
+
+                                </tr>';
+            }
+            ?>
+        </tbody>
+    </table>
+
+    <div class="inputs_add_produto">
+       
+        <span id="add_produto_opener" onclick="abrirModal('modal_adicionar_produto')" >Adicionar Produto</span>
     </div>
 
 </form>
@@ -110,8 +151,7 @@
 </div>
 <aside id="sidebar">
     <span class="princip_span" onclick="abrirModal('modal_funcionarios')"> Funcionários <i class="fa-solid fa-user-plus"></i></span>
-    <span class="princip_span" id="add_produto_opener" onclick="abrirModal('modal_adicionar_produto')">Adicionar Produto <i class="fa-solid fa-plus"></i></span>
-
+    <span class="princip_span" onclick="abrirModal('modal_produtos')">Produtos </span>
     <span class="princip_span" id="add_caixa_opener">Adicionar Caixa <i class="fa-solid fa-angle-down"></i></span>
 
     <form action="" id="adicionar_caixa">
