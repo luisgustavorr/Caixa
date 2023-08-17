@@ -202,18 +202,18 @@ $(".modal_anotar_pedido").submit(function (e) {
     data_pedido: data_pedido,
     codigo_colaborador: $("#codigo_colaborador_input").val(),
     valor_entrada : $('#valor_entrada').val(),
-    metodo_entrada : $("#metodo_pagamento_entrada").val().replace(',','.'),
+    metodo_entrada : $("#metodo_pagamento_entrada").val().replace('.','').replace(',','.'),
     retirada: $('input[name="entrega_retirada"]:checked').val(),
   };
   if($('#editando').val() == 'true'){
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret)
-      // location.reload()
+      location.reload()
     });
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
-      // location.reload()
+      location.reload()
 
     });
   }
@@ -234,6 +234,8 @@ console.log($(esse).attr('pedido'))
   $('#metodo_pagamento').val(pedido.forma_pagamento);
   $('#data_pedido').val(pedido.data_pedido);
   $('#data_entrega').val(pedido.data_entrega);
+  $('#valor_entrada').val(pedido.valor_entrada);
+  $('#metodo_pagamento_entrada').val(pedido.metodo_entrada);
   console.log(pedido)
 
 
