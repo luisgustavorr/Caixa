@@ -88,7 +88,7 @@ $data_formatada = date('d/m/Y', $timestamp);
   <div class="middle_row">
   <div class="valor_sangria_father input_father">
       <span>Valor da entrada:</span>
-      <input type="text" value="" class="oders_inputs" name="valor_entrada" id="valor_entrada">
+      <input type="text" value="" onKeyUp="mascaraMoeda(this, event)"class="oders_inputs" name="valor_entrada" id="valor_entrada">
     </div>
     <div class="input_select">
         <span>Pagamento da Entrada:</span>
