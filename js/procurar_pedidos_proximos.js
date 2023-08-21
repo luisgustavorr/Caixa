@@ -1,4 +1,4 @@
-function minhaFuncao() {
+function scanPedidosProximos() {
 
      $.post("Models/post_receivers/select_pedidos.php", {}, function(ret) {
         let pedidos = JSON.parse(ret)
@@ -13,9 +13,9 @@ function minhaFuncao() {
 }
 
 // Chame a função pela primeira vez (opcional, caso queira executá-la imediatamente)
-minhaFuncao();
+scanPedidosProximos();
 
 var intervalo = 10 * 60 * 1000;
 
 // Use a função setInterval para executar a função a cada intervalo de tempo definido
-setInterval(minhaFuncao, intervalo);
+setInterval(scanPedidosProximos, intervalo);

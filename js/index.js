@@ -1,116 +1,155 @@
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
-console.log("teste")
-$('.colab_code').val('') 
-if($('.colab_code').val() == ''){
-  $(this).css("animation", "pulse 3s infinite");
-}
-$('.colab_code').keyup(function(){
-  alert('aa')
-  if($(this).val() == ''){
+$(".colab_code").keyup(function () {
+  if ($(this).val() == "") {
     $(this).css("animation", "pulse 3s infinite");
   }
-})
-function getCookie(name) {
-  let cookie = {};
-  
-  document.cookie.split(';').forEach(function(el) {
-    let [k,v] = el.split('=');
-    cookie[k.trim()] = v;
-  })
-  
-  return cookie[name];
-  
+});
+if ($(".colab_code").val() == "") {
+  $(this).css("animation", "pulse 3s infinite");
 }
 
-let caixa = getCookie('last_codigo_colaborador')
+function getCookie(name) {
+  let cookie = {};
+
+  document.cookie.split(";").forEach(function (el) {
+    let [k, v] = el.split("=");
+    cookie[k.trim()] = v;
+  });
+
+  return cookie[name];
+}
+
+let caixa = getCookie("last_codigo_colaborador");
 function setCaixa(code, callback) {
   console.log(code);
   var data = {
     colaborador: code,
-    blue_sky: true
+    blue_sky: true,
   };
 
-  $.post('Models/post_receivers/select_colaborador.php', data, function(ret) {
+  $.post("Models/post_receivers/select_colaborador.php", data, function (ret) {
     console.log(ret);
     // Chama a função de retorno de chamada e passa o valor retornado
     callback(ret);
   });
 }
-setCaixa(caixa, function(caixa_retornado) {
+setCaixa(caixa, function (caixa_retornado) {
   console.log(caixa_retornado);
-  caixa = caixa_retornado
-  $('#blocked_fazer_sangria').attr('id','fazer_sangria')
+  caixa = caixa_retornado;
+  $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
 });
-console.log(caixa)
+console.log(caixa);
 let produto_object = {};
-$('#notification i').click(function(){
-  $('#notification').css("display",'none')
-})
+$("#notification i").click(function () {
+  $("#notification").css("display", "none");
+});
+
+$(".valores_informados").keyup(function () {
+  soma = 0;
+  $(".valores_informados").each(function (index) {
+    if ($(this).attr("id") == "sangria_informadas") {
+      soma -= parseFloat($(this).val().replace(".", "").replace(",", "."));
+    } else {
+      soma += parseFloat($(this).val().replace(".", "").replace(",", "."));
+    }
+
+    console.log($(this).val().replace(".", "").replace(",", "."));
+  });
+
+  $(".valores_informados_footer red").text(
+    "R$" + soma.toFixed(2).replace(".", ",")
+  );
+});
+$(".modal_fechar_caixa").submit(function (e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+    type: "POST",
+    url: "Models/post_receivers/insert_fechamento.php",
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function (data) {
+      console.log(data);
+    },
+  });
 
 
+});
+$("#abrir_lista_pedidos").click(function () {
+  if (
+    $("#abrir_lista_pedidos i").attr("class").includes("fa-solid fa-chevron-up")
+  ) {
+    $(".lista_pedidos").animate({ height: "0" }, function () {
+      $(".lista_pedidos").css("display", "none");
+    });
 
-$('#abrir_lista_pedidos').click(function(){
-  if($('#abrir_lista_pedidos i').attr("class").includes('fa-solid fa-chevron-up')){
-  $(".lista_pedidos").animate({'height':'0'},function(){
-    $(".lista_pedidos").css('display','none')
+    $("#abrir_lista_pedidos i").attr("class", "fa-solid fa-chevron-down");
+  } else {
+    $(".lista_pedidos").animate({ height: "200px" });
+    $(".lista_pedidos").css("display", "flex");
 
-  })
-
-  $('#abrir_lista_pedidos i').attr("class",'fa-solid fa-chevron-down')
-  }else{
-    $(".lista_pedidos").animate({'height':'200px'})
-  $(".lista_pedidos").css('display','flex')
-
-    $('#abrir_lista_pedidos i').attr("class",'fa-solid fa-chevron-up')
-
+    $("#abrir_lista_pedidos i").attr("class", "fa-solid fa-chevron-up");
   }
-})
+});
 $(".modal_anotar_pedido tbody").children().remove();
 
 $(".tags_produto_name").keyup(function (e) {
-        let produto = $(this).val().replace('.','')
-        if(e.keyCode == 190){
-
-        $(".modal_anotar_pedido tbody").append(
-          '<tr preco_produto="" produto="' +
-            produto.replace(' ','_') +
-            '" quantidade="' +
-            $("#quantidade_produto_pedido").val() +
-            '" class="produto_pedido' +
-            produto.replace(' ','_') +
-            '"><td>' +
-            $("#quantidade_produto_pedido").val() +
-            "</td><td>" +
-            produto +
-            "</td><td><input type='text'class='oders_inputs input_valor_pedido_produto' produto='"+produto.replace(' ','_')+"' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_"+produto.replace(' ','_')+"'></td><td id='valor_produto_total_"+produto.replace(' ','_')+"' >" + 100 +
-            '</td> <td produto="' +
-            produto.replace(' ','_') +
-            '" class="remove_item_pedido ">-</td>'
-        );
-        $(".tags_produto_name").val("");
-        $("#quantidade_produto_pedido").val("1");
-        $(".remove_item_pedido").click(function () {
-          $(".produto_pedido" + $(this).attr("produto")).remove();
-        });
-        verificarCondicoes()
-        $('.input_valor_pedido_produto').keyup(function(){
-          let valor_produto = parseFloat($(this).val().replace('.','').replace(',','.'))
-          let produto = $(this).attr("produto")
-          let novoValor = valor_produto * $('.produto_pedido'+produto).attr("quantidade")
-         const options = {
-            style : "currency",
-            currency : "BRL",
-            minimumFractionDigits : 2,
-            maximumFractionDigits: 5,
-        }
-        $('.produto_pedido'+produto).attr("preco_produto",novoValor.toFixed(2))
-          $('#valor_produto_total_'+produto).text(new Intl.NumberFormat('pt-BR', options).format(novoValor))
-        })
-      }
-    
-  
+  let produto = $(this).val().replace(".", "");
+  if (e.keyCode == 190) {
+    $(".modal_anotar_pedido tbody").append(
+      '<tr preco_produto="" produto="' +
+        produto.replace(" ", "_") +
+        '" quantidade="' +
+        $("#quantidade_produto_pedido").val() +
+        '" class="produto_pedido' +
+        produto.replace(" ", "_") +
+        '"><td>' +
+        $("#quantidade_produto_pedido").val() +
+        "</td><td>" +
+        produto +
+        "</td><td><input type='text'class='oders_inputs input_valor_pedido_produto' produto='" +
+        produto.replace(" ", "_") +
+        "' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_" +
+        produto.replace(" ", "_") +
+        "'></td><td id='valor_produto_total_" +
+        produto.replace(" ", "_") +
+        "' >" +
+        100 +
+        '</td> <td produto="' +
+        produto.replace(" ", "_") +
+        '" class="remove_item_pedido ">-</td>'
+    );
+    $(".tags_produto_name").val("");
+    $("#quantidade_produto_pedido").val("1");
+    $(".remove_item_pedido").click(function () {
+      $(".produto_pedido" + $(this).attr("produto")).remove();
+    });
+    verificarCondicoes();
+    $(".input_valor_pedido_produto").keyup(function () {
+      let valor_produto = parseFloat(
+        $(this).val().replace(".", "").replace(",", ".")
+      );
+      let produto = $(this).attr("produto");
+      let novoValor =
+        valor_produto * $(".produto_pedido" + produto).attr("quantidade");
+      const options = {
+        style: "currency",
+        currency: "BRL",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 5,
+      };
+      $(".produto_pedido" + produto).attr(
+        "preco_produto",
+        novoValor.toFixed(2)
+      );
+      $("#valor_produto_total_" + produto).text(
+        new Intl.NumberFormat("pt-BR", options).format(novoValor)
+      );
+    });
+  }
 });
 $("#desc_produto").on("keyup", function () {
   if ($(this).val() == "") {
@@ -120,7 +159,7 @@ $("#desc_produto").on("keyup", function () {
     data = {
       pesquisa: $(this).val(),
     };
-    
+
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
       row = JSON.parse(ret);
       $(".search_results").empty();
@@ -142,26 +181,25 @@ $("#desc_produto").on("keyup", function () {
           "Models/post_receivers/select_produto.php",
           data,
           function (ret) {
-            produto_object = ret
+            produto_object = ret;
 
-            let row = JSON.parse(ret)
-            console.log(row.nome)
-            $('#desc_produto').val(row.nome)
-
+            let row = JSON.parse(ret);
+            console.log(row.nome);
+            $("#desc_produto").val(row.nome);
           }
         );
       });
     });
   }
 });
-$('#add_produto').click(function(){
-  pesquisarProdutoPorCodigoDeBarras(produto_object)
-})
-let executando = false
+$("#add_produto").click(function () {
+  pesquisarProdutoPorCodigoDeBarras(produto_object);
+});
+let executando = false;
 $("#codigo_produto").on("keyup", function (e) {
-  if(executando) return 
-  executando = true
-  if ($(this).val() === "" && e.keyCode=="Backspace") {
+  if (executando) return;
+  executando = true;
+  if ($(this).val() === "" && e.keyCode == "Backspace") {
     $(".search_results_by_barcode").css("display", "none");
   } else {
     $(".search_results_by_barcode").css("display", "block");
@@ -171,17 +209,13 @@ $("#codigo_produto").on("keyup", function (e) {
     };
 
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
-    
-      row = JSON.parse(ret)
+      row = JSON.parse(ret);
 
-      if(row.length ==0){
+      if (row.length == 0) {
         $(".search_results_by_barcode").css("display", "none");
       }
       $(".search_results_by_barcode").empty();
       row.forEach((element) => {
-   
-        
-
         $(".search_results_by_barcode").append(
           '<span produto="' +
             element.codigo +
@@ -199,32 +233,43 @@ $("#codigo_produto").on("keyup", function (e) {
           "Models/post_receivers/select_produto.php",
           data,
           function (ret) {
-            produto_object = ret
+            produto_object = ret;
             $(".search_results_by_barcode").css("display", "none");
-            let row = JSON.parse(ret)
-            console.log(row.nome)
-            $('#desc_produto').val(row.nome)
-
+            let row = JSON.parse(ret);
+            console.log(row.nome);
+            $("#desc_produto").val(row.nome);
           }
         );
       });
     });
   }
-  executando = false
+  executando = false;
 });
 function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
-  console.log(ret)
+  console.log(ret);
   darker ? (darker_class = "darker") : (darker_class = "");
   row = JSON.parse(ret);
-  quantidade = 0
-  
-  if(parseFloat($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) > 0){
-     quantidade = parseFloat($("#quantidade_produto").val()) + parseFloat($(".row_id_"+row.id).find('.preco_produto').attr("quantidade_produto")) 
-  }else{
-     quantidade = parseFloat($("#quantidade_produto").val())
+  quantidade = 0;
+
+  if (
+    parseFloat(
+      $(".row_id_" + row.id)
+        .find(".preco_produto")
+        .attr("quantidade_produto")
+    ) > 0
+  ) {
+    quantidade =
+      parseFloat($("#quantidade_produto").val()) +
+      parseFloat(
+        $(".row_id_" + row.id)
+          .find(".preco_produto")
+          .attr("quantidade_produto")
+      );
+  } else {
+    quantidade = parseFloat($("#quantidade_produto").val());
   }
-  $(".row_id_"+row.id).remove()
+  $(".row_id_" + row.id).remove();
 
   if (typeof row === "boolean") return;
   $("#desc_produto").val(row.nome);
@@ -240,9 +285,11 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       row.codigo +
       "</td><td>" +
       row.nome +
-      "</td><td "+row.id+" quantidade_produto = '"+
-      quantidade
-      +"' id_produto='" +
+      "</td><td " +
+      row.id +
+      " quantidade_produto = '" +
+      quantidade +
+      "' id_produto='" +
       row.id +
       "' nome_produto='" +
       row.nome +
@@ -253,14 +300,16 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       "</td></tr>"
   );
   $("#tabela_produtos .preco_produto").each(function () {
-    
-    console.log('valor antigo :',parseFloat(total_valor))
-    console.log('quant :',$(this).attr("quantidade_produto"))
-    console.log('id :',$(this).attr('id_produto'))
-    total_valor = parseFloat(total_valor) + parseFloat($(this).text().replace(",", ".")) * $(this).attr("quantidade_produto");
-    total_valor = isNaN(total_valor) ? 0 : total_valor
-    console.log(total_valor)
-    console.log('-------------------------')
+    console.log("valor antigo :", parseFloat(total_valor));
+    console.log("quant :", $(this).attr("quantidade_produto"));
+    console.log("id :", $(this).attr("id_produto"));
+    total_valor =
+      parseFloat(total_valor) +
+      parseFloat($(this).text().replace(",", ".")) *
+        $(this).attr("quantidade_produto");
+    total_valor = isNaN(total_valor) ? 0 : total_valor;
+    console.log(total_valor);
+    console.log("-------------------------");
 
     $(".tiny_row_id" + $(this).attr("id_produto")).remove();
     $(".venda_preview_body tbody").append(
@@ -272,10 +321,10 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         parseFloat($(this).text().toString().replace(",", ".")) +
         "' id_produto='" +
         $(this).attr("id_produto") +
-        "'>" + $(this).attr("quantidade_produto")
-        +
+        "'>" +
+        $(this).attr("quantidade_produto") +
         "x</td><td>R$" +
-         $(this).text() +
+        $(this).text() +
         "</td><td>R$" +
         parseFloat(
           (
@@ -308,8 +357,8 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
   });
 
   darker = !darker;
-  $("#codigo_produto").val('')
-  $("#desc_produto").val('')
+  $("#codigo_produto").val("");
+  $("#desc_produto").val("");
   $("#quantidade_produto").val(1);
 
   $(".search_results").css("display", "none");
@@ -322,7 +371,7 @@ $(".menu").click(function () {
     $("#sidebar span").css("display", "none");
     $("#salvar_caixa").css("display", "none");
   } else {
-    $("#sidebar").animate({ width: "300px" },200, function () {
+    $("#sidebar").animate({ width: "300px" }, 200, function () {
       $("#sidebar .princip_span").css("display", "block");
       $("#salvar_caixa").css("display", "flex");
     });
@@ -337,12 +386,13 @@ function atualizarHorario() {
 }
 
 function verificarValorCaixa(codigoColab) {
-moment.locale('en');
-const dataAtual = moment();
-const dataFutura = dataAtual.add(30, 'days');
-const GMTstring = dataFutura.utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]');
+  moment.locale("en");
+  const dataAtual = moment();
+  const dataFutura = dataAtual.add(30, "days");
+  const GMTstring = dataFutura.utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
 
-  document.cookie = "last_codigo_colaborador="+codigoColab+';SameSite=Strict'
+  document.cookie =
+    "last_codigo_colaborador=" + codigoColab + ";SameSite=Strict";
   let dataMoment = moment();
   var dataNovaAdiantada = dataMoment.add(30, "days");
 
@@ -359,14 +409,14 @@ const GMTstring = dataFutura.utc().format('ddd, DD MMM YYYY HH:mm:ss [GMT]');
     }
   });
 }
-verificarValorCaixa(1)
+verificarValorCaixa(1);
 function valorCaixa() {
   data = {
     caixa: caixa,
   };
-  console.log(caixa)
+  console.log(caixa);
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
-    console.log(ret)
+    console.log(ret);
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
     $("#valor_sangria").val(valor.toFixed(2).replace(".", ","));
     $(".valor_caixa_father red").text(
@@ -381,12 +431,12 @@ setInterval(function () {
 
 $(".modal_sangria").submit(function (e) {
   e.preventDefault();
-  setCaixa($("#colaborador_input").val(), function(caixa_retornado) {
+  setCaixa($("#colaborador_input").val(), function (caixa_retornado) {
     console.log(caixa_retornado);
-    caixa = caixa_retornado
+    caixa = caixa_retornado;
   });
   data = {
-    path: $('#include_path').val(),
+    path: $("#include_path").val(),
     caixa: caixa,
     valor: $(".valor_caixa_apos_father red")
       .text()
@@ -426,19 +476,21 @@ $("#valor_sangria").keyup(function () {
   }
 });
 $("#whatsapp_cliente").mask("(00) 0 0000-0000");
-function verificarCondicoes (){$("#codigo_produto").focus(function () {
-  input_codigo_focado = true;
-});
-$("#codigo_produto").blur(function () {
-  input_codigo_focado = false;
-});
-$(".oders_inputs").focus(function () {
-  condicao_favoravel = false;
-});
-$(".oders_inputs").blur(function () {
-  condicao_favoravel = true;
-});}
-verificarCondicoes()
+function verificarCondicoes() {
+  $("#codigo_produto").focus(function () {
+    input_codigo_focado = true;
+  });
+  $("#codigo_produto").blur(function () {
+    input_codigo_focado = false;
+  });
+  $(".oders_inputs").focus(function () {
+    condicao_favoravel = false;
+  });
+  $(".oders_inputs").blur(function () {
+    condicao_favoravel = true;
+  });
+}
+verificarCondicoes();
 $(".pagamento_input").change(function () {
   if (
     $(this).val() == "Cartão Crédito" ||
@@ -470,11 +522,12 @@ function abrirModal(modal) {
   }
 }
 $("#valor_recebido_input").keyup(function () {
-  console.log('aqui')
+  console.log("aqui");
   let valor_calculado = parseFloat(
     Math.abs(
-      parseFloat($("#valor_total_input").val().replace('.','').replace(",", ".")) -
-        parseFloat($(this).val().replace(",", "."))
+      parseFloat(
+        $("#valor_total_input").val().replace(".", "").replace(",", ".")
+      ) - parseFloat($(this).val().replace(",", "."))
     ).toFixed(2)
   )
     .toString()
@@ -488,7 +541,7 @@ $("#valor_recebido_input").keyup(function () {
     $("#valor_calculado_input").val(valor_calculado);
   }
 });
-$('.finalizar_venda').click(function(){
+$(".finalizar_venda").click(function () {
   let valor_compra = parseFloat(
     $("#valor_compra").text().replace("R$", "").replace(",", ".")
   );
@@ -502,7 +555,7 @@ $('.finalizar_venda').click(function(){
     produtos[index] = produto_info;
   });
   data = {
-    colaborador:$('#codigo_colaborador_venda').val(),
+    colaborador: $("#codigo_colaborador_venda").val(),
     valor: valor_compra,
     caixa: caixa,
     produtos: produtos,
@@ -511,16 +564,19 @@ $('.finalizar_venda').click(function(){
 
   $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
     verificarValorCaixa();
-    if(ret !=''){
-      alert(ret)
-    }else{
-      location.reload()
+    if (ret != "") {
+      alert(ret);
+    } else {
+      location.reload();
     }
   });
-})
+});
 $(".finalizar_venda_button").click(function () {
   $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
-  if ($("#metodo_pagamento_princip").val() == "Dinheiro"  && $(this).attr("first") == 'sim') {
+  if (
+    $("#metodo_pagamento_princip").val() == "Dinheiro" &&
+    $(this).attr("first") == "sim"
+  ) {
     $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
     $(".modal_troco").css("display", "block");
     $(".modal_pagamento").css("display", "none");
@@ -538,7 +594,7 @@ $(".finalizar_venda_button").click(function () {
       produtos[index] = produto_info;
     });
     data = {
-      colaborador:$('#codigo_colaborador_venda').val(),
+      colaborador: $("#codigo_colaborador_venda").val(),
       valor: valor_compra,
       caixa: caixa,
       produtos: produtos,
@@ -546,17 +602,20 @@ $(".finalizar_venda_button").click(function () {
     };
 
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
-      if(ret !=''){
-        alert(ret)
-      }else{
-      location.reload()
-
+      if (ret != "") {
+        alert(ret);
+      } else {
+        location.reload();
       }
     });
   }
 });
 $(document).keyup(function (event) {
-  if (event.code.includes("Digit") && condicao_favoravel && window.location.href.includes('http://localhost/MixSalgados/Caixa/' )) {
+  if (
+    event.code.includes("Digit") &&
+    condicao_favoravel &&
+    window.location.href.includes("http://localhost/MixSalgados/Caixa/")
+  ) {
     var key = event.keyCode || event.which;
     key = String.fromCharCode(key);
 
@@ -610,13 +669,13 @@ let darker = false;
 
 function pesquisarProduto(barcode) {
   if (barcode.length == 13 || barcode.length == 8) {
-    clearTimeout(timeoutId)
-    timeoutId = setTimeout(function() {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
       var data = {
-        barcode: barcode
+        barcode: barcode,
       };
       var startTime = performance.now();
-      $.post("Models/post_receivers/select_produto.php", data, function(ret) {
+      $.post("Models/post_receivers/select_produto.php", data, function (ret) {
         var endTime = performance.now();
         var row = JSON.parse(ret);
         $("#desc_produto").val(row.nome);
@@ -626,12 +685,11 @@ function pesquisarProduto(barcode) {
       $("#codigo_produto").val("");
     }, 350);
   }
-
 }
 
-$("#desc_produto").blur(function(){
-  $(".search_results").css('display','none')
-})
+$("#desc_produto").blur(function () {
+  $(".search_results").css("display", "none");
+});
 //Mascara de moeda
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");
