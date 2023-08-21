@@ -1,9 +1,49 @@
-<fundo>
+<fundo></fundo>
+<form class="modal modal_fechar_caixa" style="align-items: center;">
+<div class="valores_informados_box">
+        <span class="valores_informados_title">Valores Informados:</span>
+        <div class="body_valores">
+            <div class="first_column">
 
-</fundo>
+                <div class="input_valores">
+                    <label for="dinheiro_informadas">Dinheiro: </label>
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="dinheiro_informadas" id="dinheiro_informadas">
+                </div>
+                <div class="input_valores">
+                    <label for="moedas_informadas">Moeda: </label>
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="moedas_informadas" id="moedas_informadas">
+                </div>
+                <div class="input_valores">
+                    <label for="pix_informadas">Pix: </label>
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="pix_informadas" id="pix_informadas">
+                </div>
+            </div>
+            <div class="first_column">
+                <div class="input_valores">
+                    <label for="cartao_informadas">Cartão: </label>
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="cartao_informadas" id="cartao_informadas">
+                </div>
+
+                <!-- <div class="input_valores">
+                    <label for="pix_informadas">Vale-Ticket </label>
+                    <input onKeyUp="mascaraMoeda(this, event)"type="text" class="input_princip oders_inputs"name="pix_informadas" id="pix_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)"type="text"  class="quantidade quantidade_pix oders_inputs">
+                </div> -->
+                <div class="input_valores">
+                    <label for="sangria_informadas">Sangria: </label>
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="sangria_informadas" id="sangria_informadas">
+                </div>
+            </div>
+            <div class="second_column">
+
+            </div>
+        </div>
+        <span class="valores_informados_footer">Valor Total: <red> R$00,00</red></span>
+    </div>
+    <button id="salvar_fechamento_funcionario">Salvar</button>
+</form>
 <?php 
-  if(!isset($_COOKIE['caixa'])){
-    echo '<red>INSIRA UM CAIXA VÁLIDO NO ICONE "<i class="fa-solid fa-bars"></i>"</red>';
+  if(!isset($_COOKIE['caixas'])){
   }
 ?>
  
@@ -20,19 +60,9 @@
 
   <span class="princip_span"id="abrir_lista_pedidos"><i class="fa-solid fa-chevron-down"></i> Pedidos</span>
   <div class="lista_pedidos">
-    <?php
-    $pedidos = \MySql::conectar()->prepare("SELECT * FROM `tb_pedidos` WHERE `caixa` = ? AND `entregue` = 0");
-    $pedidos->execute(array(''));
-    $pedidos = $pedidos->fetchAll();
-    foreach ($pedidos as $key => $value) {
-      $timestamp = strtotime($value['data_pedido']); // Converte a string para um timestamp Unix
-$data_formatada = date('d/m/Y', $timestamp);
-      echo "
-       <span > <input class='pedido_feito ' type='checkbox' pedido='".$value['id']."'><label onclick='editarPedido(this)' pedido='".json_encode($value)."'> ".$value['cliente']."-".$data_formatada."</label></span>
-      ";
-    }
-    ?>
+
   </div>
+  <span class="princip_span" onclick="abrirModal('modal_fechar_caixa')">Fechar Caixa</span>
   <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
 
 </aside>
