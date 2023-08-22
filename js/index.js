@@ -30,7 +30,7 @@ function setCaixa(code, callback) {
   };
 
   $.post("Models/post_receivers/select_colaborador.php", data, function (ret) {
-    console.log(ret);
+    console.log('ret'+ret);
     // Chama a função de retorno de chamada e passa o valor retornado
     callback(ret);
   });
@@ -49,11 +49,14 @@ $("#notification i").click(function () {
 $(".valores_informados").keyup(function () {
   soma = 0;
   $(".valores_informados").each(function (index) {
-    if ($(this).attr("id") == "sangria_informadas") {
+    if( $(this).val() != ''){
+          if ($(this).attr("id") == "sangria_informadas") {
       soma -= parseFloat($(this).val().replace(".", "").replace(",", "."));
     } else {
       soma += parseFloat($(this).val().replace(".", "").replace(",", "."));
     }
+
+}
 
     console.log($(this).val().replace(".", "").replace(",", "."));
   });
@@ -73,6 +76,11 @@ $(".modal_fechar_caixa").submit(function (e) {
     contentType: false,
     success: function (data) {
       console.log(data);
+      if(data != ''){
+        alert(data)
+      }else{
+        location.reload()
+      }
     },
   });
 
