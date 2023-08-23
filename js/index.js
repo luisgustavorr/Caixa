@@ -9,7 +9,11 @@ $(".colab_code").keyup(function () {
 if ($(".colab_code").val() == "") {
   $(this).css("animation", "pulse 3s infinite");
 }
-
+$('#teste_impressora').click(function(){
+  $.post("Models/post_receivers/teste_impressora.php", data, function (ret) {
+    alert(ret)
+  })
+})
 function getCookie(name) {
   let cookie = {};
 

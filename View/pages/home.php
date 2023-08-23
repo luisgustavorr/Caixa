@@ -75,6 +75,8 @@ if($fechamentos_de_hoje[0]  == 0 ){
   <?php 
 }
 ?>
+  <span class="princip_span" id="teste_impressora">Testar Impressora</span>
+
   <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
 
 </aside>
