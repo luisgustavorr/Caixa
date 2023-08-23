@@ -62,7 +62,19 @@
   <div class="lista_pedidos">
 
   </div>
+  <?php 
+$fechamentos_de_hoje = \MySql::conectar()->prepare("SELECT COUNT(*)
+FROM `tb_fechamento`
+WHERE DATE(`data`) = CURDATE()");
+$fechamentos_de_hoje->execute();
+$fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
+if($fechamentos_de_hoje[0]  == 0 ){
+  
+?>
   <span class="princip_span" onclick="abrirModal('modal_fechar_caixa')">Fechar Caixa</span>
+  <?php 
+}
+?>
   <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
 
 </aside>
