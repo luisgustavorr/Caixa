@@ -344,7 +344,7 @@ if($fechamentos_de_hoje[0]  == 0 ){
     <div class="inputs">
       <div class="first_inputs">
         <div class="input codigo_produto_input">
-          <span>Código do Produto:</span>
+          <span>Código do :</span>
           <div class="codigo_produto_input_mask">
             <input type="text" name="codigo_produto" placeholder="Escaneie o Cod.Barras do produto ou digite" id="codigo_produto" />
             <i class="fa-solid fa-magnifying-glass"></i>
