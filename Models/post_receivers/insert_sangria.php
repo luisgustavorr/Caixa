@@ -14,12 +14,16 @@ if(empty($user)){
     echo 'Código de usuário inválido';
 }
 $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
-$caixa->execute(array($_POST['caixa']));
+$caixa->execute(array(trim($_POST['caixa'])));
 $caixa = $caixa ->fetch();
 if(!empty($user)){
+    $sangria = \MySql::conectar()->prepare("INSERT INTO `tb_sangrias` (`id`, `colaborador`, `caixa`, `mensagem`, `valor`, `data`) VALUES (NULL,?,?,?,?,?)");
+    $sangria->execute(array($_POST['colaborador'],trim($_POST['caixa']),$_POST['mensagem'],$_POST['valor_sangria'],date("Y-m-d h:i:sa")));
 
+    $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` - ? WHERE `tb_caixas`.`caixa` = ? ");
+    $atualizar_db->execute(array($_POST['valor_sangria'],trim($_POST['caixa'])));
   try{
-    $connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+    @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
     @$printer = new Printer($connector);
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
@@ -39,18 +43,14 @@ $novo_valor = $_POST['valor'];
 // Escreve o rodapé da mensagem
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
 @$printer->text("Assinatura _______________________\n");
-$drawerCommand = "\x1B\x70\x00\x19\xFA";
+@$drawerCommand = "\x1B\x70\x00\x19\xFA";
 
 // Envie o comando para a impressora
-$connector->write($drawerCommand);
+@$connector->write($drawerCommand);
 // Finaliza a impressão e fecha a conexão
 @$printer->cut();
 @$printer->close();
-    $sangria = \MySql::conectar()->prepare("INSERT INTO `tb_sangrias` (`id`, `colaborador`, `caixa`, `mensagem`, `valor`, `data`) VALUES (NULL,?,?,?,?,?)");
-    $sangria->execute(array($_POST['colaborador'],$_POST['caixa'],$_POST['mensagem'],$_POST['valor_sangria'],date("Y-m-d h:i:sa")));
 
-    $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` - ? WHERE `tb_caixas`.`caixa` = ? ");
-    $atualizar_db->execute(array($_POST['valor_sangria'],$_POST['caixa']));
     
 
   

@@ -39,6 +39,7 @@ setCaixa(caixa, function (caixa_retornado) {
   console.log(caixa_retornado);
   caixa = caixa_retornado;
   $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
+  verificarValorCaixa(getCookie("last_codigo_colaborador"));
 });
 console.log(caixa);
 let produto_object = {};
@@ -417,7 +418,7 @@ function verificarValorCaixa(codigoColab) {
     }
   });
 }
-verificarValorCaixa(1);
+verificarValorCaixa(getCookie("last_codigo_colaborador"));
 function valorCaixa() {
   data = {
     caixa: caixa,
@@ -460,6 +461,7 @@ $(".modal_sangria").submit(function (e) {
     if (!vazio) {
       location.reload();
     } else {
+      console.log(ret)
       alert("Código de usuário inválido");
     }
   });
