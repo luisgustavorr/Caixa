@@ -462,7 +462,7 @@ $(".modal_sangria").submit(function (e) {
       location.reload();
     } else {
       console.log(ret)
-      alert("Código de usuário inválido");
+      alert(ret);
     }
   });
 });
