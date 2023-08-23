@@ -573,6 +573,7 @@ $(".finalizar_venda").click(function () {
   };
 
   $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+
     verificarValorCaixa();
     if (ret != "") {
       alert(ret);
@@ -615,6 +616,17 @@ $(".finalizar_venda_button").click(function () {
       if (ret != "") {
         alert(ret);
       } else {
+        moment.locale("en");
+        const dataAtual = moment();
+        const dataFutura = dataAtual.clone().add(30, "days"); // Usamos 'clone()' para não modificar a data atual
+        const GMTstring = dataFutura.utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
+        
+        // Define o cookie com a data de expiração
+        document.cookie = `last_codigo_colaborador=${$("#codigo_colaborador_venda").val()}; SameSite=Strict; expires=${GMTstring}`;
+        
+        let dataMoment = moment();
+        var dataNovaAdiantada = dataMoment.add(30, "days");
+        
         location.reload();
       }
     });
