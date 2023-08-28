@@ -415,9 +415,10 @@ function verificarValorCaixa(codigoColab) {
 
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
-    if (valor >= 30) {
+
+    if (valor >= 150) {
       $("#fazer_sangria").css("animation", "hysterical_pulse 0.7s infinite");
-    } else if (valor >= 20) {
+    } else if (valor >= 200) {
       $("#fazer_sangria").css("animation", "pulse 3s infinite");
     }
   });

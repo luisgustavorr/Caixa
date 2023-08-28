@@ -1,6 +1,7 @@
 function scanPedidosProximos() {
 
      $.post("Models/post_receivers/select_pedidos.php", {}, function(ret) {
+
         let pedidos = JSON.parse(ret)
         if(!$.isEmptyObject(pedidos)){
             $('#notification').css("display",'block')
