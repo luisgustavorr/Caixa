@@ -175,38 +175,47 @@ $("#desc_produto").on("keyup", function () {
     };
 
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
-      row = JSON.parse(ret);
-      $(".search_results").empty();
-      row.forEach((element) => {
-        $(".search_results").append(
-          '<span produto="' +
-            element.codigo +
-            '" class="resultado_pesquisa">' +
-            element.nome +
-            "</span>"
-        );
-      });
-      $(".resultado_pesquisa").click(function () {
-        data = {
-          barcode: $(this).attr("produto"),
-        };
+      try {
+        // Certifique-se de que a resposta seja válida JSON antes de fazer o parse
+        const row = JSON.parse(ret);
+        
+        $(".search_results").empty();
+        row.forEach((element) => {
+          $(".search_results").append(
+            '<span produto="' +
+              element.codigo +
+              '" class="resultado_pesquisa">' +
+              element.nome +
+              "</span>"
+          );
+        });
+        console.log($(".resultado_pesquisa"))
+        $(".resultado_pesquisa").click(function () {
+          data = {
+            barcode: $(this).attr("produto"),
+          };
 
-        $.post(
-          "Models/post_receivers/select_produto.php",
-          data,
-          function (ret) {
-            produto_object = ret;
-
-            let row = JSON.parse(ret);
-            console.log(row.nome);
-            $("#desc_produto").val(row.nome);
-          }
-        );
-      });
+          $.post("Models/post_receivers/select_produto.php", data, function (ret) {
+            try {
+              // Certifique-se de que a resposta seja válida JSON antes de fazer o parse
+              produto_object = JSON.parse(ret);
+              
+              console.log(produto_object);
+              $("#desc_produto").val(produto_object.nome);
+            } catch (error) {
+              console.error("Erro ao analisar JSON da resposta select_produto.php:", error);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Erro ao analisar JSON da resposta select_pesquisa.php:", error);
+      }
     });
   }
 });
+
 $("#add_produto").click(function () {
+  console.log(produto_object)
   pesquisarProdutoPorCodigoDeBarras(produto_object);
 });
 let executando = false;
@@ -239,6 +248,7 @@ $("#codigo_produto").on("keyup", function (e) {
         );
       });
       $(".resultado_pesquisa_by_barcode").click(function () {
+        console.log("aqui")
         data = {
           barcode: $(this).attr("produto"),
         };
@@ -263,7 +273,13 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
   console.log(ret);
   darker ? (darker_class = "darker") : (darker_class = "");
-  row = JSON.parse(ret);
+  if(typeof ret != "object"){
+    row = JSON.parse(ret);
+
+  }else{
+    row = ret
+
+  }
   quantidade = 0;
 
   if (
@@ -589,7 +605,7 @@ $(".finalizar_venda").click(function () {
 
     verificarValorCaixa();
     if (ret != "") {
-      alert(ret);
+      alert("Código de usuario inválido");
     } else {
       location.reload();
     }
@@ -633,7 +649,8 @@ $(".finalizar_venda_button").click(function () {
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
       console.log(ret)
       if (ret != "") {
-        alert(ret);
+        alert("Código de usuario inválido");
+
       } else {
         moment.locale("en");
         const dataAtual = moment();
@@ -728,9 +745,7 @@ function pesquisarProduto(barcode) {
   }
 }
 
-$("#desc_produto").blur(function () {
-  $(".search_results").css("display", "none");
-});
+
 //Mascara de moeda
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");
