@@ -214,7 +214,7 @@ $(".modal_anotar_pedido").submit(function (e) {
 $.post("Models/post_receivers/select_pedidos.php", {anytime:true}, function(ret) {
   let pedidos = JSON.parse(ret)
   if(!$.isEmptyObject(pedidos)){
-      $('#notification').css("display",'block')
+      
       pedidos.forEach(element => {
       let data = element.data_entrega.split(' ')
           $('.lista_pedidos').append("<span > <input class='pedido_feito' type='checkbox' pedido='"+element.id+"'><label onclick='editarPedido(this)' pedido='"+JSON.stringify(element)+"'>"+element.cliente+"-"+element.data_entrega+" </label></span>")
