@@ -355,7 +355,7 @@ function alterarTabela() {
           var dataMomentMIN = moment($("#data_minima").val(), "YYYY-MM-DD");
           var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
           $(".tabela_header span").html(
-            "Vendas no período de: <yellow>" +
+            "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
               dataMINFormatada +
               "</yellow> até <yellow>" +
               dataMAXFormatada +
@@ -371,13 +371,14 @@ function alterarTabela() {
       caixa: $('#select_caixa').val(),
     };
     $.post("../Models/post_receivers/select_podium.php", data, function (ret) {
+
       $(".tabela_father tbody").html(ret);
       var dataMomentMAX = moment($("#data_maxima").val(), "YYYY-MM-DD");
       var dataMAXFormatada = dataMomentMAX.format("DD/MM/YYYY");
       var dataMomentMIN = moment($("#data_minima").val(), "YYYY-MM-DD");
       var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
       $(".tabela_header span").html(
-        "Vendas no período de: <yellow>" +
+        "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
           dataMINFormatada +
           "</yellow> até <yellow>" +
           dataMAXFormatada +
@@ -403,7 +404,7 @@ $("switch").click(function () {
       var dataMomentMIN = moment($("#data_minima").val(), "YYYY-MM-DD");
       var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
       $(".tabela_header span").html(
-        "Vendas no período de: <yellow>" +
+        "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
           dataMINFormatada +
           "</yellow> até <yellow>" +
           dataMAXFormatada +
@@ -429,7 +430,7 @@ $("switch").click(function () {
         var dataMomentMIN = moment($("#data_minima").val(), "YYYY-MM-DD");
         var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
         $(".tabela_header span").html(
-          "Vendas no período de: <yellow>" +
+          "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
             dataMINFormatada +
             "</yellow> até <yellow>" +
             dataMAXFormatada +

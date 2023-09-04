@@ -27,11 +27,12 @@ function getCookie(name) {
 
 let caixa = getCookie("last_codigo_colaborador");
 function setCaixa(code, callback) {
-  console.log(code);
+ 
   var data = {
     colaborador: code,
     blue_sky: true,
   };
+  console.log(data);
 
   $.post("Models/post_receivers/select_colaborador.php", data, function (ret) {
     console.log('ret'+ret);
@@ -569,10 +570,17 @@ $(".finalizar_venda").click(function () {
     };
     produtos[index] = produto_info;
   });
+  let caixa_para_venda =''
+
+  setCaixa($("#codigo_colaborador_venda").val(), function (caixa_retornado) {
+    console.log('certo:'+caixa_retornado);
+    caixa = caixa_retornado;
+    $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
+    verificarValorCaixa(getCookie("last_codigo_colaborador"));
+  });
   data = {
     colaborador: $("#codigo_colaborador_venda").val(),
     valor: valor_compra,
-    caixa: caixa,
     produtos: produtos,
     pagamento: $("#metodo_pagamento_princip").val(),
   };
@@ -609,15 +617,21 @@ $(".finalizar_venda_button").click(function () {
       };
       produtos[index] = produto_info;
     });
+    setCaixa($("#codigo_colaborador_venda").val(), function (caixa_retornado) {
+      console.log('certo:'+caixa_retornado);
+      caixa = caixa_retornado;
+      $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
+      verificarValorCaixa(getCookie("last_codigo_colaborador"));
+    });
     data = {
       colaborador: $("#codigo_colaborador_venda").val(),
       valor: valor_compra,
-      caixa: caixa,
       produtos: produtos,
       pagamento: $("#metodo_pagamento_princip").val(),
     };
 
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+      console.log(ret)
       if (ret != "") {
         alert(ret);
       } else {

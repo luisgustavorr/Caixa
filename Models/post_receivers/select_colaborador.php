@@ -4,6 +4,7 @@ include('../../MySql.php');
 if(isset($_POST['blue_sky'])){
     $infos = \MySql::conectar()->prepare("SELECT caixa FROM `tb_colaboradores` WHERE `codigo` =  ?
     ");
+
     $infos->execute(array($_POST['colaborador']));
     $infos = $infos->fetch();
     if(!empty($infos)){
