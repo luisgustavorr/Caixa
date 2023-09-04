@@ -541,6 +541,7 @@ $(".pagamento_input").change(function () {
   $("#" + $(this).attr("id") + "_text").text($(this).val());
 });
 $("fundo").click(function () {
+  $('#editando').val(false)
   $(".modal").each(function () {
     $(this).css("display", "none");
     $("fundo").css("display", "none");

@@ -5,7 +5,14 @@
         <span class="valores_informados_title">Valores Informados:</span>
         <div class="body_valores">
             <div class="first_column">
+  <?php $fechamentos_de_hoje = \MySql::conectar()->prepare("SELECT caixa
+FROM `tb_colaboradores`
+WHERE codigo = ?");
+$fechamentos_de_hoje->execute(array($_COOKIE['last_codigo_colaborador']));
+$fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 
+?>
+                <input type="hidden"  value="<?php print_r($fechamentos_de_hoje['caixa']); ?>" name="caixa_alvo">
                 <div class="input_valores">
                     <label for="dinheiro_informadas">Dinheiro: </label>
                     <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="dinheiro_informadas" id="dinheiro_informadas">
@@ -69,7 +76,7 @@ FROM `tb_fechamento`
 WHERE DATE(`data`) = CURDATE()");
 $fechamentos_de_hoje->execute();
 $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
-if($fechamentos_de_hoje[0]  == 0 ){
+if($fechamentos_de_hoje[0]  == 0 AND isset($_COOKIE['last_codigo_colaborador'])){
   
 ?>
   <span class="princip_span" onclick="abrirModal('modal_fechar_caixa')">Fechar Caixa</span>
