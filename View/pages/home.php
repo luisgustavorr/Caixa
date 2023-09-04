@@ -163,7 +163,7 @@ if($fechamentos_de_hoje[0]  == 0 ){
 
     </div>
     <div class="valor_caixa_father input_father">
-      <span>Quantidade/KG:</span>
+      <span>Quantidade/<span class="select_valor_balanca_clicker">KG:</span></span>
       <input type="text" class="oders_inputs" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
@@ -358,7 +358,7 @@ if($fechamentos_de_hoje[0]  == 0 ){
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Quantidade/KG:</span>
+          <span style="margin: 0;">Quantidade/<span class="select_valor_balanca_clicker">KG</span>:</span>
           <input class="oders_inputs" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
@@ -446,6 +446,7 @@ if($fechamentos_de_hoje[0]  == 0 ){
 
 <script src="<?php echo INCLUDE_PATH ?>js/index.js"></script>
 <script src="<?php echo INCLUDE_PATH ?>js/atualizar_sistema.js"></script>
+<script src="<?php echo INCLUDE_PATH ?>js/selecionar_valor_balanca.js"></script>
 
 <script src="<?php echo INCLUDE_PATH ?>js/posts_senders.js"></script>
 <script src="<?php echo INCLUDE_PATH ?>js/procurar_pedidos_proximos.js"></script>
