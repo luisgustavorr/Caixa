@@ -1,41 +1,28 @@
-<?php 
-require_once 'PhpSerial.php';
 
-// Configurações da porta serial
-$port = '/dev/ttyS0'; // Ou 'COM1' no Windows
-$baud_rate = 9600;
-$data_bits = 8;
-$stop_bits = 1;
-$parity = 'none';
+<?php
+$port = 'COM1'; // A porta serial à qual a balança está conectada
+$baud = 9600;   // Taxa de baud (velocidade de comunicação) da balança
 
-// Criar uma instância da classe phpSerial
-$serial = new phpSerial;
+$serial = fopen($port, 'r+');
 
-// Configurar as propriedades da porta serial
-$serial->deviceSet($port);
-$serial->confBaudRate($baud_rate);
-$serial->confCharacterLength($data_bits);
-$serial->confStopBits($stop_bits);
-$serial->confParity($parity);
+if ($serial) {
+    // Configurar a porta serial
+    stream_set_timeout($serial, 5); // Tempo limite para leitura
 
-// Abrir a porta serial
-$serial->deviceOpen();
+    // Ler dados da balança
+    $data = fread($serial, 1024); // Leitura de até 1024 bytes
 
-// Comando para solicitar o peso da balança (exemplo)
-$command = "P"; // Consulte o manual para o comando correto
+    // Fechar a porta serial
+    fclose($serial);
 
-// Enviar o comando para a balança
-$serial->sendMessage($command);
+    // Processar os dados recebidos da balança (os dados podem ser formatados de acordo com o protocolo da balança)
+    
+    // Suponha que os dados recebidos sejam simplesmente o peso em quilogramas
+    $weightInKg = floatval($data);
 
-// Aguardar um curto período de tempo para receber a resposta
-usleep(100000); // Aguarde 0,1 segundo (ajuste conforme necessário)
-
-// Ler a resposta da balança
-$response = $serial->readPort();
-
-// Fechar a porta serial
-$serial->deviceClose();
-
-// Processar a resposta recebida (o formato depende do protocolo da balança)
-echo "Resposta da balança: " . $response;
+    // Exibir o peso
+    echo "Peso na Balança: " . $weightInKg . " kg";
+} else {
+    echo "Não foi possível abrir a porta serial.";
+}
 ?>
