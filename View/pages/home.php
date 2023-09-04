@@ -163,8 +163,8 @@ if($fechamentos_de_hoje[0]  == 0 ){
 
     </div>
     <div class="valor_caixa_father input_father">
-      <span>Quantidade/<span class="select_valor_balanca_clicker">KG:</span></span>
-      <input type="text" class="oders_inputs" name="" value="1" id="quantidade_produto_pedido">
+      <span>Quantidade/<span class="select_valor_balanca_clicker"  button_identifier="pedido">KG:</span></span>
+      <input type="text" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
     <div class="valor_caixa_father input_father">
@@ -358,8 +358,8 @@ if($fechamentos_de_hoje[0]  == 0 ){
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Quantidade/<span class="select_valor_balanca_clicker">KG</span>:</span>
-          <input class="oders_inputs" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
+          <span style="margin: 0;">Quantidade/<span class="select_valor_balanca_clicker"  button_identifier="venda">KG</span>:</span>
+          <input class="oders_inputs alvo_valor_balanca venda_button" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
       <div class="second_inputs">
