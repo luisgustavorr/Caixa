@@ -1,6 +1,7 @@
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
+console.log('atualização aplicada')
 $(".colab_code").keyup(function () {
   if ($(this).val() == "") {
     $(this).css("animation", "pulse 3s infinite");
