@@ -4,7 +4,7 @@
       "Models/post_receivers/select_valor_balanca.php",
       {},
       function (ret) {
-        console.log(attr_button_identifier);
+        console.log('ret'+ret);
         if (!ret.includes("ERROR")) {
           mascaraPesoSemKeyup($("."+attr_button_identifier+"_button"), ret);
         }
