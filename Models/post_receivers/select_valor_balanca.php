@@ -21,7 +21,7 @@ if ($serial) {
     $weightInKg = floatval($data);
 
     // Exibir o peso
-    echo $weightInKg ;
+    echo $data;
 } else {
     echo "Não foi possível abrir a porta serial.";
 }
