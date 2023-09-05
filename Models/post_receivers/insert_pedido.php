@@ -11,7 +11,7 @@ try{
     $retirar = 'Não';
 
   }
-  $connector = new WindowsPrintConnector(dest:"TM-T20X");
+  $connector = new WindowsPrintConnector(dest:"EPSON TM-T20 ReceiptE4");
 
   $printer = new Printer($connector);
 
