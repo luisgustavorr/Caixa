@@ -1,6 +1,6 @@
 
 <?php
-$port = 'COM9'; // A porta serial à qual a balança está conectada
+$port = 'COM3'; // A porta serial à qual a balança está conectada
 $baud = 9600;   // Taxa de baud (velocidade de comunicação) da balança
 
 $serial = fopen($port, 'r+');
