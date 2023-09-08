@@ -11,6 +11,9 @@
     />
    <script src="https://kit.fontawesome.com/15d5de4016.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?php echo INCLUDE_PATH?>View/pages/style/style.css" />
+
+    <link rel="stylesheet" href="<?php echo INCLUDE_PATH?>fontawesome-free-6.4.2-web/css/all.min.css" />
+
     <title>MixSalgados PDV</title>
     <script type="text/javascript" src="<?php echo INCLUDE_PATH?>js/jquery.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -20,7 +23,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
 <!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 <link rel="apple-touch-icon" sizes="180x180" href="<?php echo INCLUDE_PATH ?>Favicon/apple-touch-icon.png">

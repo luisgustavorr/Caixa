@@ -1,42 +1,41 @@
-<?php 
-require __DIR__ . '/../../vendor/autoload.php';
-print_r($_POST);
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+<?php
+// Configurações do SQLite
+$sqlite_db = 'seu_banco_de_dados_sqlite.db';
 
-// Conecta à impressora (substitua "printer_device" pelo caminho ou nome da porta da impressora)
-$connector = new WindowsPrintConnector(dest:"TM-T20X");
-
-$printer = new Printer($connector);
-// Configura o modo de impressão (tamanho da fonte, negrito, etc.)
-$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
-
-// Escreve o cabeçalho do fechamento de caixa
-$printer->text("FECHAMENTO DE CAIXA\n");
-$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-$printer->text("Data: " . date("d/m/Y H:i:s") . "\n"); // Adicione a data e hora do fechamento
-$funcionario = $_POST['funcionario'];
-$printer->text("Funcionário: " . $funcionario  . "\n"); // Adicione a data e hora do fechamento
-
-// Escreve os valores informados pelo funcionário
-$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
-$printer->text("Valores Apurados\n");
-$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-$printer->text("Troco Inicial ".$_POST['troco_inicial']."\n");
-$printer->text("Total Vendas ".$_POST['total_vendas']."\n");
-$printer->text("Troco Final ".$_POST['troco_final']."\n");
-$printer->text("Total Apurado ".$_POST['total_apurado']."\n");
-$printer->text("Total Informado ".$_POST['total_informado']."\n");
-if($_POST['diferenca'] < 0 ){
-$printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
-
+// Conexão com o SQLite
+try {
+    $pdo = new PDO("sqlite:$sqlite_db");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erro na conexão com o SQLite: " . $e->getMessage());
 }
-$printer->text("Diferença ".$_POST['diferenca']."\n");
 
-// Escreve o campo de assinatura
-$printer->text("\nAssinatura _______________________\n");
+// Consulta para selecionar todos os dados da tabela SQLite
+$select_query = "SELECT * FROM sua_tabela_sqlite";
 
-// Finaliza a impressão e fecha a conexão
-$printer->cut();
-$printer->close();
+try {
+    $result = $pdo->query($select_query);
+
+    if ($result) {
+        // Exibir os dados da tabela
+        echo "<table border='1'>";
+        echo "<tr><th>ID</th><th>Coluna1</th><th>Coluna2</th><th>Coluna3</th></tr>";
+        foreach ($result as $row) {
+            echo "<tr>";
+            echo "<td>" . $row['id'] . "</td>";
+            echo "<td>" . $row['coluna1'] . "</td>";
+            echo "<td>" . $row['coluna2'] . "</td>";
+            echo "<td>" . $row['coluna3'] . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+    } else {
+        echo "Nenhum dado encontrado na tabela.";
+    }
+} catch (PDOException $e) {
+    die("Erro ao consultar a tabela SQLite: " . $e->getMessage());
+}
+
+// Fechar a conexão
+$pdo = null;
 ?>

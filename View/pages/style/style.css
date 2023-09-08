@@ -1064,6 +1064,8 @@ input#valor_entrada {
   display: grid;
   align-items: center;
   height: 20px;
+  text-overflow: ellipsis;
+  overflow-y: hidden;
 }
 .venda_atual_body tbody tr td i {
   cursor: pointer;
