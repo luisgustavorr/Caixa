@@ -38,6 +38,8 @@ $novo_valor = $_POST['valor'];
 
 @$printer->text("Valor Sangria: R$" . number_format($valorSangria, 2, ',', '.') . "\n");
 @$printer->text("Novo valor em Caixa: R$" . $novo_valor . "\n");
+@$printer->text("Código do funcionário: " . $_POST['colaborador'] . "\n");
+
 @$printer->text("Motivo: " . $motivoSangria . "\n");
 
 // Escreve o rodapé da mensagem

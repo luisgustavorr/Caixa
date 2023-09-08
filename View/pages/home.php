@@ -41,6 +41,10 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
                     <label for="sangria_informadas">Sangria: </label>
                     <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="sangria_informadas" id="sangria_informadas">
                 </div>
+                <div class="input_valores">
+                    <label for="codigo_colaborador_informado_fechamento">Seu Código: </label>
+                    <input  type="text" class="valores_informados input_princip_completo oders_inputs colab_code" name="codigo_colaborador_informado_fechamento" id="codigo_colaborador_informado_fechamento">
+                </div>
             </div>
             <div class="second_column">
 
@@ -70,19 +74,9 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
   <div class="lista_pedidos">
 
   </div>
-  <?php 
-$fechamentos_de_hoje = \MySql::conectar()->prepare("SELECT COUNT(*)
-FROM `tb_fechamento`
-WHERE DATE(`data`) = CURDATE()");
-$fechamentos_de_hoje->execute();
-$fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
-if($fechamentos_de_hoje[0]  == 0 AND isset($_COOKIE['last_codigo_colaborador'])){
-  
-?>
+
   <span class="princip_span" onclick="abrirModal('modal_fechar_caixa')">Fechar Caixa</span>
-  <?php 
-}
-?>
+
   <span class="princip_span" id="teste_impressora">Testar Impressora</span>
 
   <span class="princip_span" onclick="atualizarSistema('modal_anotar_pedido')">Atualizar Sistema</span>
