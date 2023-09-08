@@ -84,7 +84,7 @@ $(".modal_fechar_caixa").submit(function (e) {
     success: function (data) {
       console.log(data);
       if(data != ''){
-        alert(data)
+    
       }else{
         location.reload()
       }
