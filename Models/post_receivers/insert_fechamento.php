@@ -5,6 +5,12 @@ use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 date_default_timezone_set('America/Sao_Paulo');
 
 try{
+    $user = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores`  WHERE `codigo` = ?");
+$user->execute(array($_POST['caixa_alvo']));
+$user = $user->fetch();
+@$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+
+@$printer = new Printer($connector);
     @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
     @$printer->text("FECHAMENTO DE CAIXA\n");
     @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)

@@ -36,6 +36,8 @@ if (!empty($colab)) {
   }
   @$printer->text("Valor total:".number_format($valor_compra_total,2,',','.'));
     $printer->text("-----------------------------------------\n");
+    $printer->cut();
+    $printer->close();
 } else {
   echo 'Código de vendedor inválido';
 }

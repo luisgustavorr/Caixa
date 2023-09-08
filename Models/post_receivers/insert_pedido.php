@@ -11,9 +11,12 @@ try{
     $retirar = 'Não';
 
   }
-  $connector = new WindowsPrintConnector(dest:"EPSON TM-T20 ReceiptE4");
+  $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+$caixa->execute(array(trim($_COOKIE['caixa'])));
+$caixa = $caixa ->fetch();
+  @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
-  $printer = new Printer($connector);
+  @$printer = new Printer($connector);
 
   $printer->text("PEDIDO\n");
 $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
@@ -21,7 +24,7 @@ $printer->text("Endereco:".$_POST['endereco']."\n");
 $printer->text("Cliente:".$_POST['cliente']."\n");
 $printer->text("Data do Pedido:".$_POST['data_pedido']."\n");
 $printer->text("Data da Entrega:".$_POST['data_entrega']."\n");
-$printer->text("Vai retirar?".$retirar."\n");
+$printer->text("Vai retirar ?".$retirar."\n");
 
 $printer->text("-----------------------------------------\n");
 
