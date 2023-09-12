@@ -42,7 +42,7 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
                     <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="sangria_informadas" id="sangria_informadas">
                 </div>
                 <div class="input_valores">
-                    <label for="codigo_colaborador_informado_fechamento">Seu Código: </label>
+                    <label for="codigo_colaborador_informado_fechamento">Colaborador: </label>
                     <input  type="text" class="valores_informados input_princip_completo oders_inputs colab_code" name="codigo_colaborador_informado_fechamento" id="codigo_colaborador_informado_fechamento">
                 </div>
             </div>
@@ -359,7 +359,7 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Quantidade/<span class="select_valor_balanca_clicker"  button_identifier="venda">KG</span>:</span>
+          <span style="margin: 0;">Qtd/<span class="select_valor_balanca_clicker" style="cursor:pointer;" button_identifier="venda">KG</span>:</span>
           <input class="oders_inputs alvo_valor_balanca venda_button" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
