@@ -84,7 +84,7 @@ $(".modal_fechar_caixa").submit(function (e) {
     success: function (data) {
       console.log(data);
       if(data != ''){
-    
+        alert(data)
       }else{
         location.reload()
       }
@@ -549,7 +549,12 @@ $("fundo").click(function () {
   });
 });
 function abrirModal(modal) {
+  side_bar_aberta = !side_bar_aberta;
+
   $("." + modal).css("display", "flex");
+  $('#sidebar').css("width",'0')
+  $('#sidebar').css("overflow",'hidden')
+
   $("fundo").css("display", "flex");
   if (modal == "modal_sangria") {
     valorCaixa();
