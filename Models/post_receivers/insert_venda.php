@@ -3,14 +3,12 @@
 
 
 include('../../MySql.php');
+require __DIR__ . '/../../vendor/autoload.php';
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 
 date_default_timezone_set('America/Sao_Paulo');
-@$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
-@$printer->text("RELATORIO DE VENDA\n");
-@$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($_POST['colaborador']));
 $colab = $colab->fetch();
@@ -18,6 +16,13 @@ $colab = $colab->fetch();
 $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
 $caixa->execute(array($colab['caixa']));
 $caixa = $caixa->fetch();
+@$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+
+@$printer = new Printer($connector);
+@$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
+@$printer->text("RELATORIO DE VENDA\n");
+@$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
+
 if (!empty($colab)) {
   unset($_COOKIE['caixa']);
   setcookie("caixa", $colab['caixa'], time() + 20 * 24 * 60 * 60);
