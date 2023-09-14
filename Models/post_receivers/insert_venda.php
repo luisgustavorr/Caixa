@@ -20,9 +20,8 @@ $caixa = $caixa->fetch();
 
 @$printer = new Printer($connector);
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
-@$printer->text("RELATORIO DE VENDA\n");
+@$printer->text("Mix Salgados\n");
 @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-
 if (!empty($colab)) {
   unset($_COOKIE['caixa']);
   setcookie("caixa", $colab['caixa'], time() + 20 * 24 * 60 * 60);
