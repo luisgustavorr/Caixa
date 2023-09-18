@@ -15,8 +15,10 @@ $caixa = $caixa->fetch();
     @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
 @$printer = new Printer($connector);
+$printer->setLineSpacing(30);
+
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
-@$printer->text("RELATORIO DE VENDA\n");
+@$printer->text("CUPOM DE VENDA\n");
 
 
 @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
