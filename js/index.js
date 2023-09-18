@@ -7,6 +7,13 @@ document.addEventListener("keydown", function(e) {
   }
 
 });
+$('#sim').click(function(){
+  $(".input_endereco_cliente").css('visibility',' unset')
+})
+$('#nao').click(function(){
+  $(".input_endereco_cliente").css('visibility',' hidden')
+  
+})
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
@@ -477,6 +484,7 @@ setInterval(function () {
 }, 10000);
 
 $(".modal_sangria").submit(function (e) {
+  $(".modal_sangria #finaliza_sangria_button").html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   e.preventDefault();
   setCaixa($("#colaborador_input").val(), function (caixa_retornado) {
     console.log(caixa_retornado);
@@ -548,13 +556,18 @@ $(".pagamento_input").change(function () {
     $(".a_vista").css("display", "none");
     $(".parcelado").css("display", "block");
     $("#tipo_pagamento").val("Parcelado");
+   
+
+
   } else {
     $("#tipo_pagamento").val("À Vista");
     $("#quantidade_parcelas").val("1x");
     $(".parcelado").css("display", "none");
     $(".a_vista").css("display", "block");
   }
-  $("#" + $(this).attr("id") + "_text").text($(this).val());
+  $('#tipo_pagamento_text').text($("#tipo_pagamento").val())
+  $('#quantidade_parcelas_text').text($('#quantidade_parcelas').val())
+  $('#metodo_pagamento_text').text($('#metodo_pagamento_princip').val())
 });
 $("fundo").click(function () {
   $('#editando').val(false)
