@@ -1,3 +1,12 @@
+document.addEventListener("keydown", function(e) {
+
+  if(e.keyCode === 13) {
+        
+    e.preventDefault();
+    
+  }
+
+});
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;
@@ -112,8 +121,10 @@ $("#abrir_lista_pedidos").click(function () {
 $(".modal_anotar_pedido tbody").children().remove();
 
 $(".tags_produto_name").keyup(function (e) {
+
   let produto = $(this).val().replace(".", "");
-  if (e.keyCode == 190) {
+  if (e.keyCode == 13) {
+    e.preventDefault()
     $(".modal_anotar_pedido tbody").append(
       '<tr preco_produto="" produto="' +
         produto.replace(" ", "_") +
@@ -421,9 +432,11 @@ function verificarValorCaixa(codigoColab) {
   const dataAtual = moment();
   const dataFutura = dataAtual.add(30, "days");
   const GMTstring = dataFutura.utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
-
+if(codigoColab > 0){
   document.cookie =
     "last_codigo_colaborador=" + codigoColab + ";SameSite=Strict";
+}
+
   let dataMoment = moment();
   var dataNovaAdiantada = dataMoment.add(30, "days");
 
@@ -614,6 +627,11 @@ $(".finalizar_venda").click(function () {
     if (ret != "") {
       alert("Código de usuario inválido");
     } else {
+      if($("#codigo_colaborador_venda").val() > 0){
+        document.cookie =
+          "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
+      }
+      
       location.reload();
     }
   });
@@ -658,19 +676,12 @@ $(".finalizar_venda_button").click(function () {
       if (ret != "") {
         alert("Código de usuario inválido");
 
-      } else {
-        moment.locale("en");
-        const dataAtual = moment();
-        const dataFutura = dataAtual.clone().add(30, "days"); // Usamos 'clone()' para não modificar a data atual
-        const GMTstring = dataFutura.utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]");
-        
-        // Define o cookie com a data de expiração
-        document.cookie = `last_codigo_colaborador=${$("#codigo_colaborador_venda").val()}; SameSite=Strict; expires=${GMTstring}`;
-        
-        let dataMoment = moment();
-        var dataNovaAdiantada = dataMoment.add(30, "days");
-        
-        location.reload();
+      } else{
+        if($("#codigo_colaborador_venda").val() > 0){
+          document.cookie =
+            "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
+        }
+        location.reload()
       }
     });
   }

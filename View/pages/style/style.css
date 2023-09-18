@@ -308,9 +308,19 @@ input#valor_entrada {
 }
 .finalizar_venda_button_principal_father {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 .finalizar_venda_button_principal {
+  color: rgb(253, 201, 24);
+  background: rgb(230, 13, 46);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+#imprimir_ultima_venda {
   color: rgb(253, 201, 24);
   background: rgb(230, 13, 46);
   border: none;
