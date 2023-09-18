@@ -29,7 +29,7 @@ $printer->text("Cliente:".$_POST['cliente']."\n");
 
 $printer->text("Data do Pedido:".$_POST['data_pedido']."\n");
 $printer->text("Data da Entrega:".$_POST['data_entrega']."\n");
-$printer->text("Vai retirar ?".$retirar."\n");
+$printer->text("Entrega ?".$retirar."\n");
 if($retirar == 'Sim'){
 $printer->text("Endereco:".$_POST['endereco']."\n");
 
