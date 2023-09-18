@@ -50,7 +50,7 @@ $printer->text("-----------------------------------------\n");
       $produto = \MySql::conectar()->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
     $produto->execute(array($value['id']));
     $produto = $produto->fetch();
-    $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id])." R$".$value['preco']."\n");
+    $printer->text( $value['quantidade'].'-'.$value['id']." R$".$value['preco']."\n");
     $valor_total =  $valor_total+($value['preco']*$value['quantidade']);
   };
   $printer->text("Valor Total:".$valor_total."\n");
