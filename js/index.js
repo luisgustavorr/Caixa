@@ -21,7 +21,7 @@ if ($(".colab_code").val() == "") {
 }
 $('#teste_impressora').click(function(){
   $.post("Models/post_receivers/teste_impressora.php", data, function (ret) {
-    alert(ret)
+   
   })
 })
 function getCookie(name) {
@@ -143,7 +143,7 @@ $(".tags_produto_name").keyup(function (e) {
         "'></td><td id='valor_produto_total_" +
         produto.replace(" ", "_") +
         "' >" +
-        100 +
+        0 +
         '</td> <td produto="' +
         produto.replace(" ", "_") +
         '" class="remove_item_pedido ">-</td>'

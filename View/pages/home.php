@@ -137,7 +137,7 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
       <input type="text" value="" onKeyUp="mascaraMoeda(this, event)"class="oders_inputs" name="valor_entrada" id="valor_entrada">
     </div>
     <div class="input_select">
-        <span>Pagamento da Entrada:</span>
+        <span class="pagamento_entrada">Pagamento da Entrada:</span>
         <select name="metodo_pagamento_entrada" class="pagamento_input" id="metodo_pagamento_entrada">
           <option value="Cartão Crédito">Cartão Crédito</option>
           <option value="Dinheiro">Dinheiro</option>
