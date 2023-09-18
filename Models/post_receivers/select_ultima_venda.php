@@ -24,7 +24,7 @@ if(isset($_COOKIE['last_codigo_colaborador'])){
     $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? ORDER BY `data` desc LIMIT 1;");
     $data_ultima_venda->execute(array($_COOKIE['last_codigo_colaborador']));
     $data_ultima_venda = $data_ultima_venda->fetch();
-@$printer->text("Data da compra: ".$data_ultima_venda['venda']."\n");
+@$printer->text("Data da compra: ".$data_ultima_venda['data']."\n");
     $vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT * FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `data`=? ORDER BY `data` ");
     $vendas_com_ultima_data->execute(array($_COOKIE['last_codigo_colaborador'],$data_ultima_venda['data']));
     $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
