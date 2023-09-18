@@ -232,9 +232,10 @@ $("#add_produto").click(function () {
 });
 let executando = false;
 $("#codigo_produto").on("keyup", function (e) {
+ 
   if (executando) return;
   executando = true;
-  if ($(this).val() === "" && e.keyCode == "Backspace") {
+  if ($(this).val() == "") {
     $(".search_results_by_barcode").css("display", "none");
   } else {
     $(".search_results_by_barcode").css("display", "block");
@@ -280,6 +281,7 @@ $("#codigo_produto").on("keyup", function (e) {
     });
   }
   executando = false;
+
 });
 function pesquisarProdutoPorCodigoDeBarras(ret) {
   let total_valor = 0;
@@ -687,10 +689,11 @@ $(".finalizar_venda_button").click(function () {
   }
 });
 $(document).keyup(function (event) {
+
   if (
     event.code.includes("Digit") &&
     condicao_favoravel &&
-    window.location.href.includes("http://localhost/MixSalgados/Caixa/")
+    window.location.href.includes("https://localhost/MixSalgados/Caixa/")
   ) {
     var key = event.keyCode || event.which;
     key = String.fromCharCode(key);
@@ -768,7 +771,23 @@ function pesquisarProduto(barcode) {
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");
 };
-
+function mascaraMoedaComPonto(campo, evento) {
+  var tecla = !evento ? window.event.keyCode : evento.which;
+  var valor = campo.value.replace(/[^\d]+/gi, "").reverse();
+  var resultado = "";
+  var mascara = "########.##".reverse();
+  for (var x = 0, y = 0; x < mascara.length && y < valor.length; ) {
+    if (mascara.charAt(x) != "#") {
+      resultado += mascara.charAt(x);
+      x++;
+    } else {
+      resultado += valor.charAt(y);
+      y++;
+      x++;
+    }
+  }
+  campo.value = resultado.reverse();
+}
 function mascaraMoeda(campo, evento) {
   var tecla = !evento ? window.event.keyCode : evento.which;
   var valor = campo.value.replace(/[^\d]+/gi, "").reverse();
