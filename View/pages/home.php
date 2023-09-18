@@ -103,7 +103,7 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
     <div class="endereco_cliente_father">
       <div class="input_endereco_cliente">
       <span>Endereço do cliente:</span>
-      <input required type="text" name="endereco_cliente_input" class="oders_inputs" id="endereco_cliente_input" placeholder="Insira o endereço do cliente">
+      <input  type="text" name="endereco_cliente_input" class="oders_inputs" id="endereco_cliente_input" placeholder="Insira o endereço do cliente">
       </div>
       <div class="input_select">
         <span>Método de Pagamento:</span>

@@ -175,6 +175,7 @@ $('#salvar_caixa').click(function(){
   })
 })
 $(".modal_anotar_pedido").submit(function (e) {
+  $('#finaliza_sangria_button').html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   e.preventDefault();
   produtos = [];
   data_entrega = $("#data_entrega").val().replace("T", " ");

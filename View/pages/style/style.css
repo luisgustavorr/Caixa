@@ -255,7 +255,9 @@ input#valor_entrada {
   background: white;
   border-radius: 15p;
 }
-
+.input_endereco_cliente {
+  visibility: hidden;
+}
 .inputs_pagamento_father input {
   width: 100%;
   border-radius: 12px;
