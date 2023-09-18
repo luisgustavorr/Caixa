@@ -121,7 +121,7 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
     <div class="entrega_retirada_father">
       <div>
 
-      <span>Vai buscar?</span>
+      <span>Entrega?</span>
       <label for="sim">Sim</label>
       <input type="radio" name="entrega_retirada" required value="1" id="sim">
       <label for="nao">Não</label>
