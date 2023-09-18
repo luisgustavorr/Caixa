@@ -273,6 +273,10 @@ input#valor_entrada {
 #whats_cliente_father {
   width: 45%;
 }
+.pagamento_entrada {
+  color:gray;
+}
+
 .head_pagamento {
   margin-bottom: 15px;
   display: flex;
