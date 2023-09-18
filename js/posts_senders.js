@@ -45,6 +45,7 @@ $(".modal_adicionar_produto").submit(function(e){
     por_peso:$('input[name="produto_por_peso"]:checked').val()
   }
   $.post('../Models/post_receivers/insert_produto.php',data,function(ret){
+    
     if(ret.includes('Codigo_repetido')){
       alert("Codigo do produto já existente")
     }else if(ret.includes('Codigo_barras_repetido')){
@@ -215,7 +216,6 @@ $(".modal_anotar_pedido").submit(function (e) {
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
-      location.reload()
 
     });
   }

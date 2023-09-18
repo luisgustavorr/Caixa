@@ -17,6 +17,10 @@ $caixa = $caixa ->fetch();
   @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
   @$printer = new Printer($connector);
+  $spacing = 20; // Ajuste o valor conforme necessário
+
+  $printer->setLineSpacing(30);
+$printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
 
   $printer->text("PEDIDO\n");
 $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
@@ -50,11 +54,10 @@ $printer->text("-----------------------------------------\n");
       $produto = \MySql::conectar()->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
     $produto->execute(array($value['id']));
     $produto = $produto->fetch();
-    $printer->text( $value['quantidade'].'-'.$value['id']." R$".$value['preco']."\n");
-    $valor_total =  $valor_total+($value['preco']*$value['quantidade']);
+    $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id'])." R$".$value['preco']."\n");
+    $valor_total =  $valor_total+$value['preco'];
   };
-  $printer->text("Valor Total:".$valor_total."\n");
-
+  $printer->text("Valor Total:".number_format($valor_total,2,',','.')."\n");
 // Finaliza a impressão e fecha a conexão
 $printer->cut();
 $printer->close();
