@@ -393,7 +393,14 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 
       </tbody>
     </table>
+    <?php 
+    if(isset($_COOKIE['last_codigo_colaborador'])){
+      ?>
     <button class="sangria_button" onclick="abrirModal('modal_sangria')" id="blocked_fazer_sangria">Fazer Sangria do Caixa</button>
+      
+      <?php
+    }
+    ?>
   </div>
   <div class="content_right_side">
     <div class="valores">
@@ -438,6 +445,8 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
         </div>
         <div class="finalizar_venda_button_principal_father">
           <button id="finalizar_venda_button_principal" onclick="abrirModal('modal_pagamento')" class="finalizar_venda_button_principal">Finalizar Venda</button>
+          <button id="imprimir_ultima_venda"  class="imprimir_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imprimir Ultima Venda</span></button>
+
         </div>
       </div>
 

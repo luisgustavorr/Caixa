@@ -13,6 +13,15 @@ function setCaixa(code){
   })
   return caixa_retornado
 }
+$('#imprimir_ultima_venda').click(function(){
+  $('#imprimir_ultima_venda i').css("display",'block')
+$('#imprimir_ultima_venda span').css("display",'none')
+  $.post('Models/post_receivers/select_ultima_venda.php',{},function(e){
+    console.log(e)
+    $('#imprimir_ultima_venda i').css("display",'none')
+    $('#imprimir_ultima_venda span').css("display",'block')
+  })
+})
 $('#add_produto_opener').click(function(){
   $('.modal_produtos').css('display','none')
   data ={
