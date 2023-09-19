@@ -45,15 +45,18 @@ $printer->text("-----------------------------------------\n");
    $pedido->execute(array($_POST['cliente'],json_encode($_POST['produtos']),$_POST['data_entrega'],$_POST['data_pedido'],$_POST['retirada'],$_POST['pagamento'],$_POST['endereco'],$_COOKIE['caixa'],$_POST['valor_entrada'],$_POST['metodo_entrada'],$_POST['codigo_colaborador']));
    $lastInsertedId = \MySql::conectar()->lastInsertId();
    $valor_total = 0;
-
+   $data_pedido = date("Y-m-d h:i:sa");
+   $insert_entrada_pedido = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
+   $insert_entrada_pedido->execute(array($_POST['codigo_colaborador'],date("Y-m-d h:i:sa"),$_POST['valor_entrada'],$_COOKIE['caixa'],'Entrada Pedido_'.$lastInsertedId,$_POST['pagamento'],$lastInsertedId,1));
    foreach ($_POST['produtos'] as $key => $value) {
     $produto = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
-    $produto->execute(array($_POST['codigo_colaborador'],date("Y-m-d h:i:sa"),$value['preco']*$value['quantidade'],$_COOKIE['caixa'],$value['id'],$_POST['pagamento'],$lastInsertedId,$value['quantidade']));
+    $produto->execute(array($_POST['codigo_colaborador'],$data_pedido,$value['preco'],$_COOKIE['caixa'],$value['id'],$_POST['pagamento'],$lastInsertedId,$value['quantidade']));
     $atualizar_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ? ");
-    $atualizar_caixa->execute(array($value['preco']*$value['quantidade'],$_COOKIE['caixa']));
-      $produto = \MySql::conectar()->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
+    $atualizar_caixa->execute(array($value['preco'],$_COOKIE['caixa']));
+    $produto = \MySql::conectar()->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
     $produto->execute(array($value['id']));
     $produto = $produto->fetch();
+
     $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id'])." R$".$value['preco']."\n");
     $valor_total =  $valor_total+$value['preco'];
   };
