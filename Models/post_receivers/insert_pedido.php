@@ -30,10 +30,16 @@ $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
 $printer->text("Valor Entrada:".$_POST['valor_entrada']."\n");
 
 $printer->text("Cliente:".$_POST['cliente']."\n");
+list($dataPedido, $horaPedido) = explode(' ', $_POST['data_pedido']);
+$printer->text("Data do Pedido:".$dataPedido."\n");
+$printer->text("Hora do Pedido:".$horaPedido."\n");
+echo $dataPedido, $horaPedido;
+list($dataEntrega, $horaEntrega) = explode(' ', $_POST['data_entrega']);
+$printer->text("Data da Entrega:".$dataEntrega."\n");
+$printer->text("Hora da Entrega:".$horaEntrega."\n");
+echo $dataEntrega, $horaEntrega;
 
-$printer->text("Data do Pedido:".$_POST['data_pedido']."\n");
-$printer->text("Data da Entrega:".$_POST['data_entrega']."\n");
-$printer->text("Entrega ?".$retirar."\n");
+$printer->text("Entrega? ".$retirar."\n");
 if($retirar == 'Sim'){
 $printer->text("Endereco:".$_POST['endereco']."\n");
 
@@ -60,7 +66,9 @@ $printer->text("-----------------------------------------\n");
     $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id'])." R$".$value['preco']."\n");
     $valor_total =  $valor_total+$value['preco'];
   };
-  $printer->text("Valor Total:".number_format($valor_total,2,',','.')."\n");
+  $printer->text("Valor Total:R$".number_format($valor_total,2,',','.')."\n");
+  $printer->text("Pedido de número ".$lastInsertedId."\n");
+
 // Finaliza a impressão e fecha a conexão
 $printer->cut();
 $printer->close();
