@@ -15,7 +15,8 @@ $caixa = $caixa->fetch();
     @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
 @$printer = new Printer($connector);
-$printer->setLineSpacing(30);
+$printer -> setTextSize(2, 2);
+$printer->setLineSpacing(50);
 
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
 @$printer->text("CUPOM DE VENDA\n");
