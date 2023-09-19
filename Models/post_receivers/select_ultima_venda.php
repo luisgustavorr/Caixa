@@ -49,7 +49,7 @@ list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda['data']);
     $printer->text("-----------------------------------------\n");
        
     }
-    @$printer->text("Valor total:".number_format($valor_compra_total,2,',','.'));
+    @$printer->text("Valor total:R$".number_format($valor_compra_total,2,',','.')."\n");
     $printer->text("-----------------------------------------\n");
     $printer->cut();
     $printer->close();
