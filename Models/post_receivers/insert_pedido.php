@@ -17,10 +17,12 @@ try{
 $caixa->execute(array(trim($_COOKIE['caixa'])));
 $caixa = $caixa ->fetch();
   @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+
+  @$printer = new Printer($connector);
+  $printer -> setTextSize(2, 2);
+
 $printer -> setFont(Printer::FONT_B);
 
-  $printer -> setTextSize(2, 2);
-  @$printer = new Printer($connector);
   $spacing = 20; // Ajuste o valor conforme necessário
 
   $printer->setLineSpacing(50);
