@@ -652,6 +652,8 @@ $(".finalizar_venda").click(function () {
   });
 });
 $(".finalizar_venda_button").click(function () {
+  let esse_elemento = $(this)
+  $(this).html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
   if (
     $("#metodo_pagamento_princip").val() == "Dinheiro" &&
@@ -687,10 +689,11 @@ $(".finalizar_venda_button").click(function () {
     };
 
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+      $(esse_elemento).html('Finalizar Venda')
       console.log(ret)
       if (ret != "") {
         alert("Código de usuario inválido");
-
+        
       } else{
         if($("#codigo_colaborador_venda").val() > 0){
           document.cookie =

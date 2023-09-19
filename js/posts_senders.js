@@ -216,7 +216,7 @@ $(".modal_anotar_pedido").submit(function (e) {
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
-
+      location.reload()
     });
   }
 
