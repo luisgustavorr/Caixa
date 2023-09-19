@@ -4,6 +4,8 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 include('../../MySql.php');
 date_default_timezone_set('America/Sao_Paulo');
+$data_pedido = date("Y-m-d h:i:sa");
+
 try{
   if($_POST['retirada'] == 1){
     $retirar = 'Sim';
@@ -45,15 +47,16 @@ $printer->text("Endereco:".$_POST['endereco']."\n");
 
 }
 $printer->text("-----------------------------------------\n");
+$printer->text("Item\n");
 
 
    $pedido = \MySql::conectar()->prepare(" INSERT INTO `tb_pedidos` (`id`, `cliente`, `produtos`, `data_entrega`, `data_pedido`,`retirada`,`forma_pagamento`,`endereco`,`caixa`,`valor_entrada`,`metodo_entrada`,`colaborador`) VALUES (NULL, ?, ?,?, ?, ?,?,?,?,?,?,?)");
    $pedido->execute(array($_POST['cliente'],json_encode($_POST['produtos']),$_POST['data_entrega'],$_POST['data_pedido'],$_POST['retirada'],$_POST['pagamento'],$_POST['endereco'],$_COOKIE['caixa'],$_POST['valor_entrada'],$_POST['metodo_entrada'],$_POST['codigo_colaborador']));
    $lastInsertedId = \MySql::conectar()->lastInsertId();
    $valor_total = 0;
-   $data_pedido = date("Y-m-d h:i:sa");
    $insert_entrada_pedido = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
-   $insert_entrada_pedido->execute(array($_POST['codigo_colaborador'],date("Y-m-d h:i:sa"),$_POST['valor_entrada'],$_COOKIE['caixa'],'Entrada Pedido_'.$lastInsertedId,$_POST['pagamento'],$lastInsertedId,1));
+   $insert_entrada_pedido->execute(array($_POST['codigo_colaborador'],date("Y-m-d h:i:sa", strtotime($data_pedido) + 1),$_POST['valor_entrada'],$_COOKIE['caixa'],'Entrada Pedido_'.$lastInsertedId,$_POST['pagamento'],$lastInsertedId,1));
+   
    foreach ($_POST['produtos'] as $key => $value) {
     $produto = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
     $produto->execute(array($_POST['codigo_colaborador'],$data_pedido,$value['preco'],$_COOKIE['caixa'],$value['id'],$_POST['pagamento'],$lastInsertedId,$value['quantidade']));
