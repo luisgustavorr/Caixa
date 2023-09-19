@@ -29,7 +29,7 @@ $printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
 
   $printer->text("PEDIDO\n");
 $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-$printer->text("-----------------------------------------\n");
+$printer->text("--------------------------------\n");
 
 $printer->text("Cliente:".$_POST['cliente']."\n");
 $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
@@ -37,24 +37,40 @@ $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
 $printer->text("Valor Entrada:".$_POST['valor_entrada']."\n");
 
 $printer->text("Cliente:".$_POST['cliente']."\n");
+@$printer->text(" \n");
+
 list($dataPedido, $horaPedido) = explode(' ', $_POST['data_pedido']);
 $printer->text("Data do Pedido:".$dataPedido."\n");
+@$printer->text(" \n");
+
 $printer->text("Hora do Pedido:".$horaPedido."\n");
+@$printer->text(" \n");
+
 echo $dataPedido, $horaPedido;
 list($dataEntrega, $horaEntrega) = explode(' ', $_POST['data_entrega']);
 $printer->text("Data da Entrega:".$dataEntrega."\n");
+@$printer->text(" \n");
+
 $printer->text("Hora da Entrega:".$horaEntrega."\n");
+@$printer->text(" \n");
+
 echo $dataEntrega, $horaEntrega;
 
 $printer->text("Entrega? ".$retirar."\n");
+@$printer->text(" \n");
+
 if($retirar == 'Sim'){
 $printer->text("Endereco:".$_POST['endereco']."\n");
 
 }
-$printer->text("-> NÃO É DOCUMENTO FISCAL <-\n");
+@$printer->text(" \n");
 
-$printer->text("-----------------------------------------\n");
+$printer->text("-> NÃO É DOCUMENTO FISCAL <-\n");
+@$printer->text(" \n");
+
+$printer->text("--------------------------------\n");
 $printer->text("Item\n");
+@$printer->text(" \n");
 
 
    $pedido = \MySql::conectar()->prepare(" INSERT INTO `tb_pedidos` (`id`, `cliente`, `produtos`, `data_entrega`, `data_pedido`,`retirada`,`forma_pagamento`,`endereco`,`caixa`,`valor_entrada`,`metodo_entrada`,`colaborador`) VALUES (NULL, ?, ?,?, ?, ?,?,?,?,?,?,?)");
@@ -74,6 +90,8 @@ $printer->text("Item\n");
     $produto = $produto->fetch();
 
     $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id'])." R$".$value['preco']."\n");
+    @$printer->text(" \n");
+
     $valor_total =  $valor_total+$value['preco'];
   };
   $printer->text("Valor Total:R$".number_format($valor_total,2,',','.')."\n");
