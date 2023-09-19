@@ -26,6 +26,8 @@ $printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
 
   $printer->text("PEDIDO\n");
 $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
+$printer->text("-----------------------------------------\n");
+
 $printer->text("Cliente:".$_POST['cliente']."\n");
 $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
 
@@ -46,6 +48,8 @@ if($retirar == 'Sim'){
 $printer->text("Endereco:".$_POST['endereco']."\n");
 
 }
+$printer->text("-> NÃO É DOCUMENTO FISCAL <-\n");
+
 $printer->text("-----------------------------------------\n");
 $printer->text("Item\n");
 
@@ -70,7 +74,7 @@ $printer->text("Item\n");
     $valor_total =  $valor_total+$value['preco'];
   };
   $printer->text("Valor Total:R$".number_format($valor_total,2,',','.')."\n");
-  $printer->text("Pedido de número ".$lastInsertedId."\n");
+  $printer->text("#Pedido de número ".$lastInsertedId."\n");
 
 // Finaliza a impressão e fecha a conexão
 $printer->cut();

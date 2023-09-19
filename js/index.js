@@ -134,25 +134,25 @@ $(".tags_produto_name").keyup(function (e) {
     e.preventDefault()
     $(".modal_anotar_pedido tbody").append(
       '<tr preco_produto="" produto="' +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         '" quantidade="' +
         $("#quantidade_produto_pedido").val() +
         '" class="produto_pedido' +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         '"><td>' +
         $("#quantidade_produto_pedido").val() +
         "</td><td>" +
         produto +
         "</td><td><input type='text'class='oders_inputs input_valor_pedido_produto' produto='" +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         "' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_" +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         "'></td><td id='valor_produto_total_" +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         "' >" +
         0 +
         '</td> <td produto="' +
-        produto.replace(" ", "_") +
+        produto.replace(/ /g, "_") +
         '" class="remove_item_pedido ">-</td>'
     );
     $(".tags_produto_name").val("");
