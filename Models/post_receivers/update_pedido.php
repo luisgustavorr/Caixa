@@ -13,20 +13,68 @@ try {
       $retirar = 'Não';
 
     }
-    $connector = new WindowsPrintConnector(dest:"TM-T20X");
-
-    $printer = new Printer($connector);
-
-    $printer->text("PEDIDO\n");
-  $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-  $printer->text("Endereco:".$_POST['endereco']."\n");
-  $printer->text("Cliente:".$_POST['cliente']."\n");
-  $printer->text("Data do Pedido:".$_POST['data_pedido']."\n");
-  $printer->text("Data da Entrega:".$_POST['data_entrega']."\n");
-  $printer->text("Vai retirar?".$retirar."\n");
-
-  $printer->text("-----------------------------------------\n");
-
+    $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+    $caixa->execute(array(trim($_COOKIE['caixa'])));
+    $caixa = $caixa ->fetch();
+      @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+    
+      @$printer = new Printer($connector);
+      $printer -> setTextSize(2, 2);
+    
+    $printer -> setFont(Printer::FONT_B);
+    
+      $spacing = 20; // Ajuste o valor conforme necessário
+    
+      $printer->setLineSpacing(50);
+    
+    $printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
+    
+      $printer->text("PEDIDO\n");
+    $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
+    $printer->text("--------------------------------\n");
+    
+    $printer->text("Cliente:".$_POST['cliente']."\n");
+    $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
+    
+    $printer->text("Valor Entrada:".$_POST['valor_entrada']."\n");
+    
+    $printer->text("Cliente:".$_POST['cliente']."\n");
+    @$printer->text(" \n");
+    
+    list($dataPedido, $horaPedido) = explode(' ', $_POST['data_pedido']);
+    $printer->text("Data do Pedido:".$dataPedido."\n");
+    @$printer->text(" \n");
+    
+    $printer->text("Hora do Pedido:".$horaPedido."\n");
+    @$printer->text(" \n");
+    
+    echo $dataPedido, $horaPedido;
+    list($dataEntrega, $horaEntrega) = explode(' ', $_POST['data_entrega']);
+    $printer->text("Data da Entrega:".$dataEntrega."\n");
+    @$printer->text(" \n");
+    
+    $printer->text("Hora da Entrega:".$horaEntrega."\n");
+    @$printer->text(" \n");
+    
+    echo $dataEntrega, $horaEntrega;
+    
+    $printer->text("Entrega? ".$retirar."\n");
+    @$printer->text(" \n");
+    
+    if($retirar == 'Sim'){
+    $printer->text("Endereco:".$_POST['endereco']."\n");
+    
+    }
+    @$printer->text(" \n");
+    
+    $printer->text("-> NÃO É DOCUMENTO FISCAL <-\n");
+    @$printer->text(" \n");
+    
+    $printer->text("--------------------------------\n");
+    $printer->text("Item\n");
+    @$printer->text(" \n");
+    
+    
 
   $conn = \MySql::conectar();
   $conn->beginTransaction();
@@ -52,7 +100,7 @@ try {
   // Atualiza o valor na tabela tb_caixas
   $total_valor = 0;
   foreach ($_POST['produtos'] as $key => $value) {
-    $valor_produto = $value['preco'] * $value['quantidade'];
+    $valor_produto = $value['preco'] ;
     $total_valor += $valor_produto;
   }
 
@@ -72,12 +120,14 @@ try {
     $insertVendasQuery = "INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`, `produto`, `forma_pagamento`, `pedido_id`)
                           VALUES (NULL, 'luis', ?, ?, ?, ?, ?, ?)";
     $stmtInsertVendas = $conn->prepare($insertVendasQuery);
-    $stmtInsertVendas->execute([date("Y-m-d h:i:sa"), $value['preco'] * $value['quantidade'], $caixa, $value['id'], $forma_pagamento, $pedido_id]);
+    $stmtInsertVendas->execute([date("Y-m-d h:i:sa"), $value['preco'] , $caixa, $value['id'], $forma_pagamento, $pedido_id]);
 
-  $printer->text($value['quantidade'].'X-'.$value['id']." R$".$value['preco']."\n");
+    $printer->text( $value['quantidade'].'-'.str_replace('_',' ',$value['id'])." R$".$value['preco']."\n");
+    @$printer->text(" \n");
 
   }
-
+  $printer->text("Valor Total:R$".number_format($total_valor,2,',','.')."\n");
+  $printer->text("#Pedido de número ".$pedido_id."\n");
   // Commit da transação
   $conn->commit();
 
