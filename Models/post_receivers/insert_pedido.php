@@ -17,11 +17,12 @@ try{
 $caixa->execute(array(trim($_COOKIE['caixa'])));
 $caixa = $caixa ->fetch();
   @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
-
+  $printer -> setTextSize(2, 2);
   @$printer = new Printer($connector);
   $spacing = 20; // Ajuste o valor conforme necessário
 
-  $printer->setLineSpacing(30);
+  $printer->setLineSpacing(50);
+
 $printer->setEmphasis(true); // Desativa o modo de enfatizar (negrito)
 
   $printer->text("PEDIDO\n");
