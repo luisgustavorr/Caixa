@@ -13,8 +13,12 @@ try {
       $retirar = 'Não';
 
     }
-    $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
-    $caixa->execute(array(trim($_COOKIE['caixa'])));
+    $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
+    $colab->execute(array($_POST['codigo_colaborador']));
+    $colab = $colab->fetch();
+    
+      $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+    $caixa->execute(array(trim($colab['caixa'])));
     $caixa = $caixa ->fetch();
       @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
     
