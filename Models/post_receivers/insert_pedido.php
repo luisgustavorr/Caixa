@@ -46,7 +46,7 @@ $printer->text("Cliente:".$_POST['cliente']."\n");
 @$printer->text(" \n");
 
 list($dataPedido, $horaPedido) = explode(' ', $_POST['data_pedido']);
-$printer->text("Data do Pedido:".$dataPedido."\n");
+$printer->text("Data do Pedido:".date("d-m-Y", strtotime($dataPedido))."\n");
 @$printer->text(" \n");
 
 $printer->text("Hora do Pedido:".$horaPedido."\n");
@@ -54,7 +54,7 @@ $printer->text("Hora do Pedido:".$horaPedido."\n");
 
 echo $dataPedido, $horaPedido;
 list($dataEntrega, $horaEntrega) = explode(' ', $_POST['data_entrega']);
-$printer->text("Data da Entrega:".$dataEntrega."\n");
+$printer->text("Data da Entrega:".date("d-m-Y", strtotime($dataEntrega))."\n");
 @$printer->text(" \n");
 
 $printer->text("Hora da Entrega:".$horaEntrega."\n");
