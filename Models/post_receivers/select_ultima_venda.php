@@ -31,7 +31,7 @@ if(isset($_COOKIE['last_codigo_colaborador'])){
     $data_ultima_venda = $data_ultima_venda->fetch();
 list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda['data']);
 
-@$printer->text("Data da compra: ".$dataCompra."\n");
+@$printer->text("Data da compra: ".date("d-m-Y", strtotime($dataCompra))."\n");
 @$printer->text(" \n");
 
 @$printer->text("Horário da compra: ".$horaCompra."\n");
