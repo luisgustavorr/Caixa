@@ -3,7 +3,7 @@ include('../../MySql.php');
 if(isset($_POST['codigo'])){
   $produto = \MySql::conectar()->prepare("SELECT *
   FROM `tb_produtos`
-  WHERE `codigo` LIKE ? AND preco > 0
+  WHERE `codigo` LIKE ? 
   ORDER BY
     CASE
       WHEN `codigo` LIKE ? THEN 1 
@@ -16,7 +16,7 @@ if(isset($_POST['codigo'])){
 }else{
   $produto = \MySql::conectar()->prepare("SELECT *
   FROM `tb_produtos`
-  WHERE `nome` LIKE ? AND preco > 0
+  WHERE `nome` LIKE ? 
   ORDER BY
     CASE
       WHEN `nome` LIKE ? THEN 1 
