@@ -92,14 +92,16 @@ try {
   $forma_pagamento = $_POST['pagamento'];
   $endereco = $_POST['endereco'];
   $caixa = $_POST['caixa'];
+  $numero_cliente = $_POST['numero_cliente'];
+
 
   // Atualiza os dados do pedido na tabela tb_pedidos
   $updatePedidoQuery = "UPDATE `tb_pedidos`
                       SET `cliente` = ?, `produtos` = ?, `data_entrega` = ?, `data_pedido` = ?,
-                      `retirada` = ?, `forma_pagamento` = ?, `endereco` = ?
+                      `retirada` = ?, `forma_pagamento` = ?, `endereco` = ?, `numero_cliente` = ?
                       WHERE `tb_pedidos`.`id` = ?";
   $stmtPedido = $conn->prepare($updatePedidoQuery);
-  $stmtPedido->execute([$cliente, $produtos, $data_entrega, $data_pedido, $retirada, $forma_pagamento, $endereco, $pedido_id]);
+  $stmtPedido->execute([$cliente, $produtos, $data_entrega, $data_pedido, $retirada, $forma_pagamento, $endereco,$numero_cliente, $pedido_id]);
 
   // Atualiza o valor na tabela tb_caixas
   $total_valor = 0;
