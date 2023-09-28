@@ -618,6 +618,7 @@ input#valor_entrada {
   padding: 5px;
   color: gray;
   font-size: 18px;
+  width: 50px;
 }
 #sidebar {
   position: absolute;
@@ -738,7 +739,16 @@ input#valor_entrada {
   padding: 0 5px;
   color: gray;
   font-size: 18px;
-  width: 400px;
+  width: 260px;
+}
+#numero_cliente_input {
+  border-radius: 12px;
+  border: 1px solid red;
+  height: 40px;
+  padding: 0 5px;
+  color: gray;
+  font-size: 18px;
+  width: 260px;
 }
 .input_cliente_vai_buscar {
   width: 80%;
