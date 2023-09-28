@@ -34,8 +34,14 @@ if (!empty($colab)) {
 
     $produto = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`) VALUES (NULL, ?, ?, ?, ?,?,?); ");
     $produto->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $value['quantidade'], trim($colab['caixa']), $value['id'], $_POST['pagamento']));
-    $atualizar_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ? ");
-    $atualizar_caixa->execute(array($_POST['valor'], trim($colab['caixa'])));
+    if($_POST['pagamento'] != 'Cartão Débito' AND $_POST['pagamento'] != 'Cartão Crédito'){
+      $atualizar_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?,`valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ? ");
+      $atualizar_caixa->execute(array($_POST['valor'],$_POST['valor'], trim($colab['caixa'])));
+    }else{
+      $atualizar_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ? ");
+      $atualizar_caixa->execute(array($_POST['valor'], trim($colab['caixa'])));
+    }
+
   }
 
 } else {
