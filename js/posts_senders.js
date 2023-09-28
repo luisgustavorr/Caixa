@@ -201,6 +201,7 @@ $(".modal_anotar_pedido").submit(function (e) {
     pagamento: $('#metodo_pagamento').val(),
     produtos: produtos,
     cliente: $("#nome_cliente_input").val(),
+    numero_cliente: $("#numero_cliente_input").val(),
     data_entrega: data_entrega,
     data_pedido: data_pedido,
     codigo_colaborador: $("#codigo_colaborador_input").val(),
@@ -256,6 +257,8 @@ console.log($(esse).attr('pedido'))
   $('#data_pedido').val(pedido.data_pedido);
   $('#data_entrega').val(pedido.data_entrega);
   $('#valor_entrada').val(pedido.valor_entrada);
+  $('#numero_cliente_input').val(pedido.numero_cliente);
+
   $('#metodo_pagamento_entrada').val(pedido.metodo_entrada);
 
 

@@ -38,12 +38,17 @@ $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
 $printer->text("--------------------------------\n");
 
 $printer->text("Cliente:".$_POST['cliente']."\n");
+@$printer->text(" \n");
+$printer->text("Número cliente:".$_POST['numero_cliente']."\n");
+@$printer->text(" \n");
+
+
 $printer->text("Código Funcionário:".$_POST['codigo_colaborador']."\n");
+@$printer->text(" \n");
 
 $printer->text("Valor Entrada:".$_POST['valor_entrada']."\n");
-
-$printer->text("Cliente:".$_POST['cliente']."\n");
 @$printer->text(" \n");
+
 
 list($dataPedido, $horaPedido) = explode(' ', $_POST['data_pedido']);
 $printer->text("Data do Pedido:".date("d-m-Y", strtotime($dataPedido))."\n");
@@ -79,8 +84,8 @@ $printer->text("Item\n");
 @$printer->text(" \n");
 
 
-   $pedido = \MySql::conectar()->prepare(" INSERT INTO `tb_pedidos` (`id`, `cliente`, `produtos`, `data_entrega`, `data_pedido`,`retirada`,`forma_pagamento`,`endereco`,`caixa`,`valor_entrada`,`metodo_entrada`,`colaborador`) VALUES (NULL, ?, ?,?, ?, ?,?,?,?,?,?,?)");
-   $pedido->execute(array($_POST['cliente'],json_encode($_POST['produtos']),$_POST['data_entrega'],$_POST['data_pedido'],$_POST['retirada'],$_POST['pagamento'],$_POST['endereco'],$caixa['caixa'],$_POST['valor_entrada'],$_POST['metodo_entrada'],$_POST['codigo_colaborador']));
+   $pedido = \MySql::conectar()->prepare(" INSERT INTO `tb_pedidos` (`id`, `cliente`, `produtos`, `data_entrega`, `data_pedido`,`retirada`,`forma_pagamento`,`endereco`,`caixa`,`valor_entrada`,`metodo_entrada`,`colaborador`,`numero_cliente`) VALUES (NULL, ?, ?,?, ?, ?,?,?,?,?,?,?,?)");
+   $pedido->execute(array($_POST['cliente'],json_encode($_POST['produtos']),$_POST['data_entrega'],$_POST['data_pedido'],$_POST['retirada'],$_POST['pagamento'],$_POST['endereco'],$caixa['caixa'],$_POST['valor_entrada'],$_POST['metodo_entrada'],$_POST['codigo_colaborador'],$_POST['numero_cliente']));
    $lastInsertedId = \MySql::conectar()->lastInsertId();
    $valor_total = 0;
    $insert_entrada_pedido = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
