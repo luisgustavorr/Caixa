@@ -618,7 +618,7 @@ input#valor_entrada {
   padding: 5px;
   color: gray;
   font-size: 18px;
-  width: 50px;
+  width: 193px;
 }
 #sidebar {
   position: absolute;
@@ -748,7 +748,7 @@ input#valor_entrada {
   padding: 0 5px;
   color: gray;
   font-size: 18px;
-  width: 260px;
+  width: 170px;
 }
 .input_cliente_vai_buscar {
   width: 80%;
