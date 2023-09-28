@@ -114,5 +114,3 @@ $printer->close();
 } catch (Exception $e) {
   echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
 };
-
-?>
