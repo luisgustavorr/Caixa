@@ -451,6 +451,7 @@ if(codigoColab > 0){
 
   data = {
     caixa: caixa,
+    sangria:true
   };
 
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
@@ -467,6 +468,8 @@ verificarValorCaixa(getCookie("last_codigo_colaborador"));
 function valorCaixa() {
   data = {
     caixa: caixa,
+    sangria:true
+
   };
   console.log(caixa);
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
