@@ -95,11 +95,17 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
       </div>
       <div class="subdivision">
 
+<span>Número cliente:</span>
+<input required type="text" name="numero_cliente" class="oders_inputs" id="numero_cliente_input" placeholder="Insira o numero do cliente">
+</div>
+      <div class="subdivision">
+
       <span>Seu código:</span>
       <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs colab_code" id="codigo_colaborador_input" placeholder="Insira o seu código">
       </div>
 
     </div>
+    
     <div class="endereco_cliente_father">
       <div class="input_endereco_cliente">
       <span>Endereço do cliente:</span>
