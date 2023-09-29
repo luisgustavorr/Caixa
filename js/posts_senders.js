@@ -212,12 +212,10 @@ $(".modal_anotar_pedido").submit(function (e) {
   if($('#editando').val() == 'true'){
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret)
-      location.reload()
     });
   }else{
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret)
-      location.reload()
 
     });
   }
