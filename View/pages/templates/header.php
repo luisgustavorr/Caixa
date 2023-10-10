@@ -1,7 +1,7 @@
 <?php $caixa = \MySql::conectar()->prepare("SELECT `tb_colaboradores`.`caixa` AS caixa
 FROM `tb_colaboradores`
 WHERE codigo = ?");
-$caixa->execute(array($_COOKIE['last_codigo_colaborador']));
+$caixa->execute(array(1));
 $caixa = $caixa->fetch();
 
 ?>
