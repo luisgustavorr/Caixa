@@ -16,25 +16,33 @@ $user = $user->fetch();
 @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
 @$printer = new Printer($connector);
+$printer->setTextSize(2, 2);
+$printer->setFont(Printer::FONT_B);
+$printer->setLineSpacing(50);
     @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
     @$printer->text("FECHAMENTO DE CAIXA\n\n");
     @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
 @$printer->text("Data: " . date("d/m/Y H:i:s") . "\n"); // Adicione a data e hora da sangria
 
     @$printer->text("Dinheiro Informado:".str_replace(',','.',$_POST['dinheiro_informadas'])."\n");
-$printer->text("-----------------------------------------\n");
+    $printer->text("--------------------------------\n");
+
 
     @$printer->text("Cartão Informado:".str_replace(',','.',$_POST['cartao_informadas'])."\n");
-$printer->text("-----------------------------------------\n");
+    $printer->text("--------------------------------\n");
+
 
     @$printer->text("Moedas Informadas:".str_replace(',','.',$_POST['moedas_informadas'])."\n");
-$printer->text("-----------------------------------------\n");
+    $printer->text("--------------------------------\n");
+
 
     @$printer->text("Pix Informado:".str_replace(',','.',$_POST['pix_informadas'])."\n");
-$printer->text("-----------------------------------------\n");
+    $printer->text("--------------------------------\n");
+
 
     @$printer->text("Sangria Informadas:".str_replace(',','.',$_POST['sangria_informadas'])."\n");
-$printer->text("-----------------------------------------\n");
+    $printer->text("--------------------------------\n");
+
 
 
     $equip = \MySql::conectar()->prepare("INSERT INTO `tb_fechamento` (`id`, `dinheiro`, `cartao`, `moeda`, `pix`, `sangria`, `data`,`caixa`,`colaborador`) VALUES (NULL, ?, ?, ?, ?, ?, ?,?,?)");
