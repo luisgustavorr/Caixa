@@ -22,7 +22,7 @@ $printer->setLineSpacing(50);
     @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
     @$printer->text("FECHAMENTO DE CAIXA\n\n");
     @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
-@$printer->text("Data: " . date("d/m/Y H:i:s") . "\n"); // Adicione a data e hora da sangria
+@$printer->text("Data: " . date("d/m/Y H:i:s") . "\n\n"); // Adicione a data e hora da sangria
 
     @$printer->text("Dinheiro Informado:".str_replace(',','.',$_POST['dinheiro_informadas'])."\n");
     $printer->text("--------------------------------\n");
