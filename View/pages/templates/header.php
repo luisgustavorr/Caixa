@@ -1,8 +1,8 @@
-<?php $caixa = \MySql::conectar()->prepare("SELECT `tb_colaboradores`.`caixa` AS caixa
+<?php @$caixa = \MySql::conectar()->prepare("SELECT `tb_colaboradores`.`caixa` AS caixa
 FROM `tb_colaboradores`
 WHERE codigo = ?");
-$caixa->execute(array($_COOKIE['last_codigo_colaborador']));
-$caixa = $caixa->fetch();
+@$caixa->execute(array($_COOKIE['last_codigo_colaborador']));
+@$caixa = $caixa->fetch();
 
 ?>
 <!DOCTYPE html>
