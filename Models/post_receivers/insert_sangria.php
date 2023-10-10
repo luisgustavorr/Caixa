@@ -20,7 +20,7 @@ if(!empty($user)){
     $sangria = \MySql::conectar()->prepare("INSERT INTO `tb_sangrias` (`id`, `colaborador`, `caixa`, `mensagem`, `valor`, `data`) VALUES (NULL,?,?,?,?,?)");
     $sangria->execute(array($_POST['colaborador'],trim($_POST['caixa']),$_POST['mensagem'],$_POST['valor_sangria'],date("Y-m-d h:i:sa")));
 
-    $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = ROUND(`valor_atual` - ?, 2) WHERE `tb_caixas`.`caixa` = ? ");
+    $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_no_caixa` = ROUND(`valor_no_caixa` - ?, 2) WHERE `tb_caixas`.`caixa` = ? ");
     $atualizar_db->execute(array($_POST['valor_sangria'],trim($_POST['caixa'])));
   try{
     @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
