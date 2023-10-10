@@ -204,7 +204,7 @@ $("#desc_produto").on("keyup", function () {
             '<span produto="' +
               element.codigo +
               '" class="resultado_pesquisa">' +
-              element.nome +
+              element.nome + ' - R$' +element.preco +
               "</span>"
           );
         });
@@ -263,7 +263,7 @@ $("#codigo_produto").on("keyup", function (e) {
           '<span produto="' +
             element.codigo +
             '" class="resultado_pesquisa_by_barcode">' +
-            element.nome +
+            element.nome + ' - R$' +element.preco +
             "</span>"
         );
       });
