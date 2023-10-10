@@ -34,7 +34,7 @@ if (!empty($colab)) {
 
     $produto = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`) VALUES (NULL, ?, ?, ?, ?,?,?); ");
     $produto->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $value['quantidade'], trim($colab['caixa']), $value['id'], $_POST['pagamento']));
-    if($_POST['pagamento'] != 'Cartão Débito' AND $_POST['pagamento'] != 'Cartão Crédito'){
+    if($_POST['pagamento'] == 'Dinheiro'){
       $atualizar_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?,`valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ? ");
       $atualizar_caixa->execute(array($_POST['valor'],$_POST['valor'], trim($colab['caixa'])));
     }else{
