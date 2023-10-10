@@ -3,7 +3,7 @@ FROM `tb_colaboradores` INNER JOIN `tb_caixas` ON `tb_caixas`.`caixa` = `tb_cola
 WHERE codigo = ?");
 $caixa->execute(array($_COOKIE['last_codigo_colaborador']));
 $caixa = $caixa->fetch();
-if($caixa['liberado'] != 1){
+if($caixa['liberado'] != 0){
   header('Location: https://www.mixsalgados.com/');
   
   echo '<script>location.href="https://www.mixsalgados.com/"</script>';
