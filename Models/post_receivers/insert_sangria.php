@@ -26,6 +26,9 @@ if(!empty($user)){
     @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 
     @$printer = new Printer($connector);
+    $printer->setTextSize(2, 2);
+$printer->setFont(Printer::FONT_B);
+$printer->setLineSpacing(50);
 @$printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
 
 @$printer->text("SANGRIA DE CAIXA\n");
