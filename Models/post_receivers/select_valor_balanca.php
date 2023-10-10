@@ -1,28 +1,17 @@
-
 <?php
-$port = 'COM1'; // A porta serial à qual a balança está conectada
-$baud = 9600;   // Taxa de baud (velocidade de comunicação) da balança
+$porta_serial = fopen("COM1", "r"); // Abre a porta serial COM1 para leitura
 
-$serial = fopen($port, 'r+');
+if ($porta_serial) {
+    $linha = fgets($porta_serial); // Lê uma linha da porta serial
 
-if ($serial) {
-    // Configurar a porta serial
-    stream_set_timeout($serial, 5); // Tempo limite para leitura
+    if ($linha !== false) {
+        echo $linha; // Exibe a linha lida
+    } else {
+        echo "Nenhuma linha foi lida.";
+    }
 
-    // Ler dados da balança
-    $data = fread($serial, 1024); // Leitura de até 1024 bytes
-
-    // Fechar a porta serial
-    fclose($serial);
-
-    // Processar os dados recebidos da balança (os dados podem ser formatados de acordo com o protocolo da balança)
-    
-    // Suponha que os dados recebidos sejam simplesmente o peso em quilogramas
-    $weightInKg = floatval($data);
-
-    // Exibir o peso
-    echo $data;
+    fclose($porta_serial); // Fecha a porta serial
 } else {
-    echo "Não foi possível abrir a porta serial.";
+    echo "Falha ao abrir a porta serial COM1.";
 }
 ?>

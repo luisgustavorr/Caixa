@@ -1,18 +1,16 @@
 
+<?php 
+if($caixa['liberado'] == 1){
+
+?>
 <fundo></fundo>
 <form class="modal modal_fechar_caixa" style="align-items: center;">
 <div class="valores_informados_box">
         <span class="valores_informados_title">Valores Informados:</span>
         <div class="body_valores">
             <div class="first_column">
-  <?php $fechamentos_de_hoje = \MySql::conectar()->prepare("SELECT caixa
-FROM `tb_colaboradores`
-WHERE codigo = ?");
-$fechamentos_de_hoje->execute(array($_COOKIE['last_codigo_colaborador']));
-$fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 
-?>
-                <input type="hidden"  value="<?php print_r($fechamentos_de_hoje['caixa']); ?>" name="caixa_alvo">
+                <input type="hidden"  value="<?php print_r($caixa['caixa']); ?>" name="caixa_alvo">
                 <div class="input_valores">
                     <label for="dinheiro_informadas">Dinheiro: </label>
                     <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="dinheiro_informadas" id="dinheiro_informadas">
@@ -170,8 +168,8 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 
     </div>
     <div class="valor_caixa_father input_father">
-      <span>Quantidade/<span class="select_valor_balanca_clicker"  button_identifier="pedido">KG:</span></span>
-      <input type="text" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
+    <div style="" medida="un" class="select_valor_clicker_father" button_identifier="pedido"><span class="select_valor_balanca_clicker" style="cursor:pointer;" ativo="0" >UN</span></div>
+  <input type="text" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
     <div class="valor_caixa_father input_father">
@@ -350,6 +348,8 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 </div>
 
 <div class="content">
+
+
   <div class="content_left_side">
     <div class="inputs">
       <div class="first_inputs">
@@ -365,8 +365,8 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
           </div>
         </div>
         <div class="input quantidade_produto_input">
-          <span style="margin: 0;">Qtd/<span class="select_valor_balanca_clicker" style="cursor:pointer;" button_identifier="venda">KG</span>:</span>
-          <input class="oders_inputs alvo_valor_balanca venda_button" min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
+          <div style="" medida="un" class="select_valor_clicker_father" button_identifier="venda"><span class="select_valor_balanca_clicker" style="cursor:pointer;" ativo="0" >UN</span></div>
+          <input class="oders_inputs alvo_valor_balanca venda_button"  min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
       <div class="second_inputs">
@@ -471,3 +471,4 @@ $fechamentos_de_hoje = $fechamentos_de_hoje->fetch();
 </body>
 
 </html>
+<?php }?>

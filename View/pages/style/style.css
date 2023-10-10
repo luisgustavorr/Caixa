@@ -808,6 +808,31 @@ input#valor_entrada {
   border-radius: 12px;
   cursor: pointer;
 }
+.select_valor_balanca_clicker{
+  cursor: pointer;
+  background: red;
+  margin: 0 !important;
+  border-radius: 17px;
+  font-size: 12px !important;
+  color: white !important;
+  height: 30px;
+  display: flex;
+  width: 30px;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+}
+.select_valor_clicker_father{
+  margin: 0;
+  width: 80px;
+  background: #dbdbdb;
+  
+  border-radius: 20px;
+  display: flex;
+  cursor: pointer;
+  height: 30px;
+  justify-content: start;
+}
 #form_equip input {
   width: 100%;
   text-align: center;
