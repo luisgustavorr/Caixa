@@ -1,15 +1,4 @@
-<?php $caixa = \MySql::conectar()->prepare("SELECT `tb_colaboradores`.`caixa` AS caixa, `tb_caixas`.`liberado` AS liberado
-FROM `tb_colaboradores` INNER JOIN `tb_caixas` ON `tb_caixas`.`caixa` = `tb_colaboradores`.`caixa`
-WHERE codigo = ?");
-$caixa->execute(array($_COOKIE['last_codigo_colaborador']));
-$caixa = $caixa->fetch();
-if($caixa['liberado'] != 0){
-  header('Location: https://www.mixsalgados.com/');
-  
-  echo '<script>location.href="https://www.mixsalgados.com/"</script>';
 
-}else{
-?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -57,4 +46,3 @@ object-fit: contain;" />
         <i class="fa-solid fa-bars menu"></i>
       </div>
     </header>
-   <?php }?>
