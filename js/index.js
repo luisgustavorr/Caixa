@@ -78,7 +78,8 @@ $("#notification i").click(function () {
 $(".valores_informados").keyup(function () {
   soma = 0;
   $(".valores_informados").each(function (index) {
-    if( $(this).val() != ''){
+    if( $(this).val() != '' && $(this).attr("id").trim() != "codigo_colaborador_informado_fechamento"){
+
           if ($(this).attr("id") == "sangria_informadas") {
       soma -= parseFloat($(this).val().replace(".", "").replace(",", "."));
     } else {
@@ -515,7 +516,6 @@ $(".modal_sangria").submit(function (e) {
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
     let vazio = ret;
     if (!vazio) {
-      location.reload();
     } else {
       console.log(ret)
       alert(ret);
