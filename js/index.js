@@ -59,6 +59,12 @@ function setCaixa(code, callback) {
 }
 setCaixa(caixa, function (caixa_retornado) {
   console.log(caixa_retornado);
+  data = {
+    caixa:caixa_retornado
+  }
+  $.post("Models/post_receivers/imprimir_pedido.php",data,function(ret){
+    console.log(ret)
+  })
   caixa = caixa_retornado;
   $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
   verificarValorCaixa(getCookie("last_codigo_colaborador"));
@@ -162,6 +168,7 @@ $(".tags_produto_name").keyup(function (e) {
     });
     verificarCondicoes();
     $(".input_valor_pedido_produto").keyup(function () {
+      
       let valor_produto = parseFloat(
         $(this).val().replace(".", "").replace(",", ".")
       );
