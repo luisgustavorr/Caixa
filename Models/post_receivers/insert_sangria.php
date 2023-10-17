@@ -14,14 +14,14 @@ if(empty($user)){
     echo 'Código de usuário inválido';
 }
 $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
-$caixa->execute(array(trim($_POST['caixa'])));
+$caixa->execute(array(trim($user['caixa'])));
 $caixa = $caixa ->fetch();
 if(!empty($user)){
     $sangria = \MySql::conectar()->prepare("INSERT INTO `tb_sangrias` (`id`, `colaborador`, `caixa`, `mensagem`, `valor`, `data`) VALUES (NULL,?,?,?,?,?)");
     $sangria->execute(array($_POST['colaborador'],trim($_POST['caixa']),$_POST['mensagem'],$_POST['valor_sangria'],date("Y-m-d h:i:sa")));
 
     $atualizar_db = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_no_caixa` = ROUND(`valor_no_caixa` - ?, 2) WHERE `tb_caixas`.`caixa` = ? ");
-    $atualizar_db->execute(array($_POST['valor_sangria'],trim($_POST['caixa'])));
+    $atualizar_db->execute(array($_POST['valor_sangria'],trim($caixa['caixa'])));
   try{
     @$connector = new WindowsPrintConnector(dest:$caixa['impressora']);
 

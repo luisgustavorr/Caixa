@@ -46,7 +46,7 @@ $printer->setLineSpacing(50);
 
 
     $equip = \MySql::conectar()->prepare("INSERT INTO `tb_fechamento` (`id`, `dinheiro`, `cartao`, `moeda`, `pix`, `sangria`, `data`,`caixa`,`colaborador`) VALUES (NULL, ?, ?, ?, ?, ?, ?,?,?)");
-    $equip->execute(array(str_replace(',','.',$_POST['dinheiro_informadas']),str_replace(',','.',$_POST['cartao_informadas']),str_replace(',','.',$_POST['moedas_informadas']),str_replace(',','.',$_POST['pix_informadas']),str_replace(',','.',$_POST['sangria_informadas']),date("Y-m-d"),$user["caixa"],$_POST['codigo_colaborador_informado_fechamento']));
+    $equip->execute(array(str_replace(',','.',str_replace('.','',$_POST['dinheiro_informadas'])),str_replace(',','.',str_replace('.','',$_POST['cartao_informadas'])),str_replace(',','.',str_replace('.','',$_POST['moedas_informadas'])),str_replace(',','.',str_replace('.','',$_POST['pix_informadas'])),str_replace(',','.',str_replace('.','',$_POST['sangria_informadas'])),date("Y-m-d"),$user["caixa"],$_POST['codigo_colaborador_informado_fechamento']));
     $equip = $equip->fetch();
 
     $printer->cut();
