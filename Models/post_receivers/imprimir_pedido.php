@@ -20,7 +20,7 @@ foreach ($pedidos as $key => $pedido) {
     } else {
         $retirar = 'Não';
     }
-$connector = new WindowsPrintConnector(dest: $caixa['impressora']);
+$connector = new WindowsPrintConnector(dest: 'TM-T20X');
 $printer = new Printer($connector);
 $printer->setTextSize(2, 2);
 $printer->setFont(Printer::FONT_B);
@@ -71,6 +71,7 @@ $printer->text("#Pedido de número " . $pedido['id'] . "\n");
 // Finaliza a impressão e fecha a conexão
 $printer->cut();
 $printer->close();
-$colabStmt = \MySql::conectar()->prepare("UPDATE  SET  `enviado` = 2 FROM `tb_pedidos` WHERE id = ?");
-$colabStmt->execute(array($pedido['id'] ));
+
+$colabStmt = \MySql::conectar()->prepare("UPDATE `tb_pedidos` SET  `enviado` = 2   WHERE id = ?");
+$colabStmt->execute(array($pedido['id']));
 }
