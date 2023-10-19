@@ -166,7 +166,7 @@
     </div>
     <div class="valor_caixa_father input_father">
     <div style="" medida="un" class="select_valor_clicker_father" button_identifier="pedido"><span class="select_valor_balanca_clicker" style="cursor:pointer;" ativo="0" >UN</span></div>
-  <input type="text" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
+  <input type="text" onkeyup="mascaraPeso(this,event)" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
     <div class="valor_caixa_father input_father">
