@@ -44,8 +44,8 @@ foreach($Name as $i => $n){
     ];
     $insert_Erro = MySql::conectar()->prepare("INSERT INTO `tb_error_log` (`id`, `message`, `caixa`) VALUES (NULL,?, ?);");
 $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste impressoras'));
-}
 
+}
 
 ?>
 <fundo></fundo>
