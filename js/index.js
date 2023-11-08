@@ -619,6 +619,7 @@ $("#valor_recebido_input").keyup(function () {
   }
 });
 $(".finalizar_venda").click(function () {
+  $(this).attr("disabled",true)
   let valor_compra = parseFloat(
     $("#valor_compra").text().replace("R$", "").replace(",", ".")
   );
@@ -660,8 +661,11 @@ $(".finalizar_venda").click(function () {
       location.reload();
     }
   });
+  $(this).addClass('finalizar_venda')
+
 });
 $(".finalizar_venda_button").click(function () {
+  $(this).attr("disabled",true)
   let esse_elemento = $(this)
   $(this).html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   $("#valor_total_input").val($("#valor_compra").text().replace("R$", ""));
@@ -703,6 +707,7 @@ $(".finalizar_venda_button").click(function () {
       console.log(ret)
       if (ret != "") {
         alert("Código de usuario inválido");
+        esse_elemento.removeAttr("disabled")
         
       } else{
         if($("#codigo_colaborador_venda").val() > 0){
