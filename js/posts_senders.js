@@ -231,6 +231,7 @@ $(".modal_anotar_pedido").submit(function (e) {
       console.log(ret);
       $(this).attr("fazendo_pedido", false);
       location.reload();
+   
     });
   }
 });

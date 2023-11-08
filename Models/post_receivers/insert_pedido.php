@@ -96,7 +96,15 @@ try {
     // Finaliza a impressão e fecha a conexão
     $printer->cut();
     $printer->close();
+    echo 'Conseguiu';
 } catch (Exception $e) {
+    $db = conectarAoBanco();
     echo "Couldn't print to this printer: " . $e->getMessage() . "\n";
+    $colabStmt = $db->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
+    $colabStmt->execute(array($_POST['codigo_colaborador']));
+    $colab = $colabStmt->fetch();
+    $insert_Erro = $db->prepare("INSERT INTO `tb_error_log` (`id`, `message`, `caixa`) VALUES (NULL,?, ?);");
+    $insert_Erro->execute(array($e,$colab['caixa']));
+
 }
 ?>
