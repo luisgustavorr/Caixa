@@ -63,6 +63,7 @@ $novo_valor = $_POST['valor'];
 
 }catch(Exception $e){   
     echo 'Falha ao imprimir: '.$e->getMessage();
+   ReportError::conectar($e);
 
 }
 }
