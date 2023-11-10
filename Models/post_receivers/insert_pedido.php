@@ -105,5 +105,6 @@ try {
     $colab = $colabStmt->fetch();
     $insert_Erro = $db->prepare("INSERT INTO `tb_error_log` (`id`, `message`, `caixa`) VALUES (NULL,?, ?);");
     $insert_Erro->execute(array($e,$colab['caixa']));
+
 }
 ?>
