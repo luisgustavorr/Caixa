@@ -19,7 +19,6 @@ $caixa = $caixa->fetch();
 
 
 $data_atual =  date("Y-m-d h:i:sa");
-
 if (!empty($colab)) {
   unset($_COOKIE['caixa']);
   unset($_COOKIE['last_codigo_colaborador']);
