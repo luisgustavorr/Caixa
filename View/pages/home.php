@@ -46,7 +46,6 @@ foreach($Name as $i => $n){
 $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste impressoras'));
 
 }
-
 ?>
 <fundo></fundo>
 <form class="modal modal_fechar_caixa" style="align-items: center;">

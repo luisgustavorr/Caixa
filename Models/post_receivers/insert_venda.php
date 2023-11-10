@@ -45,4 +45,5 @@ if (!empty($colab)) {
 
 } else {
   echo 'Código de vendedor inválido';
+
 }
