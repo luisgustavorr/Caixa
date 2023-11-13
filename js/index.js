@@ -648,7 +648,7 @@ $(".finalizar_venda").click(function () {
   };
 
   $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
-
+    console.log(ret)
     verificarValorCaixa();
     if (ret != "") {
       alert("Código de usuario inválido");
