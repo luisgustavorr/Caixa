@@ -46,6 +46,7 @@ foreach($Name as $i => $n){
 $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste impressoras'));
 
 }
+// ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
 <form class="modal modal_fechar_caixa" style="align-items: center;">
