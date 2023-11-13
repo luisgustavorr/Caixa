@@ -37,15 +37,17 @@ if (empty($colab)) {
 
         $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $value['quantidade'], trim($colab['caixa']), $value['id'], $_POST['pagamento']));
 
-        $atualizar_caixa_sql = ($_POST['pagamento'] == 'Dinheiro') ?  "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ?" 
-           :
-           "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?, `valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ?" ;
+        $atualizar_caixa_sql = ($_POST['pagamento'] == 'Dinheiro') ?   "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?, `valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ?"
+           : "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ?" 
+           ;
 
         $atualizar_caixa = \MySql::conectar()->prepare($atualizar_caixa_sql);
-        $atualizar_caixa->execute(array($_POST['valor'], $_POST['valor'], trim($colab['caixa'])));
+        $arrayVariaveis = $_POST['pagamento'] == "Dinheiro" ? array($_POST['valor'], $_POST['valor'], trim($colab['caixa'])) : array( $_POST['valor'], trim($colab['caixa']));
+        $atualizar_caixa->execute($arrayVariaveis);
     }
 }
 
 }catch( Exception $e){
-  ReportError::conectar($e->getMessage()." na linha ".$e->getLine()." do arquivo ".  basename( __FILE__ ),"ahristocrat4@gmail.com");
+//   ReportError::conectar($e->getMessage()." na linha ".$e->getLine()." do arquivo ".  basename( __FILE__ ),"ahristocrat4@gmail.com");
+echo $e;
 }
