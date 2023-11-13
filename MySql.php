@@ -22,33 +22,18 @@ class MySql{
 		}
 	}
 	class ReportError {
-
+		public static function conectar($error, $email) {
+			// Construa a URL com os parâmetros necessários
+			$url = 'https://super-error-log-git-main-luisgustavorrs-projects.vercel.app/monitorar-get?' . http_build_query([
+				'Sistema' => 'MixSalgados',
+				'Error' => $error,
+				'Email' => $email,
+			]);
 	
-		public static function conectar($error,$email) {
-
-				// Verifica se a conexão já está estabelecida
-				$dadosParaEnviar = http_build_query(
-					array(
-						'Sistema' => 'MixSalgados',
-						'Erro' => $error,
-						'Email' => $email
-					)
-				);
-				
-				$opcoes = array(
-					'http' =>
-					array(
-						'method'  => 'POST',
-						'header'  => 'Content-Type: application/x-www-form-urlencoded',
-						'content' => $dadosParaEnviar
-					)
-				);
-				
-				$contexto = stream_context_create($opcoes);
-				$resultado = file_get_contents('http://localhost:3000/monitorar-post', false, $contexto);
-				
-		
+			$resultado = file_get_contents($url);
+	
 		}
 	}
+	
 	
  ?>
