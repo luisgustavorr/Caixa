@@ -11,12 +11,12 @@ $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `cai
 $caixa->execute(array(trim('Loja Várzea')));
 $caixa = $caixa ->fetch();
   try{
-    $connector = new WindowsPrintConnector(dest:$caixa['impressora']);
+    $connector = new WindowsPrintConnector(dest:"asdmlqwjdmalij");
 
     $printer = new Printer($connector);
 $printer->setEmphasis(true); // Ativa o modo de enfatizar (negrito)
 
-$printer->text("SANGRIA DE CAIXA\n");
+$printer->text("SA NGRIA DE CAIXA\n");
 $printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
 $printer->text("Data: " . date("d/m/Y H:i:s") . "\n"); // Adicione a data e hora da sangria
 $printer->text("Teste de Impressão"); // Adicione a data e hora da sangria
@@ -41,7 +41,10 @@ $printer->close();
 
 }catch(Exception $e){   
     echo 'Falha ao imprimir: '.$e->getMessage();
+    print_r($e);
+    ReportError::conectar($e, "ahristocrat4@gmail.com");
 
+    // ReportError::conectar($e->getMessage()." na linha ".$e->getLine()." do arquivo ".  basename( __FILE__ ),"ahristocrat4@gmail.com");
 }
 
 ?>

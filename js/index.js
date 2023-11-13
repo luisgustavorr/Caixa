@@ -28,7 +28,7 @@ if ($(".colab_code").val() == "") {
 }
 $('#teste_impressora').click(function(){
   $.post("Models/post_receivers/teste_impressora.php", data, function (ret) {
-   
+   console.log(ret)
   })
 })
 function getCookie(name) {
