@@ -42,12 +42,14 @@ try {
         $vendaStmt = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`) VALUES (NULL, ?, ?, ?, ?,?,?); ");
     
         foreach ($_POST['produtos'] as $key => $value) {
-            $valor_compra_total += $value['preco'] * $value['quantidade'];
+            $quantidade_float = floatval(str_replace(",",".",$value['quantidade']));
+       
+            $valor_compra_total += $value['preco'] * $quantidade_float;
     
             $produtoStmt->execute(array($value['id']));
             $produto = $produtoStmt->fetch();
     
-            $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $value['quantidade'], trim($colab['caixa']), $value['id'], $_POST['pagamento']));
+            $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento']));
     
             $atualizar_caixa_sql = ($_POST['pagamento'] == 'Dinheiro') ?   "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?, `valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ?"
                : "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ?" 
