@@ -1,3 +1,15 @@
+function restartVenda() {
+  $('.alvo_restart_venda').each(function(){
+    const prefixo = $(this).text().includes("Subtotal") ? "Subtotal: " : "";
+    $(this).text(prefixo+"R$00,0"  )  
+  })
+  $('.tabela_produtos').children().remove()
+  $(".modal").css("display",'none')
+  $("fundo").css("display",'none')
+  $(".enable_this_button").text("Finalizar Venda")
+  $(".enable_this_button").removeAttr("disabled")
+  valorCaixa();
+}
 document.addEventListener("keydown", function(e) {
 
   if(e.keyCode === 13) {
@@ -657,8 +669,7 @@ $(".finalizar_venda").click(function () {
         document.cookie =
           "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
       }
-      
-      location.reload();
+      restartVenda()
     }
   });
   $(this).addClass('finalizar_venda')
@@ -714,7 +725,7 @@ $(".finalizar_venda_button").click(function () {
           document.cookie =
             "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
         }
-        location.reload()
+        restartVenda()
       }
     });
   }
