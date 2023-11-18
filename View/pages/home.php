@@ -273,7 +273,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     </div>
   </div>
   <div class="button_father">
-    <button class="finalizar_venda">Finalizar Venda</button>
+    <button class="finalizar_venda enable_this_button">Finalizar Venda</button>
   </div>
 </div>
 <form class="modal modal_sangria">
@@ -384,8 +384,8 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <span>Metodo de Pagamento:</span>
       <h4 id="metodo_pagamento_text">Dinheiro</h4>
       <p>Total da Compra:</p>
-      <h2 id="valor_compra">R$00,00</h2>
-      <button id="finalizar_venda_modal_button" first="sim" class="finalizar_venda_button">Finalizar Venda</button>
+      <h2 class="alvo_restart_venda" id="valor_compra">R$00,00</h2>
+      <button id="finalizar_venda_modal_button" first="sim" class="finalizar_venda_button enable_this_button">Finalizar Venda</button>
     </div>
   </div>
 
@@ -430,7 +430,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       </div>
 
     </div>
-    <table id="tabela_produtos">
+    <table  id="tabela_produtos">
       <thead>
         <tr>
           <th>Código</th>
@@ -440,7 +440,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
           <th>UN</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="tabela_produtos">
 
       </tbody>
     </table>
@@ -457,11 +457,11 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     <div class="valores">
       <div class="valor_father valor_unitario">
         <span>Valor Unitário:</span>
-        <strong>R$: 00,00</strong>
+        <strong>R$00,00</strong>
       </div>
       <div class="valor_father valor_total">
         <span>Valor Total:</span>
-        <strong>R$: 00,00</strong>
+        <strong class="alvo_restart_venda">R$00,00</strong>
       </div>
     </div>
     <div class="venda_atual_box">
@@ -475,7 +475,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
         </span>
         <div class="venda_preview">
           <h3 class="venda_preview_title">Produtos na Venda:</h3>
-          <table class="venda_preview_body">
+          <table  class="venda_preview_body ">
             <thead>
               <tr>
                 <th>Produto</th>
@@ -486,11 +486,11 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
 
               </tr>
             </thead>
-            <tbody>
+            <tbody class="tabela_produtos">
 
             </tbody>
           </table>
-          <h3 class="venda_preview_bottom">Subtotal: R$00,00</h3>
+          <h3  class="alvo_restart_venda venda_preview_bottom">Subtotal: R$00,00</h3>
 
 
         </div>
