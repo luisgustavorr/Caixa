@@ -336,6 +336,16 @@ input#valor_entrada {
   cursor: pointer;
   margin-top: 5px;
 }
+#cancelar_ultima_venda {
+  color: rgb(253, 201, 24);
+  background: rgb(230, 13, 46);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 5px;
+}
 .input_select select {
   border-radius: 4px;
   border: 1px solid #424242;

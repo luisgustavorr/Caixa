@@ -26,6 +26,11 @@ $("#finaliza_sangria_button").removeAttr("disabled")
 $(".modal").css("display",'none')
 $("fundo").css("display",'none')
 }
+function cancelarUltimaVenda(){
+  $.post("Models/post_receivers/delete_last_venda.php", data, function (ret) {
+    console.log(ret)
+  })
+}
 $(".datas").change(function () {
   alterarTabela();
 });
