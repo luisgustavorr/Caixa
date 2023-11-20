@@ -33,8 +33,8 @@ try {
         $data_atual = date("Y-m-d h:i:sa");
         unset($_COOKIE['caixa']);
         unset($_COOKIE['last_codigo_colaborador']);
-        setcookie("last_codigo_colaborador", $_POST['colaborador'], time() + 20 * 24 * 60 * 60);
-        setcookie("caixa", $colab['caixa'], time() + 20 * 24 * 60 * 60);
+        setcookie("last_codigo_colaborador", $_POST['colaborador'], time() + 20 * 24 * 60 * 60,"/");
+        setcookie("caixa", $colab['caixa'], time() + 20 * 24 * 60 * 60,"/");
     
         $valor_compra_total = 0;
     
