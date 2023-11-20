@@ -1,3 +1,31 @@
+function resetPedido() {
+  formatoDataHora = function (data) {
+    var dia = ('0' + data.getDate()).slice(-2);
+    var mes = ('0' + (data.getMonth() + 1)).slice(-2);
+    var ano = data.getFullYear();
+    var horas = ('0' + data.getHours()).slice(-2);
+    var minutos = ('0' + data.getMinutes()).slice(-2);
+    return ano + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos;
+  };
+$(".modal_anotar_pedido input[type='text']").each(function(){
+if($(this).attr("id") == "quantidade_produto_pedido") {
+$(this).val(1)
+}else{
+$(this).val("")
+
+}
+})
+$(".modal_anotar_pedido tbody").children().remove()
+var dataAtual = new Date();
+ var dataFutura = new Date();
+  dataFutura.setMinutes(dataFutura.getMinutes() + 30);
+$('#data_pedido').val(formatoDataHora(dataAtual))
+$('#data_entrega').val(formatoDataHora(dataFutura))
+$("#finaliza_sangria_button").text("Finalizar Operação")
+$("#finaliza_sangria_button").removeAttr("disabled")
+$(".modal").css("display",'none')
+$("fundo").css("display",'none')
+}
 $(".datas").change(function () {
   alterarTabela();
 });
@@ -224,14 +252,14 @@ $(".modal_anotar_pedido").submit(function (e) {
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret);
       $(this).attr("fazendo_pedido", false);
-      location.reload();
+      resetPedido()
     });
   } else {
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret);
       $(this).attr("fazendo_pedido", false);
-      location.reload();
-   
+      
+      resetPedido()
     });
   }
 });
