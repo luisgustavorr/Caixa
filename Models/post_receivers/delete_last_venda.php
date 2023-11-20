@@ -5,5 +5,4 @@ include('../../MySql.php');
     ORDER BY `tb_vendas`.`id` DESC
     LIMIT 1;");
     $equip->execute(array($_COOKIE["caixa"]));
-    echo'aaaa'.$_COOKIE["caixa"];
 ?>
