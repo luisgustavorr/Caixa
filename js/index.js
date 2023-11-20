@@ -592,6 +592,9 @@ $(".pagamento_input").change(function () {
   $('#metodo_pagamento_text').text($('#metodo_pagamento_princip').val())
 });
 $("fundo").click(function () {
+  $(".enable_this_button").removeAttr("disabled")
+  $(".enable_this_button").text("Finalizar Venda")
+console.log("aqui")
   $('#editando').val(false)
   $(".modal").each(function () {
     $(this).css("display", "none");
