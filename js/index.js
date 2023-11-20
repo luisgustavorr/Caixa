@@ -26,6 +26,26 @@ $('#nao').click(function(){
   $(".input_endereco_cliente").css('visibility',' hidden')
   
 })
+$("#cancelar_ultima_venda").click(function(){
+    $(this).text("Certeza?")
+    if($(this).attr("confirmar") == 'true'){
+      console.log("venda cancelada")
+      cancelarUltimaVenda()
+      $(this).text("Venda Cancelada")
+      $(this).attr("confirmar",false)
+      setTimeout(() => {
+        $(this).text("Cancelar Última Venda")
+      }, 3000);
+    }else{
+      $(this).attr("confirmar",true)
+      $(this).text("Certeza?")
+      setTimeout(() => {
+        $(this).attr("confirmar",false)
+        $(this).text("Cancelar Última Venda")
+      }, 3000);
+    }
+
+})
 let timeoutId;
 let input_codigo_focado = false;
 let condicao_favoravel = true;

@@ -496,7 +496,8 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
         </div>
         <div class="finalizar_venda_button_principal_father">
           <button id="finalizar_venda_button_principal" onclick="abrirModal('modal_pagamento')" class="finalizar_venda_button_principal">Finalizar Venda</button>
-          <button id="imprimir_ultima_venda"  class="imprimir_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imprimir Ultima Venda</span></button>
+          <button id="imprimir_ultima_venda"  class="imprimir_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imprimir Última Venda</span></button>
+          <button id="cancelar_ultima_venda" confirmar=false class="cancelar_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Cancelar Última Venda</span></button>
 
         </div>
       </div>
