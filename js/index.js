@@ -6,6 +6,7 @@ function restartVenda() {
   $('.tabela_produtos').children().remove()
   $(".modal").css("display",'none')
   $("fundo").css("display",'none')
+$(".modal_troco input").val("");
   $(".enable_this_button").text("Finalizar Venda")
   $(".enable_this_button").removeAttr("disabled")
   valorCaixa();
