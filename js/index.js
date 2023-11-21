@@ -549,6 +549,7 @@ $(".modal_sangria").submit(function (e) {
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
     let vazio = ret;
     if (!vazio) {
+location.reload()
     } else {
       console.log(ret)
       alert(ret);
