@@ -45,7 +45,7 @@ WHERE codigo = ?");
   <body>
      <script>0</script>
   <header>
-      <img src="<?php echo INCLUDE_PATH?>img/Logo mix.png" style="height: 40px;
+      <img onclick=" window.location.reload(true)" src="<?php echo INCLUDE_PATH?>img/Logo mix.png" style="height: 40px;
 object-fit: contain;" />
       <div class="right_side">
         <span><i class="fa-regular fa-clock"></i> <date_now class=" horario_atual_finder">Seg: 10/07/2023 10h40</date_now></span>
