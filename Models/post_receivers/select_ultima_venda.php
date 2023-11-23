@@ -26,7 +26,7 @@ $printer->setLineSpacing(50);
 
 @$printer->setEmphasis(false); // Desativa o modo de enfatizar (negrito)
 if(isset($_COOKIE['last_codigo_colaborador'])){
-    $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? ORDER BY `data` desc LIMIT 1;");
+    $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas` WHERE `tb_vendas`.`colaborador` = ? ORDER BY `id` desc LIMIT 1;");
     $data_ultima_venda->execute(array($_COOKIE['last_codigo_colaborador']));
     $data_ultima_venda = $data_ultima_venda->fetch();
 list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda['data']);
