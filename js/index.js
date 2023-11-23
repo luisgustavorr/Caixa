@@ -1,3 +1,5 @@
+var segunda_parte_divisao = false;
+var produtos = []
 function restartVenda() {
   $('.alvo_restart_venda').each(function(){
     const prefixo = $(this).text().includes("Subtotal") ? "Subtotal: " : "";
@@ -9,7 +11,34 @@ function restartVenda() {
   $(".enable_this_button").text("Finalizar Venda")
   $(".enable_this_button").removeAttr("disabled")
   valorCaixa();
+   segunda_parte_divisao = false;
+   produtos = []
+   $('#dividir_venda').removeClass("fa-bounce")
+$('#valor_compra_dividida_father').css("display","none")
+$("#valor_compra").css("display","block")
 }
+$('#dividir_venda').click(function(){
+  if($(this).attr("dividindo") == "true"){
+    console.log("Aaaa")
+    $(this).attr("dividindo",false) 
+  $(this).removeClass("fa-bounce")
+  $("#finalizar_venda_modal_button").text("Finalizar Venda")
+
+      $("#valor_compra").css("display","block")
+   $("#valor_compra_dividida").val($("#valor_compra_dividida").attr("valor_inicial"))
+    
+    $("#valor_compra_dividida_father").css("display","none")
+  }else{
+    $("#valor_compra").css("display","none")
+    $("#valor_compra_dividida_father").css("display","flex")
+   $("#valor_compra_dividida").focus()
+  $(this).addClass("fa-bounce")
+  $("#finalizar_venda_modal_button").text("Dividir Pagamento")
+
+    $(this).attr("dividindo",true) 
+  }
+ })
+ 
 document.addEventListener("keydown", function(e) {
 
   if(e.keyCode === 13) {
@@ -437,6 +466,12 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
   $("#valor_compra").text(
     "R$" + total_valor.toFixed(2).toString().replace(".", ",")
   );
+  $("#valor_compra_dividida").val(
+    total_valor.toFixed(2).toString().replace(".", ",")
+  );
+  $("#valor_compra_dividida").attr("valor_inicial",
+    total_valor.toFixed(2).toString().replace(".", ",")
+  );
   $(".remove_item").click(function () {
     if ($(this).attr("class").includes("trash_inactive")) {
       $(this).addClass("trash_activated");
@@ -548,6 +583,7 @@ $(".modal_sangria").submit(function (e) {
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
     let vazio = ret;
     if (!vazio) {
+      location.reload()
     } else {
       console.log(ret)
       alert(ret);
@@ -653,52 +689,11 @@ $("#valor_recebido_input").keyup(function () {
     $("#valor_calculado_input").val(valor_calculado);
   }
 });
-$(".finalizar_venda").click(function () {
-  $(this).attr("disabled",true)
-  let valor_compra = parseFloat(
-    $("#valor_compra").text().replace("R$", "").replace(",", ".")
-  );
-  let produtos = [];
-  $(".venda_preview_body .quantidade_produto").each(function (index) {
-    let produto_info = {
-      id: $(this).attr("id_produto"),
-      quantidade: $(this).text().replace("x", ""),
-      preco: $(this).attr("preco_produto"),
-    };
-    produtos[index] = produto_info;
-  });
-  let caixa_para_venda =''
 
-  setCaixa($("#codigo_colaborador_venda").val(), function (caixa_retornado) {
-    console.log('certo:'+caixa_retornado);
-    caixa = caixa_retornado;
-    $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
-    verificarValorCaixa(getCookie("last_codigo_colaborador"));
-  });
-  data = {
-    colaborador: $("#codigo_colaborador_venda").val(),
-    valor: valor_compra,
-    produtos: produtos,
-    pagamento: $("#metodo_pagamento_princip").val(),
-  };
 
-  $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
-    console.log(ret)
-    verificarValorCaixa();
-    if (ret != "") {
-      alert("Código de usuario inválido");
-    } else {
-      if($("#codigo_colaborador_venda").val() > 0){
-        document.cookie =
-          "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
-      }
-      restartVenda()
-    }
-  });
-  $(this).addClass('finalizar_venda')
-
-});
 $(".finalizar_venda_button").click(function () {
+
+$("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
   $(this).attr("disabled",true)
   let esse_elemento = $(this)
   $(this).html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
@@ -714,41 +709,75 @@ $(".finalizar_venda_button").click(function () {
     let valor_compra = parseFloat(
       $("#valor_compra").text().replace("R$", "").replace(",", ".")
     );
-    let produtos = [];
-    $(".venda_preview_body .quantidade_produto").each(function (index) {
-      let produto_info = {
-        id: $(this).attr("id_produto"),
-        quantidade: $(this).text().replace("x", ""),
-        preco: $(this).attr("preco_produto"),
-      };
-      produtos[index] = produto_info;
-    });
+
+    if(!segunda_parte_divisao){
+      $(".venda_preview_body .quantidade_produto").each(function (index) {
+        let produto_info = {
+          id: $(this).attr("id_produto"),
+          quantidade: $(this).text().replace("x", ""),
+          preco: $(this).attr("preco_produto"),
+        };
+        produtos[index] = produto_info;
+      });
+    }
+   
     setCaixa($("#codigo_colaborador_venda").val(), function (caixa_retornado) {
       console.log('certo:'+caixa_retornado);
       caixa = caixa_retornado;
       $("#blocked_fazer_sangria").attr("id", "fazer_sangria");
       verificarValorCaixa(getCookie("last_codigo_colaborador"));
     });
+    console.log(produtos)
     data = {
       colaborador: $("#codigo_colaborador_venda").val(),
       valor: valor_compra,
       produtos: produtos,
       pagamento: $("#metodo_pagamento_princip").val(),
+      segunda_parte:segunda_parte_divisao
     };
-
+    console.log(segunda_parte_divisao)
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
       $(esse_elemento).html('Finalizar Venda')
       console.log(ret)
-      if (ret != "") {
-        alert("Código de usuario inválido");
+    
+
+      if (JSON.parse(ret)) {
+        const ret_in_JSON = JSON.parse(ret)
         esse_elemento.removeAttr("disabled")
-        
+        if(segunda_parte_divisao == true) {
+          $('#dividir_venda').attr("dividindo","false")
+        }
+          if($('#dividir_venda').attr("dividindo") == "true"){
+          console.log("aqui")
+          console.log(ret_in_JSON["produtos_quitados"])
+          const objetoEstaNoArray2 = (obj) => ret_in_JSON["produtos_quitados"].some(item => JSON.stringify(item) === JSON.stringify(obj));
+          const resultado = produtos.filter(item => !objetoEstaNoArray2(item));
+          console.log(resultado)
+          produtos = resultado
+          segunda_parte_divisao = true
+          $('#valor_compra_dividida').val(ret_in_JSON["resto_da_metade"])
+          $('#valor_compra_dividida').attr("disabled",true)
+          if($("#metodo_pagamento_princip").val() == 'Dinheiro'){
+
+            $('.modal_troco').css("display","none")
+            $('.modal_pagamento').css("display","flex")
+            $("#finalizar_venda_modal_button").text("Finalizar Venda")
+            $("#finalizar_venda_modal_button").removeAttr("disabled")
+            
+          }
+
+        }else{
+        restartVenda()
+
+        }
       } else{
+        alert("Código de usuario inválido");
+
         if($("#codigo_colaborador_venda").val() > 0){
           document.cookie =
             "last_codigo_colaborador=" + $("#codigo_colaborador_venda").val() + ";SameSite=Strict";
         }
-        restartVenda()
+      
       }
     });
   }

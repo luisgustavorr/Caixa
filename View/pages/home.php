@@ -265,7 +265,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       </div>
     </div>
     <div class="input_troco valor_calculado_troco">
-      <span>Valor Calculado:</span>
+      <span> Valor Calculado:</span>
       <div class="input_money_father">
         <span class="prefix">R$</span>
         <input readonly="readonly" type="text" class="oders_inputs input_money" name="valor_calculado_input" id="valor_calculado_input">
@@ -273,7 +273,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     </div>
   </div>
   <div class="button_father">
-    <button class="finalizar_venda enable_this_button">Finalizar Venda</button>
+    <button class="finalizar_venda_button enable_this_button">Finalizar Venda</button>
   </div>
 </div>
 <form class="modal modal_sangria">
@@ -383,8 +383,16 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <h4 id="quantidade_parcelas_text">1x</h4>
       <span>Metodo de Pagamento:</span>
       <h4 id="metodo_pagamento_text">Dinheiro</h4>
-      <p>Total da Compra:</p>
-      <h2 class="alvo_restart_venda" id="valor_compra">R$00,00</h2>
+      <p style="display: flex;
+  justify-content: space-between;
+  width: 150px;"><i dividindo=false id="dividir_venda" class="fa-solid fa-divide"></i> Total da Compra:</p>
+      <h2 class="alvo_restart_venda" id="valor_compra">R$00,00</h2></h2>
+      <div id="valor_compra_dividida_father">
+        <h2>R$</h2>
+      <input  style=" border:none; width:80px; font-size: 25px;
+  font-weight: bold; color: black;" type="text" dividindo=true id="valor_compra_dividida">
+      </div>
+
       <button id="finalizar_venda_modal_button" first="sim" class="finalizar_venda_button enable_this_button">Finalizar Venda</button>
     </div>
   </div>

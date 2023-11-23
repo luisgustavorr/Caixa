@@ -316,6 +316,24 @@ input#valor_entrada {
   display: flex;
   justify-content: space-evenly;
 }
+#dividir_venda{
+  font-size: 14px;
+  background: red;
+  padding: 3px;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  width: 20px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+#valor_compra_dividida_father{
+  display: none;
+  border: 1px solid gray;
+  border-radius: 3px;
+
+}
 .finalizar_venda_button_principal {
   color: rgb(253, 201, 24);
   background: rgb(230, 13, 46);
@@ -508,7 +526,7 @@ input#valor_entrada {
   display: flex;
   justify-content: center;
 }
-.finalizar_venda {
+.modal_troco .finalizar_venda_button {
   border: none;
   background: rgb(253, 201, 24);
   color: rgb(230, 13, 46);
