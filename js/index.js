@@ -611,6 +611,8 @@ $("#valor_sangria").keyup(function () {
   }
 });
 $("#whatsapp_cliente").mask("(00) 0 0000-0000");
+
+$("#valor_compra_dividida").mask("00000,00");
 function verificarCondicoes() {
   $("#codigo_produto").focus(function () {
     input_codigo_focado = true;

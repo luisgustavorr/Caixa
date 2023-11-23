@@ -389,7 +389,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <h2 class="alvo_restart_venda" id="valor_compra">R$00,00</h2></h2>
       <div id="valor_compra_dividida_father">
         <h2>R$</h2>
-      <input  style=" border:none; width:80px; font-size: 25px;
+      <input  style=" border:none; width:120px; font-size: 25px;
   font-weight: bold; color: black;" type="text" dividindo=true id="valor_compra_dividida">
       </div>
 
