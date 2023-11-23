@@ -8,6 +8,7 @@ function restartVenda() {
   $('.tabela_produtos').children().remove()
   $(".modal").css("display",'none')
   $("fundo").css("display",'none')
+$(".modal_troco input").val("");
   $(".enable_this_button").text("Finalizar Venda")
   $(".enable_this_button").removeAttr("disabled")
   valorCaixa();
@@ -583,7 +584,7 @@ $(".modal_sangria").submit(function (e) {
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
     let vazio = ret;
     if (!vazio) {
-      location.reload()
+      location.reload();
     } else {
       console.log(ret)
       alert(ret);
