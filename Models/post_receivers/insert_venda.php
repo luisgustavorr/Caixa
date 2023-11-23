@@ -47,7 +47,7 @@ try {
         $vendaStmt = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`venda_dividida_id`) VALUES (NULL, ?, ?, ?, ?,?,?,?); ");
         $valor_da_parte =  $_POST['valor'];
         $array_retorno = [
-            "produtos_partidos" => [],
+            "data" => [],
             "produtos_quitados" => [],
             "resto_da_metade" => [],
             "ret" => []
