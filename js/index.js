@@ -212,7 +212,7 @@ $(".tags_produto_name").keyup(function (e) {
         $("#quantidade_produto_pedido").val() +
         "</td><td>" +
         produto +
-        "</td><td><input type='text'class='oders_inputs input_valor_pedido_produto' produto='" +
+        "</td><td><input type='text'class='others_inputs input_valor_pedido_produto' produto='" +
         produto.replace(/ /g, "_") +
         "' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_" +
         produto.replace(/ /g, "_") +
@@ -620,10 +620,10 @@ function verificarCondicoes() {
   $("#codigo_produto").blur(function () {
     input_codigo_focado = false;
   });
-  $(".oders_inputs").focus(function () {
+  $(".others_inputs").focus(function () {
     condicao_favoravel = false;
   });
-  $(".oders_inputs").blur(function () {
+  $(".others_inputs").blur(function () {
     condicao_favoravel = true;
   });
 }
