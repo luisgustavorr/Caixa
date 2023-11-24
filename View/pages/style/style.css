@@ -28,7 +28,7 @@ html {
   height: 100%;
 }
 .modal {
-  z-index: 1;
+  z-index: 3;
 }
 .modal_produtos {
   width: 80%;
@@ -51,7 +51,7 @@ fundo {
   width: 100%;
   top: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 2;
   background: rgba(0, 0, 0, 0.54);
   justify-content: center;
   align-items: center;
@@ -67,7 +67,6 @@ fundo {
   padding: 2%;
   left: 50%;
   top: 50%;
-  z-index: 2;
   transform: translate(-50%, -50%);
   justify-content: center;
 }
@@ -153,7 +152,7 @@ input#valor_entrada {
   bottom: 0%;
   left: 0px;
   background: white;
-  z-index: 8;
+  z-index: 1;
 }
 #notification i {
   float: right;
@@ -1675,7 +1674,7 @@ i span {
   top: 50%;
   flex-direction: column;
   padding: 2% 0;
-  z-index: 1;
+  z-index: 3;
 }
 .modal_fechar_caixa h3 {
   font-size: 25px;
