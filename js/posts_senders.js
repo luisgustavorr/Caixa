@@ -210,6 +210,18 @@ $("#salvar_caixa").click(function () {
   });
 });
 $(".modal_anotar_pedido").submit(function (e) {
+  let permitir_pedido = true
+
+  $(".modal_anotar_pedido tbody input").each(function(){
+    if($(this).val() == ""){
+      alert("ERRO: Existem produtos sem valor!")
+      permitir_pedido = false
+    }
+  })
+  if(!permitir_pedido){
+    return false
+  }
+
   if($(this).attr('fazendo_pedido')){
     return false
   }
