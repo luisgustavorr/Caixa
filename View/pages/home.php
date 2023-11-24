@@ -58,35 +58,35 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
                 <input type="hidden"  value="<?php print_r($caixa['caixa']); ?>" name="caixa_alvo">
                 <div class="input_valores">
                     <label for="dinheiro_informadas">Dinheiro: </label>
-                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="dinheiro_informadas" id="dinheiro_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo others_inputs" name="dinheiro_informadas" id="dinheiro_informadas">
                 </div>
                 <div class="input_valores">
                     <label for="moedas_informadas">Moeda: </label>
-                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="moedas_informadas" id="moedas_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo others_inputs" name="moedas_informadas" id="moedas_informadas">
                 </div>
                 <div class="input_valores">
                     <label for="pix_informadas">Pix: </label>
-                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="pix_informadas" id="pix_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo others_inputs" name="pix_informadas" id="pix_informadas">
                 </div>
             </div>
             <div class="first_column">
                 <div class="input_valores">
                     <label for="cartao_informadas">Cartão: </label>
-                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="cartao_informadas" id="cartao_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo others_inputs" name="cartao_informadas" id="cartao_informadas">
                 </div>
 
                 <!-- <div class="input_valores">
                     <label for="pix_informadas">Vale-Ticket </label>
-                    <input onKeyUp="mascaraMoeda(this, event)"type="text" class="input_princip oders_inputs"name="pix_informadas" id="pix_informadas">
-                    <input onKeyUp="mascaraMoeda(this, event)"type="text"  class="quantidade quantidade_pix oders_inputs">
+                    <input onKeyUp="mascaraMoeda(this, event)"type="text" class="input_princip others_inputs"name="pix_informadas" id="pix_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)"type="text"  class="quantidade quantidade_pix others_inputs">
                 </div> -->
                 <div class="input_valores">
                     <label for="sangria_informadas">Sangria: </label>
-                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo oders_inputs" name="sangria_informadas" id="sangria_informadas">
+                    <input onKeyUp="mascaraMoeda(this, event)" type="text" class="valores_informados input_princip_completo others_inputs" name="sangria_informadas" id="sangria_informadas">
                 </div>
                 <div class="input_valores">
                     <label for="codigo_colaborador_informado_fechamento">Colaborador: </label>
-                    <input  type="text" class="valores_informados input_princip_completo oders_inputs colab_code" name="codigo_colaborador_informado_fechamento" id="codigo_colaborador_informado_fechamento">
+                    <input  type="text" class="valores_informados input_princip_completo others_inputs colab_code" name="codigo_colaborador_informado_fechamento" id="codigo_colaborador_informado_fechamento">
                 </div>
             </div>
             <div class="second_column">
@@ -134,17 +134,17 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <div class="subdivision">
 
       <span>Nome do cliente:</span>
-      <input required type="text" name="nome_cliente" class="oders_inputs" id="nome_cliente_input" placeholder="Insira o nome do cliente">
+      <input required type="text" name="nome_cliente" class="others_inputs" id="nome_cliente_input" placeholder="Insira o nome do cliente">
       </div>
       <div class="subdivision">
 
 <span>Número cliente:</span>
-<input required type="text" name="numero_cliente" class="oders_inputs" id="numero_cliente_input" placeholder="Insira o numero do cliente">
+<input required type="text" name="numero_cliente" class="others_inputs" id="numero_cliente_input" placeholder="Insira o numero do cliente">
 </div>
       <div class="subdivision">
 
       <span>Seu código:</span>
-      <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs colab_code" id="codigo_colaborador_input" placeholder="Insira o seu código">
+      <input required type="text" name="codigo_colaborador" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="others_inputs colab_code" id="codigo_colaborador_input" placeholder="Insira o seu código">
       </div>
 
     </div>
@@ -152,7 +152,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     <div class="endereco_cliente_father">
       <div class="input_endereco_cliente">
       <span>Endereço do cliente:</span>
-      <input  type="text" name="endereco_cliente_input" class="oders_inputs" id="endereco_cliente_input" placeholder="Insira o endereço do cliente">
+      <input  type="text" name="endereco_cliente_input" class="others_inputs" id="endereco_cliente_input" placeholder="Insira o endereço do cliente">
       </div>
       <div class="input_select">
         <span>Método de Pagamento:</span>
@@ -183,7 +183,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
   <div class="middle_row">
   <div class="valor_sangria_father input_father">
       <span>Valor da entrada:</span>
-      <input type="text" value="" onKeyUp="mascaraMoeda(this, event)"class="oders_inputs" name="valor_entrada" id="valor_entrada">
+      <input type="text" value="" onKeyUp="mascaraMoeda(this, event)"class="others_inputs" name="valor_entrada" id="valor_entrada">
     </div>
     <div class="input_select">
         <span class="pagamento_entrada">Pagamento da Entrada:</span>
@@ -214,12 +214,12 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     </div>
     <div class="valor_caixa_father input_father">
     <div style="" medida="un" class="select_valor_clicker_father" button_identifier="pedido"><span class="select_valor_balanca_clicker" style="cursor:pointer;" ativo="0" >UN</span></div>
-  <input type="text" onkeyup="mascaraPeso(this,event)" class="oders_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
+  <input type="text" onkeyup="mascaraPeso(this,event)" class="others_inputs alvo_valor_balanca pedido_button" name="" value="1" id="quantidade_produto_pedido">
 
     </div>
     <div class="valor_caixa_father input_father">
       <span>Nome produto:</span>
-      <input type="text" class="tags_produto_name oders_inputs" name="" laceholder="Nome do produto" id="nome_produto_pedido">
+      <input type="text" class="tags_produto_name others_inputs" name="" laceholder="Nome do produto" id="nome_produto_pedido">
 
     </div>
 
@@ -254,21 +254,21 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <span>Valor Total:</span>
       <div class="input_money_father">
         <span class="prefix">R$</span>
-        <input type="text" class="oders_inputs input_money" name="valor_total_input" id="valor_total_input">
+        <input type="text" class="others_inputs input_money" name="valor_total_input" id="valor_total_input">
       </div>
     </div>
     <div class="input_troco valor_recebido_troco ">
       <span>Valor Recebido:</span>
       <div class="input_money_father">
         <span class="prefix">R$</span>
-        <input onKeyUp="mascaraMoeda(this, event)" type="text" class="oders_inputs input_money" name="valor_recebido_input" id="valor_recebido_input">
+        <input onKeyUp="mascaraMoeda(this, event)" type="text" class="others_inputs input_money" name="valor_recebido_input" id="valor_recebido_input">
       </div>
     </div>
     <div class="input_troco valor_calculado_troco">
       <span> Valor Calculado:</span>
       <div class="input_money_father">
         <span class="prefix">R$</span>
-        <input readonly="readonly" type="text" class="oders_inputs input_money" name="valor_calculado_input" id="valor_calculado_input">
+        <input readonly="readonly" type="text" class="others_inputs input_money" name="valor_calculado_input" id="valor_calculado_input">
       </div>
     </div>
   </div>
@@ -282,7 +282,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
   <div class="first_row">
     <div class="colaborador_father input_father">
       <span>Colaborador:</span>
-      <input required value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>"type="text" name="colaborador" class="oders_inputs colab_code" id="colaborador_input" placeholder="Insira seu código">
+      <input required value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>"type="text" name="colaborador" class="others_inputs colab_code" id="colaborador_input" placeholder="Insira seu código">
     </div>
     <div class="horario_father input_father">
       <span>Horário da Sangria:</span>
@@ -294,7 +294,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <span>Valor da Sangria:</span>
       <div class="input_valor_sangria">
         <span>R$</span>
-        <input type="text" required value="" onKeyUp="mascaraMoeda(this, event)" name="valor_sangria" class="oders_inputs" id="valor_sangria"></input>
+        <input type="text" required value="" onKeyUp="mascaraMoeda(this, event)" name="valor_sangria" class="others_inputs" id="valor_sangria"></input>
 
       </div>
     </div>
@@ -308,7 +308,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
     </div>
   </div>
   <span class="motivo_sangria_text">Explique o motivo para realização da Sangria:</span>
-  <textarea name="motivo_sangria" id="motivo_sangria" class="oders_inputs" cols="30" rows="10"></textarea>
+  <textarea name="motivo_sangria" id="motivo_sangria" class="others_inputs" cols="30" rows="10"></textarea>
   <div class="button_finalizar_father">
     <button id="finaliza_sangria_button" class="finalizar_button">Finalizar Operação</button>
   </div>
@@ -318,18 +318,18 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
 
     <div class="inputs_pagamento_father">
       <span>Seu Código:</span>
-      <input type="text" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="oders_inputs colab_code" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
+      <input type="text" value="<?php if(isset($_COOKIE['last_codigo_colaborador'])) echo $_COOKIE['last_codigo_colaborador']?>" class="others_inputs colab_code" placeholder="Digite o seu do código" name="codigo_colaborador_venda" id="codigo_colaborador_venda">
 
     </div>
 
     <div class="inputs_pagamento_father">
       <span>Nome Cliente:</span>
-      <input type="text" class="oders_inputs" placeholder="Digite o Nome do Cliente" name="nome_cliente" id="nome_cliente">
+      <input type="text" class="others_inputs" placeholder="Digite o Nome do Cliente" name="nome_cliente" id="nome_cliente">
 
     </div>
     <div id="whats_cliente_father" class="inputs_pagamento_father">
       <span>Whatsapp Cliente:</span>
-      <input type="text" class="oders_inputs" placeholder="Digite o Whatsapp do Cliente" name="whatsapp_cliente" id="whatsapp_cliente">
+      <input type="text" class="others_inputs" placeholder="Digite o Whatsapp do Cliente" name="whatsapp_cliente" id="whatsapp_cliente">
     </div>
   </div>
   
@@ -389,7 +389,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <h2 class="alvo_restart_venda" id="valor_compra">R$00,00</h2></h2>
       <div id="valor_compra_dividida_father">
         <h2>R$</h2>
-      <input  style=" border:none; width:120px; font-size: 25px;
+      <input class="others_inputs"  onKeyUp="mascaraMoeda(this, event)" style=" border:none; width:120px; font-size: 25px;
   font-weight: bold; color: black;" type="text" dividindo=true id="valor_compra_dividida">
       </div>
 
@@ -419,14 +419,14 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
         </div>
         <div class="input quantidade_produto_input">
           <div style="" medida="un" class="select_valor_clicker_father" button_identifier="venda"><span class="select_valor_balanca_clicker" style="cursor:pointer;" ativo="0" >UN</span></div>
-          <input class="oders_inputs alvo_valor_balanca venda_button"  min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
+          <input class="others_inputs alvo_valor_balanca venda_button"  min="1" onKeyUp="mascaraPeso(this, event)" type="text" name="quantidade_produto" id="quantidade_produto" value="1" />
         </div>
       </div>
       <div class="second_inputs">
       <div class="input desc_produto_input">
         <span>Descrição do Produto:</span>
         <div class="desc_produto_input_mask">
-          <input class="oders_inputs" type="text" name="desc_produto" placeholder="Digite o nome do produto" id="desc_produto" />
+          <input class="others_inputs" type="text" name="desc_produto" placeholder="Digite o nome do produto" id="desc_produto" />
           <i class="fa-solid fa-magnifying-glass"></i>
         </div>
         <div class="search_results">
