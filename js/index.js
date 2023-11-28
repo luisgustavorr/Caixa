@@ -1,5 +1,11 @@
 var segunda_parte_divisao = false;
 var produtos = []
+function resetSangria() {
+  $('.modal_sangria').css("display","none")
+  $('fundo').css("display","none")
+  $(".modal_sangria #finaliza_sangria_button").text("Finalizar Operação")
+  valorCaixa();
+}
 function restartVenda() {
   $('.alvo_restart_venda').each(function(){
     const prefixo = $(this).text().includes("Subtotal") ? "Subtotal: " : "";
@@ -584,7 +590,7 @@ $(".modal_sangria").submit(function (e) {
   $.post("Models/post_receivers/insert_sangria.php", data, function (ret) {
     let vazio = ret;
     if (!vazio) {
-      location.reload();
+      resetSangria()
     } else {
       console.log(ret)
       alert(ret);
