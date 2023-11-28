@@ -211,7 +211,7 @@ $("#salvar_caixa").click(function () {
 });
 $(".modal_anotar_pedido").submit(function (e) {
   let permitir_pedido = true
-
+  let esse_elemento = $(this)
   $(".modal_anotar_pedido tbody input").each(function(){
     if($(this).val() == ""){
       alert("ERRO: Existem produtos sem valor!")
@@ -219,10 +219,13 @@ $(".modal_anotar_pedido").submit(function (e) {
     }
   })
   if(!permitir_pedido){
+    console.log("val")
     return false
   }
 
-  if($(this).attr('fazendo_pedido')){
+  if($(this).attr('fazendo_pedido') == "true"){
+    console.log("fazendo_pedido")
+
     return false
   }
   $(this).attr("fazendo_pedido", true);
@@ -268,13 +271,13 @@ $(".modal_anotar_pedido").submit(function (e) {
   if ($("#editando").val() == "true") {
     $.post("Models/post_receivers/update_pedido.php", data, function (ret) {
       console.log(ret);
-      $(this).attr("fazendo_pedido", false);
+      $(esse_elemento).attr("fazendo_pedido", false);
       resetPedido()
     });
   } else {
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret);
-      $(this).attr("fazendo_pedido", false);
+      $(esse_elemento).attr("fazendo_pedido", false);
       
       resetPedido()
     });
