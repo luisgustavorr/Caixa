@@ -74,14 +74,19 @@ try {
 
     $insertEntradaStmt = $db->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
     $insertEntradaStmt->execute(array($_POST['codigo_colaborador'], date("Y-m-d h:i:sa", strtotime($data_pedido) + 1), $_POST['valor_entrada'], $caixa['caixa'], 'Entrada Pedido_' . $lastInsertedId, $_POST['pagamento'], $lastInsertedId, 1));
-
+  
     foreach ($_POST['produtos'] as $key => $value) {
         $produtoStmt = $db->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`pedido_id`,`quantidade_produto`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
         $produtoStmt->execute(array($_POST['codigo_colaborador'], $data_pedido, $value['preco'], $caixa['caixa'], $value['id'], $_POST['pagamento'], $lastInsertedId, $value['quantidade']));
 
-        $atualizarCaixaStmt = $db->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ? ");
-        $atualizarCaixaStmt->execute(array($value['preco'], $caixa['caixa']));
+        if($_POST["pagamento"] == 'Dinheiro'){
+            $atualizarCaixaStmt = $db->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?,`valor_no_caixa` = `valor_no_caixa` + ?   WHERE `tb_caixas`.`caixa` = ? ");
+            $atualizarCaixaStmt->execute(array($value['preco'], $value['preco'], $caixa['caixa']));
+        }else{
 
+            $atualizarCaixaStmt = $db->prepare("UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ? ");
+            $atualizarCaixaStmt->execute(array($value['preco'], $caixa['caixa']));
+        }
         $produtoNomeStmt = $db->prepare("SELECT nome FROM `tb_produtos` WHERE  `id` =?");
         $produtoNomeStmt->execute(array($value['id']));
         $produtoNome = $produtoNomeStmt->fetch();
