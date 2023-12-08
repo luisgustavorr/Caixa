@@ -20,6 +20,7 @@ $(".modal_troco input").val("");
   valorCaixa();
    segunda_parte_divisao = false;
    produtos = []
+   $('#valor_compra_dividida').removeAttr("disabled")
    $('#dividir_venda').removeClass("fa-bounce")
 $('#valor_compra_dividida_father').css("display","none")
 $("#valor_compra").css("display","block")
