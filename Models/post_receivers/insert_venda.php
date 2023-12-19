@@ -60,7 +60,6 @@ try {
             $quantidade_float = floatval(str_replace(",", ".", $value['quantidade']));
 
             if ($_POST["segunda_parte"] == "true" AND !$metade_quitada) {
-        
                 $apagarMetadeQuitada = \MySql::conectar()->prepare("DELETE FROM `tb_vendas` WHERE `venda_dividida_id` = ?");
                 $apagarMetadeQuitada->execute(array($colab['caixa'] . "_" . $value['id']));
                 $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'], "9841_"));
@@ -71,8 +70,6 @@ try {
                 $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'], 0));
                 array_push($array_retorno["produtos_quitados"], $value);
             } else if ($valor_da_parte > 0) {
-
-
                 $quantidade_float = floatval(str_replace(",", ".", $value['quantidade']));
                 $valor_compra_total += $value['preco'] * $quantidade_float;
                 $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $valor_da_parte, trim($colab['caixa']), $value['id'], $_POST['pagamento'], $colab['caixa'] . "_" . $value['id']));
@@ -82,7 +79,6 @@ try {
         }
         $atualizar_caixa_sql = ($_POST['pagamento'] == 'Dinheiro') ?   "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ?, `valor_no_caixa` = `valor_no_caixa` + ? WHERE `tb_caixas`.`caixa` = ?"
             : "UPDATE `tb_caixas` SET `valor_atual` = `valor_atual` + ? WHERE `tb_caixas`.`caixa` = ?";
-
         $atualizar_caixa = \MySql::conectar()->prepare($atualizar_caixa_sql);
         $arrayVariaveis = $_POST['pagamento'] == "Dinheiro" ? array($_POST['valor'], $_POST['valor'], trim($colab['caixa'])) : array($_POST['valor'], trim($colab['caixa']));
         $atualizar_caixa->execute($arrayVariaveis);

@@ -539,11 +539,18 @@ if(codigoColab > 0){
 
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
-
-    if (valor >= 150) {
+    if(valor ==0){
+      $("#fazer_sangria").css("display", "none");
+      console.log("aqui")
+    }
+    else if (valor >= 150) {
       $("#fazer_sangria").css("animation", "hysterical_pulse 0.7s infinite");
+      $("#fazer_sangria").css("display", "block");
+
     } else if (valor >= 200) {
       $("#fazer_sangria").css("animation", "pulse 3s infinite");
+      $("#fazer_sangria").css("display", "block");
+
     }
   });
 }
@@ -558,6 +565,13 @@ function valorCaixa() {
   $.post("Models/post_receivers/select_valor_caixa.php", data, function (ret) {
     console.log(ret);
     let valor = ret == "" ? (valor = 0) : parseFloat(ret);
+    if(valor ==0){
+      $("#fazer_sangria").css("display", "none");
+      console.log("aaqui")
+    }else{
+      $("#fazer_sangria").css("display", "block");
+
+    }
     $("#valor_sangria").val(valor.toFixed(2).replace(".", ","));
     $(".valor_caixa_father red").text(
       "R$" + valor.toFixed(2).replace(".", ",")
@@ -570,6 +584,13 @@ setInterval(function () {
 }, 10000);
 
 $(".modal_sangria").submit(function (e) {
+  let valor_sangria = $('#valor_sangria').val().replace("R$", "").replace(",", ".")
+  let valor_caixa = $('.valor_caixa_father red').text().replace("R$", "").replace(",", ".")
+ if(parseFloat(valor_sangria) > parseFloat(valor_caixa)){
+  alert("O valor da sangria é maior que o valor do caixa");
+  return false
+ }else{
+
   $(".modal_sangria #finaliza_sangria_button").html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   e.preventDefault();
   setCaixa($("#colaborador_input").val(), function (caixa_retornado) {
@@ -597,6 +618,8 @@ $(".modal_sangria").submit(function (e) {
       alert(ret);
     }
   });
+ }
+
 });
 $("#valor_sangria").keyup(function () {
   //valor caixa - valor retirado
