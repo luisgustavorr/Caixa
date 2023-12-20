@@ -149,9 +149,8 @@ $(".valores_informados").keyup(function () {
   $(".valores_informados").each(function (index) {
     if( $(this).val() != '' && $(this).attr("id").trim() != "codigo_colaborador_informado_fechamento"){
 
-          if ($(this).attr("id") == "sangria_informadas") {
-      soma -= parseFloat($(this).val().replace(".", "").replace(",", "."));
-    } else {
+          if ($(this).attr("id") != "sangria_informadas") {
+
       soma += parseFloat($(this).val().replace(".", "").replace(",", "."));
     }
 
