@@ -896,6 +896,7 @@ input#valor_entrada {
   width: 100%;
   left: 0;
   justify-content: stretch;
+  overflow-y: scroll;
 }
 .search_results .resultado_pesquisa {
   border-bottom: 1px solid black;
