@@ -34,7 +34,19 @@ try {
     if (empty($colab)) {
         echo 'Código de vendedor inválido';
     } else {
-        $data_atual = date("Y-m-d h:i:sa");
+        $array_retorno = [
+            "data" => [],
+            "produtos_quitados" => [],
+            "resto_da_metade" => [],
+            "ret" => []
+        ];
+        $data_atual =date("Y-m-d h:i:sa");
+        $array_retorno["data"] = $data_atual;
+
+        if($_POST['data_venda'] != ''){
+            $data_atual = $_POST['data_venda'];
+        }
+
         unset($_COOKIE['caixa']);
         unset($_COOKIE['last_codigo_colaborador']);
         setcookie("last_codigo_colaborador", $_POST['colaborador'], time() + 20 * 24 * 60 * 60, "/");
@@ -46,25 +58,20 @@ try {
 
         $vendaStmt = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`venda_dividida_id`) VALUES (NULL, ?, ?, ?, ?,?,?,?); ");
         $valor_da_parte =  $_POST['valor'];
-        $array_retorno = [
-            "data" => [],
-            "produtos_quitados" => [],
-            "resto_da_metade" => [],
-            "ret" => []
-        ];
+      
+
         $array_produtos = $_POST['produtos'];
         usort($array_produtos, 'compararPorPreco');
         $metade_quitada = false;
         foreach ($array_produtos as $key => $value) {
-            array_push($array_retorno["ret"], "valor Da Parte 1:" . $valor_da_parte . "\n");
             $quantidade_float = floatval(str_replace(",", ".", $value['quantidade']));
 
             if ($_POST["segunda_parte"] == "true" AND !$metade_quitada) {
-                $apagarMetadeQuitada = \MySql::conectar()->prepare("DELETE FROM `tb_vendas` WHERE `venda_dividida_id` = ?");
-                $apagarMetadeQuitada->execute(array($colab['caixa'] . "_" . $value['id']));
-                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'], "9841_"));
-
+                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, floatval(str_replace(',','.',$_POST['valor_restante'][0])) , trim($colab['caixa']), $value['id'], $_POST['pagamento'], "9841_"));
                 $metade_quitada = true;
+        array_push($array_retorno["ret"], $_POST['data_venda'].'_____'.$data_atual);
+
+
             }else if ($valor_da_parte >= $value["preco"] * $quantidade_float) {
                 $valor_compra_total += $value['preco'] * $quantidade_float;
                 $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'], 0));
@@ -83,6 +90,7 @@ try {
         $arrayVariaveis = $_POST['pagamento'] == "Dinheiro" ? array($_POST['valor'], $_POST['valor'], trim($colab['caixa'])) : array($_POST['valor'], trim($colab['caixa']));
         $atualizar_caixa->execute($arrayVariaveis);
         array_push($array_retorno["resto_da_metade"], str_replace(".",",",$valor_da_parte * -1));
+
         print_r(json_encode($array_retorno));
     }
 } catch (Exception $e) {
