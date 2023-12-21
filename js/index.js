@@ -1,5 +1,7 @@
 var segunda_parte_divisao = false;
 var produtos = []
+let valor_restante = 0
+let data_venda = null
 function resetSangria() {
   $('.modal_sangria').css("display","none")
   $('fundo').css("display","none")
@@ -20,6 +22,8 @@ $(".modal_troco input").val("");
   valorCaixa();
    segunda_parte_divisao = false;
    produtos = []
+    valor_restante = 0
+ data_venda = null
    $('#valor_compra_dividida').removeAttr("disabled")
    $('#dividir_venda').removeClass("fa-bounce")
 $('#valor_compra_dividida_father').css("display","none")
@@ -722,7 +726,6 @@ $("#valor_recebido_input").keyup(function () {
   }
 });
 
-
 $(".finalizar_venda_button").click(function () {
 
 $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
@@ -765,7 +768,9 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
       valor: valor_compra,
       produtos: produtos,
       pagamento: $("#metodo_pagamento_princip").val(),
-      segunda_parte:segunda_parte_divisao
+      segunda_parte:segunda_parte_divisao,
+      valor_restante: valor_restante,
+      data_venda:data_venda
     };
     console.log(segunda_parte_divisao)
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
@@ -775,6 +780,9 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
 
       if (JSON.parse(ret)) {
         const ret_in_JSON = JSON.parse(ret)
+        valor_restante = ret_in_JSON["resto_da_metade"]
+        data_venda = ret_in_JSON["data"]
+        console.log(data_venda)
         esse_elemento.removeAttr("disabled")
         if(segunda_parte_divisao == true) {
           $('#dividir_venda').attr("dividindo","false")
