@@ -12,8 +12,7 @@
 
 */
 
-
-require_once './vendor/autoload.php';
+                                            require_once './vendor/autoload.php';
 include('config.php');
 $app = new Application();
 $app->executar();
