@@ -26,6 +26,21 @@ $("#finaliza_sangria_button").removeAttr("disabled")
 $(".modal").css("display",'none')
 $("fundo").css("display",'none')
 }
+$('#imprimir_nfe').click(function(){
+  $.post('Models/post_receivers/gerarNFe.php',{},function(ret){
+
+
+    const {retorno,data} = JSON.parse(ret)
+
+
+    $.post('Models/post_receivers/imprimirNFe.php',{data:data},function(ret){ 
+      console.log(ret)
+			if(ret = 'Sucesso!'){
+        alert('NFe gerada com sucesso!')
+      }
+    })
+  })
+})
 function cancelarUltimaVenda(){
   $.post("Models/post_receivers/delete_last_venda.php", data, function (ret) {
     console.log(ret)
@@ -283,42 +298,8 @@ $(".modal_anotar_pedido").submit(function (e) {
     });
   }
 });
-$.post(
-  "Models/post_receivers/select_pedidos.php",
-  { anytime: true },
-  function (ret) {
-    let pedidos = JSON.parse(ret);
-    if (!$.isEmptyObject(pedidos)) {
-      pedidos.forEach((element) => {
-        let data = element.data_entrega.split(" ");
-        $(".lista_pedidos").append(
-          "<span > <input class='pedido_feito' type='checkbox' pedido='" +
-            element.id +
-            "'><label onclick='editarPedido(this)' pedido='" +
-            JSON.stringify(element) +
-            "'>" +
-            element.cliente +
-            "-" +
-            element.data_entrega +
-            " </label></span>"
-        );
-        $(".pedido_feito").change(function () {
-          let pedido = $(this).attr("pedido");
-          data = {
-            pedido: pedido,
-          };
-          $.post(
-            "Models/post_receivers/update_pedido_feito.php",
-            data,
-            function (ret) {
-              location.reload();
-            }
-          );
-        });
-      });
-    }
-  }
-);
+
+
 function editarPedido(esse) {
   // Exibir o fundo e a modal
   console.log(esse);
