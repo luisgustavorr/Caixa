@@ -6,5 +6,10 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'NFePHP\\NFe\\' => array($vendorDir . '/nfephp-org/sped-nfe/src'),
+    'NFePHP\\Gtin\\' => array($vendorDir . '/nfephp-org/sped-gtin/src'),
+    'NFePHP\\Common\\' => array($vendorDir . '/nfephp-org/sped-common/src'),
     'Mike42\\' => array($vendorDir . '/mike42/escpos-php/src/Mike42'),
+    'JsonSchema\\' => array($vendorDir . '/justinrainbow/json-schema/src/JsonSchema'),
 );
