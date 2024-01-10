@@ -56,7 +56,7 @@ try {
 
         // Use prepared statements para evitar injeção de SQL
 
-        $vendaStmt = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`venda_dividida_id`) VALUES (NULL, ?, ?, ?, ?,?,?,?); ");
+        $vendaStmt = \MySql::conectar()->prepare("INSERT INTO `tb_vendas` (`id`, `colaborador`, `data`, `valor`, `caixa`,`produto`,`forma_pagamento`,`quantidade_produto`,`venda_dividida_id`) VALUES (NULL, ?,?, ?, ?, ?,?,?,?); ");
         $valor_da_parte =  $_POST['valor'];
       
 
@@ -67,19 +67,19 @@ try {
             $quantidade_float = floatval(str_replace(",", ".", $value['quantidade']));
 
             if ($_POST["segunda_parte"] == "true" AND !$metade_quitada) {
-                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, floatval(str_replace(',','.',$_POST['valor_restante'][0])) , trim($colab['caixa']), $value['id'], $_POST['pagamento'], "9841_"));
+                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, floatval(str_replace(',','.',$_POST['valor_restante'][0])) , trim($colab['caixa']), $value['id'], $_POST['pagamento'],  $quantidade_float,"9841_"));
                 $metade_quitada = true;
         array_push($array_retorno["ret"], $_POST['data_venda'].'_____'.$data_atual);
 
 
             }else if ($valor_da_parte >= $value["preco"] * $quantidade_float) {
                 $valor_compra_total += $value['preco'] * $quantidade_float;
-                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'], 0));
+                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $value['preco'] * $quantidade_float, trim($colab['caixa']), $value['id'], $_POST['pagamento'],  $quantidade_float,0));
                 array_push($array_retorno["produtos_quitados"], $value);
             } else if ($valor_da_parte > 0) {
                 $quantidade_float = floatval(str_replace(",", ".", $value['quantidade']));
                 $valor_compra_total += $value['preco'] * $quantidade_float;
-                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $valor_da_parte, trim($colab['caixa']), $value['id'], $_POST['pagamento'], $colab['caixa'] . "_" . $value['id']));
+                $vendaStmt->execute(array($_POST['colaborador'], $data_atual, $valor_da_parte, trim($colab['caixa']), $value['id'], $_POST['pagamento'],  $quantidade_float,$colab['caixa'] . "_" . $value['id']));
             }
             $valor_da_parte = $valor_da_parte - $value['preco'] * $quantidade_float;
             array_push($array_retorno["ret"], "valor Da Parte 2:" . $valor_da_parte . "\n");
