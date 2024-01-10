@@ -1,6 +1,5 @@
 {
     "require": {
-        "mike42/escpos-php": "^2.2",
-        "nfephp-org/sped-nfe": "^5.1"
+        "mike42/escpos-php": "^2.2"
     }
 }
