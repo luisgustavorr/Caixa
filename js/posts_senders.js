@@ -1,3 +1,4 @@
+console.log(TestaCPF("15483790693"))
 function resetPedido() {
   formatoDataHora = function (data) {
     var dia = ('0' + data.getDate()).slice(-2);
@@ -34,6 +35,12 @@ $("#imprimir_nfe").click(function(){
 $("#cpf_cliente_nfe").mask("000.000.000-00");
 
 $('.modal_imp_nfe').submit(function(e){
+  e.preventDefault()
+
+  if( !(TestaCPF($("#cpf_cliente_nfe").val().replace(/[.-]/g, '')))){
+    alert("CPF inválido!")
+    return
+  }
   $(".modal_imp_nfe button").html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
   e.preventDefault()
   let nome_nfe = $("#nome_cliente_nfe").val()
