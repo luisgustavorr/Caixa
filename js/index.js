@@ -1,5 +1,6 @@
 
 var segunda_parte_divisao = false;
+console.log("Ultima versão da nota fiscal!")
 var produtos = []
 let valor_restante = 0
 let data_venda = null
