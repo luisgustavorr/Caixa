@@ -1,4 +1,4 @@
-
+console.log("novíssimo")
 var segunda_parte_divisao = false;
 console.log("Ultima versão da nota fiscal!")
 var produtos = []
