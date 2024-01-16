@@ -105,7 +105,7 @@ if (isset($cookieteste)) {
     $std->tpImp = 1;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+    $std->tpAmb = 1; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
     $std->indPres = 0;
