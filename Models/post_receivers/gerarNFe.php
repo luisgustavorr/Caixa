@@ -9,12 +9,13 @@ use NFePHP\NFe\Make;
 use NFePHP\DA\NFe\Danfe;
 use NFePHP\NFe\Complements;
 //$_COOKIE['last_codigo_colaborador']
+
 $cookieteste = 9841;
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
 
-$caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` WHERE `caixa` = ?");
+$caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` INNER JOIN `tb_caixas` ON  `tb_caixas`.`caixa` = `tb_equipamentos`.`caixa` WHERE `tb_equipamentos`.`caixa` = ?");
 $caixa->execute(array($colab['caixa']));
 $caixa = $caixa->fetch();
 $arrayRetorno = [
@@ -24,6 +25,10 @@ $arrayRetorno = [
 
 if (isset($cookieteste)) {
 
+
+    $data_emissao = date('Y-m-d-H-i-s');
+    $arrayRetorno['data'] = $data_emissao;
+
     $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas` WHERE `tb_vendas`.`colaborador` = ? AND pedido_id =0 ORDER BY `id` desc LIMIT 1;");
     $data_ultima_venda->execute(array($cookieteste));
     $data_ultima_venda = $data_ultima_venda->fetch();
@@ -32,40 +37,52 @@ if (isset($cookieteste)) {
     $vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
     $vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda['data']));
     $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
+    $n_nfe = rand(0, 999) + rand(0, 999);
+
+    $select_nfe = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE data_venda =  ?");
+    $select_nfe->execute(array($data_ultima_venda['data']));
+    $select_nfe = $select_nfe->fetchAll();
+
+    // if(count($select_nfe) !=0){
+    //      $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+    //      $arrayRetorno['data'] = $data_formatada;
+    //     print_r(json_encode($arrayRetorno));
+    //     exit;
+    // }
+    $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`) VALUES (NULL, ?, ?, ?);");
+    $insert_nfe->execute(array($data_emissao,$data_ultima_venda['data'],$n_nfe));
+    $insert_nfe = $insert_nfe->fetchAll();
 
 
 
-
-    $nome_empresa = 'Mix Salgados Ltda';
-    $IE = '44288470048';
-    $cUF = 31;
-    $CNPJ = '47767930000139';
+    $nome_empresa = $caixa['caixa'];
+    $IE = $caixa['IE']."";
+    $cUF =  $caixa['cUF']."";
+    $CNPJ = $caixa['CNPJ'].""; //transformar em str
 
     $nfe = new Make();
     $std = new \stdClass();
-    $data_emissao = date('Y-m-d-H-i-s');
-    $teste = '';
     // '2023-12-28-09-20-30'
     function criarArquivoNFe($data_atual, $tipo, $arquivo)
     {
-
+        
         [$ano, $mes, $dia, $hora, $minuto, $segundos] = explode('-', $data_atual);
-        if (file_exists('../../NFE/' . $tipo . '/' . $ano)) {
+        if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano)) {
 
-            if (file_exists('../../NFE/' . $tipo . '/' . $ano . '/' . $mes)) {
-                if (file_exists('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia)) {
-                    file_put_contents('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
+            if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes)) {
+                if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia)) {
+                    file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
                 } else {
-                    mkdir('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
-                    file_put_contents('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
+                    mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
+                    file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
                 }
             } else {
-                mkdir('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
-                file_put_contents('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
+                mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
+                file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
             }
         } else {
-            mkdir('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
-            file_put_contents('../../NFE/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
+            mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
+            file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
         }
     };
     $std->versao = '4.00';
@@ -79,7 +96,7 @@ if (isset($cookieteste)) {
     $std->natOp = 'VENDA';
     $std->mod = 55;
     $std->serie = 1;
-    $std->nNF = rand(0, 9999999);
+    $std->nNF = $n_nfe;
     $std->dhEmi = date('Y-m-d\TH:i:sP');
     $std->dhSaiEnt = date('Y-m-d\TH:i:sP');
     $std->tpNF = 1;
@@ -102,44 +119,48 @@ if (isset($cookieteste)) {
     $std->CRT = 3;
     $std->CNPJ = $CNPJ;
     $nfe->tagemit($std);
-
+    $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".$caixa['CEP']),true);
+   
     $std = new \stdClass();
-    $std->xLgr =strtoupper("Rua Antonio Carcereiro");
-    $std->nro = '16';
-    $std->xBairro = 'VARZEA DA OLARIA';
-    $std->cMun = 3133808; //Código de município precisa ser válido e igual o  cMunFG
-    $std->xMun = 'Itaúna';
-    $std->UF = 'MG';
-    $std->CEP = '35680121';
+    $std->xLgr =strtoupper($infoEnd["street"]);
+    $std->nro = $caixa['numero'];
+    $std->xBairro = strtoupper($infoEnd["neighborhood"]);
+    $std->cMun = $caixa["cMunicipio"]; //Código de município precisa ser válido e igual o  cMunFG
+    $std->xMun =$infoEnd["city"];
+    $std->UF = $infoEnd["state"];
+    $std->CEP = $caixa['CEP']."";
     $std->cPais = '1058';
     $std->xPais = 'BRASIL';
     $nfe->tagenderEmit($std);
 
+    $cpf_cliente = str_replace(".","",str_replace("-","","15483790693"));
     $std = new \stdClass();
-    $std->xNome = 'CONSUMIDOR';
+    $std->xNome = "luis";
     $std->indIEDest = 9;
-    $std->CPF = '15483790693';
+    $std->CPF = $cpf_cliente;
 
     $nfe->tagdest($std);
 
     $std = new \stdClass();
-    $std->xLgr = strtoupper("Rua Antonio Carcereiro");
-    $std->nro = '16';
-    $std->xBairro = 'VARZEA DA OLARIA';
-    $std->cMun = 3133808; //Código de município precisa ser válido e igual o  cMunFG
-    $std->xMun = strtoupper('ItaÚna');
-    $std->UF = 'MG';
-    $std->CEP = '35680121';
+    $std->xLgr =strtoupper($infoEnd["street"]);
+    $std->nro = $caixa['numero'];
+    $std->xBairro = strtoupper($infoEnd["neighborhood"]);
+    $std->cMun = $caixa["cMunicipio"]; //Código de município precisa ser válido e igual o  cMunFG
+    $std->xMun =$infoEnd["city"];
+    $std->UF = $infoEnd["state"];
+    $std->CEP = $caixa['CEP']."";
     $std->cPais = '1058';
     $std->xPais = 'BRASIL';
     $nfe->tagenderDest($std);
+
     $valor_total_produtos = 0;
     $valor_total_icms = 0;
 
     foreach ($vendas_com_ultima_data as $key => $value) {
-        $valor_total_produtos = $value['valor'] + $valor_total_produtos;
         $valor_produto = $value['valor'];
         $quantidade = $value['quantidade_produto'];
+        $valor_total_produtos = $valor_produto + $valor_total_produtos;
+        // print_r($vendas_com_ultima_data);
 
         $arrayRetorno['retorno']['quantidade'] = $quantidade;
 
@@ -169,13 +190,16 @@ if (isset($cookieteste)) {
         $std->CFOP = '5102';
         $std->uCom = $UN;
         $std->qCom = $quantidade;
-        $std->vUnCom = str_replace(',', '.', $value['preco']);
-        $std->vProd = $valor_produto;
+        $std->vUnCom = str_replace(',', '.', $value["preco"]);
+        $std->vProd =   $valor_produto;
         $std->uTrib = $UN;
         $std->qTrib = $quantidade;
-        $std->vUnTrib = $valor_produto;
+        $std->vUnTrib = str_replace(',', '.', $value["preco"]);
         $std->indTot = 1;
         $nfe->tagprod($std);
+        // echo $quantidade;
+        // echo $valor_produto;
+        // echo  str_replace(',', '.', $value["preco"]);
 
         $std = new \stdClass();
         $std->item = $item;
@@ -363,24 +387,26 @@ if (isset($cookieteste)) {
     } catch (InvalidArgumentException $e) {
         $arrayRetorno['retorno']['error'] = "Ocorreu um erro durante o processamento :" . $e->getMessage();
     }
-    $arrayRetorno['data'] = $data_emissao;
+  
 
     $configJson = json_encode($config);
     // $certificadoDigital = file_get_contents('certificado.pfx');}
+    $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
+    $diretorio =scandir($path);
+    $arquivo = $diretorio[2];
 
-    $caminhoCertificado = '../../certificados/VARZEA/MIX-SALGADOS-LTDA_47767930000139.pfx';
-
+    $caminhoCertificado = $path.$arquivo;
+    echo $caminhoCertificado;
     $certificadoDigital = file_get_contents($caminhoCertificado);
     $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, '123456'));
 
-    print_r(json_encode($arrayRetorno));
     try {
         $xmlAssinado = $tools->signNFe($xml); // O conteúdo do XML assinado fica armazenado na variável $xmlAssinado
         criarArquivoNFe($data_emissao, 'xml', $xmlAssinado );
     } catch (\Exception $e) {
         //aqui você trata possíveis exceptions da assinatura
    
-        // exit($e->getMessage());
+        exit($e->getMessage());
     }
     try {
         $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
@@ -390,12 +416,12 @@ if (isset($cookieteste)) {
         $std = $st->toStd($resp);
         if ($std->cStat != 103) {
             //erro registrar e voltar
-            // exit("[$std->cStat] $std->xMotivo");
+            exit("[$std->cStat] $std->xMotivo");
         }
         $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
     } catch (\Exception $e) {
         //aqui você trata possiveis exceptions do envio
-        // exit($e->getMessage());
+        exit($e->getMessage());
     }
     try {
         $protocolo = $tools->sefazConsultaRecibo($recibo);
@@ -403,7 +429,7 @@ if (isset($cookieteste)) {
 
     } catch (\Exception $e) {
         //aqui você trata possíveis exceptions da consulta
-        // exit($e->getMessage());
+        exit($e->getMessage());
     };
 
 $request = $xmlAssinado;
@@ -413,6 +439,8 @@ $response = $protocolo;
         // header('Content-type: text/xml; charset=UTF-8');
 
     } catch (\Exception $e) {
-        // echo "Erro: " . $e->getMessage();
+        echo "Erro: " . $e->getMessage();
     }
+    print_r(json_encode($arrayRetorno));
+
 }

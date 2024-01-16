@@ -49,6 +49,22 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
 // ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
+<form class="modal modal_imp_nfe" style=""> 
+<h3>Imprimir NFE</h3>
+  <div class="inputs_father">
+    <div class="input input_nome_cliente_nfe">
+      <label>Nome Cliente</label>
+      <input type="text" autocomplete="off" id="nome_cliente_nfe">
+    </div>
+    <div class="input input_cpf_cliente_nfe">
+      <label>CPF Cliente</label>
+      <input type="text" autocomplete="off" id="cpf_cliente_nfe">
+    </div>
+    <button id="imprimir_nfe_modal_button">
+      IMPRIMIR
+    </button>
+  </div>
+</form>
 <form class="modal modal_fechar_caixa" style="align-items: center;">
 <div class="valores_informados_box">
         <span class="valores_informados_title">Valores Informados:</span>

@@ -26,17 +26,37 @@ $("#finaliza_sangria_button").removeAttr("disabled")
 $(".modal").css("display",'none')
 $("fundo").css("display",'none')
 }
-$('#imprimir_nfe').click(function(){
-  $.post('Models/post_receivers/gerarNFe.php',{},function(ret){
+$("#imprimir_nfe").click(function(){
+  $(".modal_imp_nfe").css("display","flex")
+  $("fundo").css("display","flex")
 
+})
+$("#cpf_cliente_nfe").mask("000.000.000-00");
+
+$('.modal_imp_nfe').submit(function(e){
+  $(".modal_imp_nfe button").html('<i class="fa-solid fa-spinner fa-spin-pulse"></i>')
+  e.preventDefault()
+  let nome_nfe = $("#nome_cliente_nfe").val()
+  let cpf_nfe = $("#cpf_cliente_nfe").val()
+  data = {
+    nome_cliente : nome_nfe,
+    cpf_nfe:cpf_nfe
+  }
+  $.post('Models/post_receivers/gerarNFe.php',data,function(ret){
+
+    console.log(ret)
 
     const {retorno,data} = JSON.parse(ret)
-
 
     $.post('Models/post_receivers/imprimirNFe.php',{data:data},function(ret){ 
       console.log(ret)
 			if(ret = 'Sucesso!'){
         alert('NFe gerada com sucesso!')
+        $(".modal").each(function () {
+          $(this).css("display", "none");
+          $("fundo").css("display", "none");
+        });
+        $(".modal_imp_nfe button").html('IMPRIMIR')
       }
     })
   })

@@ -3,8 +3,8 @@ require __DIR__ . '/../../vendor/autoload.php';
 include('../../MySql.php');
 
 
-// use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+// use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 
 use NFePHP\POS\DanfcePos;
 
@@ -22,12 +22,12 @@ $impressora = $caixa['impressora'];
 $data = $_POST['data'];
 [$ano, $mes, $dia, $hora, $minuto, $segundos] = explode('-', $data);
 
-$nomeArquivo  = '../../NFE/xml/' . $ano . '/' . $mes . '/' . $dia . '/' . $data . '.xml' ;
+$nomeArquivo  = 'C:/Users/Public/Documents/NotasFiscais/xml/' . $ano . '/' . $mes . '/' . $dia . '/' . $data . '.xml' ;
 
 // Conectar à impressora térmica
 try {
-    // $connector = new WindowsPrintConnector($impressora);
-    $connector = new  FilePrintConnector("./tmp/test.bin");
+    $connector = new WindowsPrintConnector($impressora);
+    // $connector = new  FilePrintConnector("./tmp/test.bin");
     
 } catch (\Exception $ex) {
     die('Não foi possível conectar com a impressora.');
