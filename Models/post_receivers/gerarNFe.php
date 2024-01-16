@@ -133,11 +133,11 @@ if (isset($cookieteste)) {
     $std->xPais = 'BRASIL';
     $nfe->tagenderEmit($std);
 
-    $cpf_cliente = str_replace(".","",str_replace("-","","15483790693"));
+    $cpf_cliente = str_replace(".","",str_replace("-","",$_POST["cpf_nfe"]));
     $std = new \stdClass();
-    $std->xNome = "luis";
+    $std->xNome = $_POST["nome_cliente"];
     $std->indIEDest = 9;
-    $std->CPF = $cpf_cliente;
+    $std->CPF = $_POST["cpf_nfe"];
 
     $nfe->tagdest($std);
 
@@ -396,7 +396,7 @@ if (isset($cookieteste)) {
     $arquivo = $diretorio[2];
 
     $caminhoCertificado = $path.$arquivo;
-    echo $caminhoCertificado;
+    // echo $caminhoCertificado;
     $certificadoDigital = file_get_contents($caminhoCertificado);
     $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, '123456'));
 
