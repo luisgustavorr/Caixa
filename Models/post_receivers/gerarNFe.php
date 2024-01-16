@@ -8,9 +8,9 @@ date_default_timezone_set('America/Sao_Paulo');
 use NFePHP\NFe\Make;
 use NFePHP\DA\NFe\Danfe;
 use NFePHP\NFe\Complements;
-//$_COOKIE['last_codigo_colaborador']
 
-$cookieteste = 9841;
+
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
