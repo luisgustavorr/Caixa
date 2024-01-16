@@ -54,11 +54,11 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
   <div class="inputs_father">
     <div class="input input_nome_cliente_nfe">
       <label>Nome Cliente</label>
-      <input type="text" autocomplete="off" id="nome_cliente_nfe">
+      <input  class="others_inputs" type="text" autocomplete="off" id="nome_cliente_nfe">
     </div>
     <div class="input input_cpf_cliente_nfe">
       <label>CPF Cliente</label>
-      <input type="text" autocomplete="off" id="cpf_cliente_nfe">
+      <input class="others_inputs" type="text" autocomplete="off" id="cpf_cliente_nfe">
     </div>
     <button id="imprimir_nfe_modal_button">
       IMPRIMIR
