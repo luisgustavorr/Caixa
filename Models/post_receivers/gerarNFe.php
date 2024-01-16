@@ -396,7 +396,7 @@ if (isset($cookieteste)) {
     $arquivo = $diretorio[2];
 
     $caminhoCertificado = $path.$arquivo;
-    echo $caminhoCertificado;
+    // echo $caminhoCertificado;
     $certificadoDigital = file_get_contents($caminhoCertificado);
     $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, '123456'));
 
