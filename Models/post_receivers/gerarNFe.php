@@ -43,12 +43,12 @@ if (isset($cookieteste)) {
     $select_nfe->execute(array($data_ultima_venda['data']));
     $select_nfe = $select_nfe->fetchAll();
 
-    // if(count($select_nfe) !=0){
-    //      $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-    //      $arrayRetorno['data'] = $data_formatada;
-    //     print_r(json_encode($arrayRetorno));
-    //     exit;
-    // }
+    if(count($select_nfe) !=0){
+         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+          $arrayRetorno['data'] = $data_formatada;
+      print_r(json_encode($arrayRetorno));
+       exit;
+    }
     $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`) VALUES (NULL, ?, ?, ?);");
     $insert_nfe->execute(array($data_emissao,$data_ultima_venda['data'],$n_nfe));
     $insert_nfe = $insert_nfe->fetchAll();
@@ -105,7 +105,7 @@ if (isset($cookieteste)) {
     $std->tpImp = 1;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+    $std->tpAmb = 1; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
     $std->indPres = 0;
