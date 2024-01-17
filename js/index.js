@@ -31,6 +31,8 @@ function resetSangria() {
   valorCaixa();
 }
 function restartVenda() {
+  $("#metodo_pagamento_princip").val("")
+  $("#metodo_pagamento_princip").css("border","1px solid #424242")
   $('.alvo_restart_venda').each(function(){
     const prefixo = $(this).text().includes("Subtotal") ? "Subtotal: " : "";
     $(this).text(prefixo+"R$00,0"  )  
@@ -749,6 +751,11 @@ $("#valor_recebido_input").keyup(function () {
 });
 
 $(".finalizar_venda_button").click(function () {
+  if($("#metodo_pagamento_princip").val()==""){
+    $("#metodo_pagamento_princip").css("border","1px solid red")
+    alert("Favor selecione uma forma de pagamento.")
+    return
+  }
 
 $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
   $(this).attr("disabled",true)
@@ -796,6 +803,7 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
     };
     console.log(segunda_parte_divisao)
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
+
       $(esse_elemento).html('Finalizar Venda')
       console.log(ret)
     

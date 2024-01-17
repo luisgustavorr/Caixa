@@ -355,6 +355,8 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <div class="input_select">
         <span>Método de Pagamento:</span>
         <select name="metodo_pagamento_princip" class="pagamento_input" id="metodo_pagamento_princip">
+        <option value="">Selecione o Método</option>
+
           <option value="Cartão Crédito">Cartão Crédito</option>
 
           <option value="Dinheiro">Dinheiro</option>
