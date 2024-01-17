@@ -37,7 +37,7 @@ if (isset($cookieteste)) {
     $vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
     $vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda['data']));
     $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
-    $n_nfe = rand(0, 999) + rand(0, 999);
+    $n_nfe = "9841".rand(0, 999);
 
     $select_nfe = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE data_venda =  ?");
     $select_nfe->execute(array($data_ultima_venda['data']));
