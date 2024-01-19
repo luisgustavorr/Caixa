@@ -1,16 +1,21 @@
 <?php
-
-
 include('../../MySql.php');
+
+// error_reporting(E_ERROR);
+// ini_set('display_errors', 'On');
 require __DIR__ . '/../../vendor/autoload.php';
 date_default_timezone_set('America/Sao_Paulo');
 
+use NFePHP\NFe\Tools;
 use NFePHP\NFe\Make;
-use NFePHP\DA\NFe\Danfe;
-use NFePHP\NFe\Complements;
+use NFePHP\Common\Certificate;
+use NFePHP\DA\NFe\Danfce;
 
+$cookieteste = 9841;
+$arrayRetorno = [
+    'retorno' => [],
 
-$cookieteste = $_COOKIE['last_codigo_colaborador'];
+];
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
@@ -18,64 +23,92 @@ $colab = $colab->fetch();
 $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` INNER JOIN `tb_caixas` ON  `tb_caixas`.`caixa` = `tb_equipamentos`.`caixa` WHERE `tb_equipamentos`.`caixa` = ?");
 $caixa->execute(array($colab['caixa']));
 $caixa = $caixa->fetch();
-$arrayRetorno = [
-    'retorno' => [],
+$infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".$caixa['CEP']),true);
 
+$arr = [
+    "atualizacao" => date('Y-m-d h:i:s'),
+    "tpAmb" => 2,
+    "razaosocial" => $caixa["caixa"],
+    "cnpj" => $caixa["CNPJ"]."", // PRECISA SER VÁLIDO
+    "ie" => $caixa["IE"]."", // PRECISA SER VÁLIDO
+    "siglaUF" => $infoEnd["state"],
+    "schemes" => "PL_009_V4",
+    "versao" => '4.00',
+    "tokenIBPT" => "AAAAAAA",
+    "CSC" => $caixa["CSC"],
+    "CSCid" => $caixa["CSCid"],
+    "aProxyConf" => [
+        "proxyIp" => "",
+        "proxyPort" => "",
+        "proxyUser" => "",
+        "proxyPass" => ""
+    ]
 ];
 
-if (isset($cookieteste)) {
+$configJson = json_encode($arr);
+$path = "../../certificados/".strtoupper($infoEnd["street"])."/";
+$diretorio =scandir($path);
+$arquivo = $diretorio[2];
 
+$caminhoCertificado = $path.$arquivo;
+// echo $caminhoCertificado;
+$pfxcontent  = file_get_contents($caminhoCertificado);
 
-    $data_emissao = date('Y-m-d-H-i-s');
-    $arrayRetorno['data'] = $data_emissao;
-
+$data_emissao = date('Y-m-d-H-i-s');
+$arrayRetorno['data'] = $data_emissao;
+if(!isset($_POST['data_venda'])){
     $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas` WHERE `tb_vendas`.`colaborador` = ? AND pedido_id =0 ORDER BY `id` desc LIMIT 1;");
     $data_ultima_venda->execute(array($cookieteste));
     $data_ultima_venda = $data_ultima_venda->fetch();
-    list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda['data']);
+    $data_ultima_venda = $data_ultima_venda["data"];
+}else{
+    $data_ultima_venda = $_POST['data_venda'];
+}
 
     $vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
     $vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda['data']));
     $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
     $n_nfe = "9841".rand(0, 999);
 
-    $select_nfe = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE data_venda =  ?");
-    $select_nfe->execute(array($data_ultima_venda['data']));
-    $select_nfe = $select_nfe->fetchAll();
+list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda);
 
-    if(count($select_nfe) !=0){
-         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-          $arrayRetorno['data'] = $data_formatada;
-      print_r(json_encode($arrayRetorno));
-       exit;
+$vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
+$vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda));
+$vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
+// print_r($vendas_com_ultima_data);
+
+$select_ultima_nfe = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE impressa != 0 ORDER by numero_nfe DESC LIMIT 1;");
+$select_ultima_nfe->execute();
+$select_ultima_nfe = $select_ultima_nfe->fetch();
+$n_nfe =$select_ultima_nfe["numero_nfe"] +1;
+
+$select_nfe = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE data_venda =  ? AND caixa = ?");
+$select_nfe->execute(array($data_ultima_venda,$caixa["caixa"]));
+$select_nfe = $select_nfe->fetchAll();
+
+
+//    if(count($select_nfe) !=0){
+//          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+//           $arrayRetorno['data'] = $data_formatada;
+//       print_r(json_encode($arrayRetorno));
+//        exit;
+//     }
+    if(!isset($_POST['data_venda'])){
+    $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`) VALUES (NULL, ?, ?, ?,?,?);");
+    $insert_nfe->execute(array($data_emissao,$data_ultima_venda,$n_nfe,1,$caixa["caixa"]));
+    }else{
+    $update = \MySql::conectar()->prepare("UPDATE tb_nfe SET impressa = 1 WHERE data_venda = ? AND impressa = 0 AND caixa = ? ");
+    $update->execute(array($data_ultima_venda,$caixa["caixa"]));
     }
-    $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`) VALUES (NULL, ?, ?, ?);");
-    $insert_nfe->execute(array($data_emissao,$data_ultima_venda['data'],$n_nfe));
-    $insert_nfe = $insert_nfe->fetchAll();
+function criarArquivoNFe($data_atual, $tipo, $arquivo)
+{
 
+    [$ano, $mes, $dia, $hora, $minuto, $segundos] = explode('-', $data_atual);
+    if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano)) {
 
-
-    $nome_empresa = $caixa['caixa'];
-    $IE = $caixa['IE']."";
-    $cUF =  $caixa['cUF']."";
-    $CNPJ = $caixa['CNPJ'].""; //transformar em str
-
-    $nfe = new Make();
-    $std = new \stdClass();
-    // '2023-12-28-09-20-30'
-    function criarArquivoNFe($data_atual, $tipo, $arquivo)
-    {
-        
-        [$ano, $mes, $dia, $hora, $minuto, $segundos] = explode('-', $data_atual);
-        if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano)) {
-
-            if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes)) {
-                if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia)) {
-                    file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
-                } else {
-                    mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
-                    file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
-                }
+        if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes)) {
+            if (file_exists('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia)) {
+                file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
             } else {
                 mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
                 file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
@@ -84,85 +117,108 @@ if (isset($cookieteste)) {
             mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
             file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
         }
-    };
-    $std->versao = '4.00';
-    $std->Id =null;
-    $std->pk_nItem = '';
-    $nfe->taginfNFe($std);
+    } else {
+        mkdir('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia, 0777, true);
+        file_put_contents('C:/Users/Public/Documents/NotasFiscais/' . $tipo . '/' . $ano . '/' . $mes . '/' . $dia . '/' . $data_atual . '.' . $tipo, $arquivo);
+    }
+};
 
+
+$tools = new Tools($configJson, Certificate::readPfx($pfxcontent, '123456'));
+//$tools->disableCertValidation(true); //tem que desabilitar
+$tools->model('65');
+
+try {
+
+    $make = new Make();
+
+
+    //infNFe OBRIGATÓRIA
     $std = new \stdClass();
-    $std->cUF = 31; //coloque um código real e válido
-    $std->cNF = '97626321';
-    $std->natOp = 'VENDA';
-    $std->mod = 55;
-    $std->serie = 1;
-    $std->nNF = $n_nfe;
-    $std->dhEmi = date('Y-m-d\TH:i:sP');
-    $std->dhSaiEnt = date('Y-m-d\TH:i:sP');
+    $std->Id = '';
+    $std->versao = '4.00';
+    $infNFe = $make->taginfNFe($std);
+
+    //ide OBRIGATÓRIA
+    $std = new \stdClass();
+    $std->cUF = 31;
+    $std->cNF = '83701267';
+    $std->natOp = 'VENDA CONSUMIDOR';
+    $std->mod = 65;
+    $std->serie = $n_nfe;
+    // $n_nfe
+    $std->nNF = 100;
+    $std->dhEmi = (new \DateTime())->format('Y-m-d\TH:i:sP');
+    $std->dhSaiEnt = null;
     $std->tpNF = 1;
     $std->idDest = 1;
-    $std->cMunFG = 3133808; //Código de município precisa ser válido
-    $std->tpImp = 1;
+    $std->cMunFG = 3133808;
+    $std->tpImp = 5;
     $std->tpEmis = 1;
     $std->cDV = 2;
+<<<<<<< HEAD
+    $std->tpAmb = 2;
+=======
     $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+>>>>>>> ff2bab88e19a3f16dc5a0afcc4a117eaca6a8321
     $std->finNFe = 1;
     $std->indFinal = 1;
-    $std->indPres = 0;
-    $std->procEmi = '0';
-    $std->verProc = 1;
-    $nfe->tagide($std);
+    $std->indPres = 1;
+    $std->procEmi = 0;
+    $std->verProc = '4.13';
+    $std->dhCont = null;
+    $std->xJust = null;
+    $ide = $make->tagIde($std);
 
+    //emit OBRIGATÓRIA
     $std = new \stdClass();
-    $std->xNome = $nome_empresa;
-    $std->IE = $IE;
-    $std->CRT = 3;
-    $std->CNPJ = $CNPJ;
-    $nfe->tagemit($std);
-    $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".$caixa['CEP']),true);
-   
+    $std->xNome = $caixa["caixa"];
+    $std->xFant = $caixa["caixa"];
+    $std->IE = $caixa["IE"]."";
+    $std->IEST = null;
+    //$std->IM = '95095870';
+    $std->CNAE = '5611203';
+    $std->CRT = 1;
+    $std->CNPJ = $caixa["CNPJ"]."";
+    //$std->CPF = '12345678901'; //NÃO PASSE TAGS QUE NÃO EXISTEM NO CASO
+    $emit = $make->tagemit($std);
+
+    //enderEmit OBRIGATÓRIA
     $std = new \stdClass();
-    $std->xLgr =strtoupper($infoEnd["street"]);
-    $std->nro = $caixa['numero'];
-    $std->xBairro = strtoupper($infoEnd["neighborhood"]);
-    $std->cMun = $caixa["cMunicipio"]; //Código de município precisa ser válido e igual o  cMunFG
-    $std->xMun =$infoEnd["city"];
+    $std->xLgr = $infoEnd["street"];
+    $std->nro = $caixa["numero"];
+    $std->xCpl = ' ';
+    $std->xBairro = $infoEnd["neighborhood"];
+    $std->cMun = 3133808;
+    $std->xMun = $infoEnd["city"];
     $std->UF = $infoEnd["state"];
-    $std->CEP = $caixa['CEP']."";
-    $std->cPais = '1058';
-    $std->xPais = 'BRASIL';
-    $nfe->tagenderEmit($std);
+    $std->CEP = $caixa["CEP"];
+    $std->cPais = 1058;
+    $std->xPais = 'Brasil';
+    $std->fone = '3799510441';
+    $ret = $make->tagenderemit($std);
+    $errors = $make->getErrors();
+    // print_r($vendas_com_ultima_data);
+    if(isset($_POST["nome_cliente"]) AND isset($_POST["cpf_nfe"])){
+        if($_POST["nome_cliente"] !="" AND $_POST["cpf_nfe"] !=""){
+        $std = new \stdClass();
+        $std->xNome = $_POST["nome_cliente"];
+        $std->CPF = str_replace(".","",str_replace("-","",$_POST["cpf_nfe"]));
+        $std->indIEDest = 9;
+        $dest = $make->tagdest($std);
+        $arrayRetorno["retorno"]="nova criada";
 
-    $cpf_cliente = str_replace(".","",str_replace("-","",$_POST["cpf_nfe"]));
-    $std = new \stdClass();
-    $std->xNome = $_POST["nome_cliente"];
-    $std->indIEDest = 9;
-    $std->CPF = $_POST["cpf_nfe"];
-
-    $nfe->tagdest($std);
-
-    $std = new \stdClass();
-    $std->xLgr =strtoupper($infoEnd["street"]);
-    $std->nro = $caixa['numero'];
-    $std->xBairro = strtoupper($infoEnd["neighborhood"]);
-    $std->cMun = $caixa["cMunicipio"]; //Código de município precisa ser válido e igual o  cMunFG
-    $std->xMun =$infoEnd["city"];
-    $std->UF = $infoEnd["state"];
-    $std->CEP = $caixa['CEP']."";
-    $std->cPais = '1058';
-    $std->xPais = 'BRASIL';
-    $nfe->tagenderDest($std);
-
+        }
+    }
     $valor_total_produtos = 0;
-    $valor_total_icms = 0;
-
+    $valor_total_icms = 0 ;
     foreach ($vendas_com_ultima_data as $key => $value) {
         $valor_produto = $value['valor'];
         $quantidade = $value['quantidade_produto'];
         $valor_total_produtos = $valor_produto + $valor_total_produtos;
         // print_r($vendas_com_ultima_data);
+     
 
-        $arrayRetorno['retorno']['quantidade'] = $quantidade;
 
         if ($value['por_peso'] == 1) {
             $UN = 'KG';
@@ -170,277 +226,193 @@ if (isset($cookieteste)) {
             $UN = 'UNID';
         }
         $pICMS = $value['icms'];
-        $IPI = 0;
-        $PIS = 0;
-        $COFINS = 0;
-        $valor_total_tributos = ($pICMS / 100 * $valor_produto) + ($IPI / 100 * $valor_produto) + ($PIS / 100 * $valor_produto) + ($COFINS / 100 * $valor_produto);
+
+        // + ($IPI / 100 * $valor_produto) + ($PIS / 100 * $valor_produto) + ($COFINS / 100 * $valor_produto)
+        $valor_total_tributos = ($pICMS / 100 * $valor_produto);
         $item = $key + 1;
 
         $valorICMS = number_format($valor_produto * ($pICMS / 100), 2, '.', '');
         $valor_total_icms = $valorICMS + $valor_total_icms;
-        // $arrayRetorno['retorno'][$value['nome']] = number_format($valor_total_icms, 2, '.', '');
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->cEAN = 'SEM GTIN';
-        $std->cEANTrib = 'SEM GTIN';
-        $std->cProd = $value['codigo'];
-        $std->xProd = $value['nome'];
-        $std->NCM = str_replace('.', '', $value['ncm']);
-        $std->CFOP = '5102';
-        $std->uCom = $UN;
-        $std->qCom = $quantidade;
-        $std->vUnCom = str_replace(',', '.', $value["preco"]);
-        $std->vProd =   $valor_produto;
-        $std->uTrib = $UN;
-        $std->qTrib = $quantidade;
-        $std->vUnTrib = str_replace(',', '.', $value["preco"]);
-        $std->indTot = 1;
-        $nfe->tagprod($std);
-        // echo $quantidade;
-        // echo $valor_produto;
-        // echo  str_replace(',', '.', $value["preco"]);
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->vTotTrib = 10.99;
-        $nfe->tagimposto($std);
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->orig = 0;
-        $std->CST = '00'; //codigo do icms (CST_ICMS na tabela) funciona com 00
-        $std->modBC = 1;
-        $std->vBC = $valor_produto; // valor do produto
-        $std->pICMS = $pICMS; //porcentagem do icms (ICMS na tabela)
-        $std->vICMS = $valorICMS; // valor icms porcentagem X valor do produto
-        $nfe->tagICMS($std);
-
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->cEnq = '999';
-        $std->CST = '50';
-        $std->vIPI =  ($IPI / 100) * $valor_produto;
-        $std->vBC = $valor_produto;
-        $std->pIPI = $IPI;
-        $nfe->tagIPI($std);
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->CST = '99'; //codigo do PIS (CST_PIS_COFINS na tabela)
-        $std->vBC = $valor_produto;
-        $std->pPIS = 0; //PIS DA MIX
-        $std->vPIS = ($PIS / 100) * $valor_produto; // valor PIS porcentagem X valor do produto
-        $nfe->tagPIS($std);
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->CST = '99';
-        $std->vBC =  $valor_produto;
-        $std->pCOFINS = $COFINS;
-        $std->vCOFINS = ($COFINS / 100) * $valor_produto;
-        $std->qBCProd = 0;
-        $std->vAliqProd = 0;
-        $nfe->tagCOFINS($std);
-
-        $std = new \stdClass();
-        $std->item = $item;
-        $std->vCOFINS =  ($PIS / 100) * $valor_produto;
-        $std->vBC = $valor_produto;
-        $std->pCOFINS = $COFINS;
-
-        $nfe->tagCOFINSST($std);
-    }
-
-
+    //prod OBRIGATÓRIA
     $std = new \stdClass();
-    $std->vBC = $valor_total_produtos;
-    $std->vICMS = $valor_total_icms;
-    $std->vICMSDeson = 0.00;
-    $std->vBCST = 0.00;
-    $std->vST = 0.00;
-    $std->vProd = $valor_total_produtos;
-    $std->vFrete = 0.00;
-    $std->vSeg = 0.00;
-    $std->vDesc = 0.00;
-    $std->vII = 0.00;
-    $std->vIPI = 0.00;
-    $std->vPIS = 0.00;
-    $std->vCOFINS = 0.00;
-    $std->vOutro = 0.00;
-    $std->vNF = $valor_total_produtos;
-    $std->vTotTrib = 0.00;
-    $nfe->tagICMSTot($std);
+    $std->item = $item;
+    $std->cProd =  $value['codigo_id'];
+    $std->cEAN = "SEM GTIN";
+    $std->xProd =  $value['nome'];
+    $std->NCM = str_replace('.', '', $value['ncm']);
+    //$std->cBenef = 'ab222222';
+    $std->EXTIPI = '';
+    $std->CFOP = 5101;
+    $std->uCom = $UN;
+    $std->qCom = $quantidade;
+    $std->vUnCom =  str_replace(',', '.', $value["preco"]);
+    $std->vProd = $valor_produto;
+    $std->cEANTrib = "SEM GTIN"; //'6361425485451';
+    $std->uTrib =  $UN;
+    $std->qTrib = $quantidade;
+    $std->vUnTrib = str_replace(',', '.', $value["preco"]);
+    //$std->vFrete = 0.00;
+    //$std->vSeg = 0;
+    //$std->vDesc = 0;
+    //$std->vOutro = 0;
+    $std->indTot = 1;
+    //$std->xPed = '12345';
+    //$std->nItemPed = 1;
+    //$std->nFCI = '12345678-1234-1234-1234-123456789012';
+    $prod = $make->tagprod($std);
 
-    //USAR EM CASO DE ENTREGA 
-    //9 se nao for entrega e 3 se for
+    $tag = new \stdClass();
+    $tag->item = $item;
+    $tag->infAdProd = 'Valor';
+    $make->taginfAdProd($tag);
+
+    //Imposto 
+    $std = new stdClass();
+    $std->item = $item; //item da NFe
+    $std->vTotTrib = $valor_total_tributos;
+    $make->tagimposto($std);
+
+    $std = new stdClass();
+    $std->item = $item; //item da NFe
+    $std->orig = 0;
+    $std->CSOSN = '102';
+    $std->pCredSN = 0.00;
+    $std->vCredICMSSN = 0.00;
+    $std->modBCST = null;
+    $std->pMVAST = null;
+    $std->pRedBCST = null;
+    $std->vBCST = null;
+    $std->pICMSST = null;
+    $std->vICMSST = null;
+    $std->vBCFCPST = null; //incluso no layout 4.00
+    $std->pFCPST = null; //incluso no layout 4.00
+    $std->vFCPST = null; //incluso no layout 4.00
+    $std->vBCSTRet = null;
+    $std->pST = null;
+    $std->vICMSSTRet = null;
+    $std->vBCFCPSTRet = null; //incluso no layout 4.00
+    $std->pFCPSTRet = null; //incluso no layout 4.00
+    $std->vFCPSTRet = null; //incluso no layout 4.00
+    $std->modBC = null;
+    $std->vBC = $valor_produto;
+    $std->pRedBC = null;
+    $std->pICMS = $pICMS;
+    $std->vICMS = $valorICMS;
+    $std->pRedBCEfet = null;
+    $std->vBCEfet = null;
+    $std->pICMSEfet = null;
+    $std->vICMSEfet = null;
+    $std->vICMSSubstituto = null;
+    $make->tagICMSSN($std);
+
+
+    
+    }
+    //icmstot OBRIGATÓRIA
+    $std = new \stdClass();
+    //$std->vBC = 100;
+    //$std->vICMS = 0;
+    //$std->vICMSDeson = 0;
+    //$std->vFCPUFDest = 0;
+    //$std->vICMSUFDest = 0;
+    //$std->vICMSUFRemet = 0;
+    //$std->vFCP = 0;
+    //$std->vBCST = 0;
+    //$std->vST = 0;
+    //$std->vFCPST = 0;
+    //$std->vFCPSTRet = 0.23;
+    //$std->vProd = 2000;
+    //$std->vFrete = 100;
+    //$std->vSeg = null;
+    //$std->vDesc = null;
+    //$std->vII = 12;
+    //$std->vIPI = 23;
+    //$std->vIPIDevol = 9;
+    //$std->vPIS = 6;
+    //$std->vCOFINS = 25;
+    //$std->vOutro = null;
+    //$std->vNF = 2345.83;
+    //$std->vTotTrib = 798.12;
+    $icmstot = $make->tagicmstot($std);
+
+    //transp OBRIGATÓRIA
     $std = new \stdClass();
     $std->modFrete = 9;
-    $nfe->tagtransp($std);
+    $transp = $make->tagtransp($std);
 
-    // $std = new \stdClass();
-    // $std->item = 1;
-    // $std->qVol = 2;
-    // $std->esp = 'caixa';
-    // $std->marca = 'OLX';
-    // $std->nVol = '11111';
-    // $std->pesoL = 10.00;
-    // $std->pesoB = 11.00;
-    // $nfe->tagvol($std);
 
-    $std = new \stdClass();
-    $std->nFat = '002';
-    $std->vOrig = 100;
-    $std->vLiq = 100;
-    $nfe->tagfat($std);
-
-    //USAR QUANDO FOR PARCELA
-    // $std = new \stdClass();
-    // $std->nDup = '001';
-    // $std->dVenc = date('Y-m-d');
-    // $std->vDup = 11.03;
-    // $nfe->tagdup($std);
-
+    //pag OBRIGATÓRIA
     $std = new \stdClass();
     $std->vTroco = 0;
-    $nfe->tagpag($std);
+    $pag = $make->tagpag($std);
 
+    //detPag OBRIGATÓRIA
     $std = new \stdClass();
-    $std->indPag = 0;
-    $std->tPag = "01";
+    $std->indPag = 1;
+    $std->tPag = '01';
     $std->vPag = $valor_total_produtos;
-    $nfe->tagdetPag($std);
+    $detpag = $make->tagdetpag($std);
 
-    $xml = $nfe->getXML();
-    $caminhoArquivo = '../../NFE/xml/Nfe_' . $data_emissao . '.xml';
-    // Tenta salvar o XML no arquivo
+    //infadic
+    $std = new \stdClass();
+    $std->infAdFisco = '';
+    $std->infCpl = '';
+    $info = $make->taginfadic($std);
 
-    // if (file_put_contents($caminhoArquivo, $xml) !== false) {
-    //     $arrayRetorno['retorno']['XML'] = 'XML da NFe salvo com sucesso!';
-    // } else {
-    //     $arrayRetorno['retorno']['errorXML'] =  'Erro ao salvar o XML da NFe.';
-    // }
-    // print_r($xml);
-    $config  = [
-        "atualizacao" => date('Y-m-d h:i:s'),
-        "tpAmb" => 2,
-        "razaosocial" => $nome_empresa,
-        "cnpj" => $CNPJ, // PRECISA SER VÁLIDO
-        "ie" => $IE, // PRECISA SER VÁLIDO
-        "siglaUF" => "MG",
-        "schemes" => "PL_009_V4",
-        "versao" => '4.00',
-        "tokenIBPT" => "AAAAAAA",
-        "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
-        "CSCid" => "000002",
-        "aProxyConf" => [
-            "proxyIp" => "",
-            "proxyPort" => "",
-            "proxyUser" => "",
-            "proxyPass" => ""
-        ]
-    ];
+    $std = new stdClass();
+    $std->CNPJ = $caixa["CNPJ"]; //CNPJ da pessoa jurídica responsável pelo sistema utilizado na emissão do documento fiscal eletrônico
+    $std->xContato = 'Fulano de Tal'; //Nome da pessoa a ser contatada
+    $std->email = 'fulano@soft.com.br'; //E-mail da pessoa jurídica a ser contatada
+    $std->fone = '1155551122'; //Telefone da pessoa jurídica/física a ser contatada
+    //$std->CSRT = 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'; //Código de Segurança do Responsável Técnico
+    //$std->idCSRT = '01'; //Identificador do CSRT
+    $make->taginfRespTec($std);
+ 
+    $make->monta();
+    $xml = $make->getXML();
 
+
+    $xml = $tools->signNFe($xml);
+    criarArquivoNFe($data_emissao, 'xml', $xml);
+
+    // echo $xml;
     try {
         $logo = file_get_contents(realpath(__DIR__ . '/../../img/Logo mix.png'));
-        $danfe = new Danfe($xml);
-        $danfe->exibirTextoFatura = false;
-        $danfe->exibirPIS = false;
-        $danfe->exibirIcmsInterestadual = false;
-        $danfe->exibirValorTributos = false;
-        $danfe->descProdInfoComplemento = false;
-        $danfe->exibirNumeroItemPedido = false;
-        $danfe->setOcultarUnidadeTributavel(true);
-        $danfe->obsContShow(false);
-        $danfe->printParameters(
-            $orientacao = 'P',
-            $papel = 'A7',
-            $margSup = 2,
-            $margEsq = 2
-        );
-        $danfe->logoParameters($logo, $logoAlign = 'C', $mode_bw = false);
-        $danfe->setDefaultFont($font = 'times');
-        $danfe->setDefaultDecimalPlaces(4);
-        $danfe->debugMode(false);
-        $danfe->creditsIntegratorFooter('WEBNFe Sistemas - http://www.webenf.com.br');
-        //$danfe->epec('891180004131899', '14/08/2018 11:24:45'); //marca como autorizada por EPEC
-
-        // Caso queira mudar a configuracao padrao de impressao
-        /*  $this->printParameters( $orientacao = '', $papel = 'A4', $margSup = 2, $margEsq = 2 ); */
-        // Caso queira sempre ocultar a unidade tributável
-        /*  $this->setOcultarUnidadeTributavel(true); */
-        //Informe o numero DPEC
-        /*  $danfe->depecNumber('123456789'); */
-        //Configura a posicao da logo
-        $danfe->logoParameters($logo, 'C', false);
-        //Gera o PDF
-        $pdf = $danfe->render($logo);
-        header('Content-Type: application/pdf');
+        $danfce = new Danfce($xml);
+        $danfce->debugMode(true); //seta modo debug, deve ser false em produção
+        $danfce->setPaperWidth(80); //seta a largura do papel em mm max=80 e min=58
+        $danfce->setMargins(2); //seta as margens
+        $danfce->setDefaultFont('arial'); //altera o font pode ser 'times' ou 'arial'
+        $danfce->setOffLineDoublePrint(true); //ativa ou desativa a impressão conjunta das via do consumidor e da via do estabelecimento qnado a nfce for emitida em contingência OFFLINE
+        //$danfce->setPrintResume(true); //ativa ou desativa a impressao apenas do resumo
+        //$danfce->setViaEstabelecimento(); //altera a via do consumidor para a via do estabelecimento, quando a NFCe for emitida em contingência OFFLINE
+        //$danfce->setAsCanceled(); //força marcar nfce como cancelada
+        $danfce->creditsIntegratorFooter('WEBNFe Sistemas - http://www.webnfe.com.br');
+        $pdf = $danfce->render($logo);
         criarArquivoNFe($data_emissao, 'pdf', $pdf);
-
-        // if (file_put_contents('../../NFE/pdf/Nfe_' . $data_emissao . '.pdf', $pdf) !== false) {
-        //     $arrayRetorno['retorno']['PDF'] =  'Sucesso Pdf';
-        // } else {
-        //     $arrayRetorno['retorno']['errorPDF'] = 'Erro ao salvar o XML da NFe.';
-        // }
-    } catch (InvalidArgumentException $e) {
-        $arrayRetorno['retorno']['error'] = "Ocorreu um erro durante o processamento :" . $e->getMessage();
-    }
-  
-
-    $configJson = json_encode($config);
-    // $certificadoDigital = file_get_contents('certificado.pfx');}
-    $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
-    $diretorio =scandir($path);
-    $arquivo = $diretorio[2];
-
-    $caminhoCertificado = $path.$arquivo;
-    // echo $caminhoCertificado;
-    $certificadoDigital = file_get_contents($caminhoCertificado);
-    $tools = new NFePHP\NFe\Tools($configJson, NFePHP\Common\Certificate::readPfx($certificadoDigital, '123456'));
-
-    try {
-        $xmlAssinado = $tools->signNFe($xml); // O conteúdo do XML assinado fica armazenado na variável $xmlAssinado
-        criarArquivoNFe($data_emissao, 'xml', $xmlAssinado );
     } catch (\Exception $e) {
-        //aqui você trata possíveis exceptions da assinatura
-   
-        exit($e->getMessage());
+        echo $e->getMessage();
     }
+
     try {
         $idLote = str_pad(100, 15, '0', STR_PAD_LEFT); // Identificador do lote
-        $resp = $tools->sefazEnviaLote([$xmlAssinado], $idLote);
-    
+        $resp = $tools->sefazEnviaLote([$xml], $idLote);
+
         $st = new NFePHP\NFe\Common\Standardize();
         $std = $st->toStd($resp);
         if ($std->cStat != 103) {
             //erro registrar e voltar
-            exit("[$std->cStat] $std->xMotivo");
+            // print_r($std);
+             print_r(json_encode($arrayRetorno));
+
+            exit();
         }
         $recibo = $std->infRec->nRec; // Vamos usar a variável $recibo para consultar o status da nota
     } catch (\Exception $e) {
         //aqui você trata possiveis exceptions do envio
         exit($e->getMessage());
     }
-    try {
-        $protocolo = $tools->sefazConsultaRecibo($recibo);
-        // print_r($protocolo);
 
-    } catch (\Exception $e) {
-        //aqui você trata possíveis exceptions da consulta
-        exit($e->getMessage());
-    };
-
-$request = $xmlAssinado;
-$response = $protocolo;
-    try {
-        $xml = Complements::toAuthorize($request, $response);
-        // header('Content-type: text/xml; charset=UTF-8');
-
-    } catch (\Exception $e) {
-        echo "Erro: " . $e->getMessage();
-    }
-    print_r(json_encode($arrayRetorno));
-
+} catch (\Exception $e) {
+    echo $e->getMessage();
 }
