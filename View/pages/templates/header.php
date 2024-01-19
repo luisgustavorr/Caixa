@@ -16,6 +16,7 @@ WHERE codigo = ?");
       href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
+
    <script src="https://kit.fontawesome.com/15d5de4016.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="<?php echo INCLUDE_PATH?>View/pages/style/style.css" />
 
@@ -30,7 +31,7 @@ WHERE codigo = ?");
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
 <!-- jsPDF -->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.js" integrity="sha512-3FKAKNDHbfUwAgW45wNAvfgJDDdNoTi5PZWU7ak3Xm0X8u0LbDBWZEyPklRebTZ8r+p0M2KIJWDYZQjDPyYQEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <link rel="apple-touch-icon" sizes="180x180" href="<?php echo INCLUDE_PATH ?>Favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="<?php echo INCLUDE_PATH ?>Favicon/favicon-32x32.png">

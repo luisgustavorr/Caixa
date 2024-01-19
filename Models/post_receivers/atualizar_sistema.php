@@ -1,7 +1,29 @@
 <?php
-exec('git fetch --all');
-exec('git reset --hard origin/cupom_fiscal_Branch')
+// exec('git fetch --all');
+// exec('git reset --hard origin/cupom_fiscal_Branch');
+function toggleZipExtension($enable = true) {
+    $phpIniPath = php_ini_loaded_file();
+    if ($phpIniPath) {
+        $contents = file_get_contents($phpIniPath);
 
+        if ($enable) {
+            // Descomentar a extensão zip
+            $contents = str_replace(";extension=zip", "extension=zip", $contents);
+        } else {
+            // Comentar a extensão zip
+            $contents = str_replace("extension=zip", ";extension=zip", $contents);
+        }
+
+        // Salvar o conteúdo modificado em um novo arquivo
+        file_put_contents($phpIniPath, $contents);
+        echo 'php.ini modificado com sucesso!';
+    } else {
+        echo 'php.ini não encontrado.';
+    }
+}
+
+// Usar a função para descomentar a extensão zip
+toggleZipExtension(true); 
 
 
 // include('../../MySql.php');

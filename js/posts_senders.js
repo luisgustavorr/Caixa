@@ -36,8 +36,8 @@ $("#cpf_cliente_nfe").mask("000.000.000-00");
 
 $('.modal_imp_nfe').submit(function(e){
   e.preventDefault()
-
-  if( !(TestaCPF($("#cpf_cliente_nfe").val().replace(/[.-]/g, '')))){
+  
+  if( $("#cpf_cliente_nfe").val() != "" &&!(TestaCPF($("#cpf_cliente_nfe").val().replace(/[.-]/g, '')))){
     alert("CPF inválido!")
     return
   }
@@ -49,6 +49,10 @@ $('.modal_imp_nfe').submit(function(e){
     nome_cliente : nome_nfe,
     cpf_nfe:cpf_nfe
   }
+  if($("#imprimir_nfe").attr("data_venda") !=''){
+    data["data_venda"] = $("#imprimir_nfe").attr("data_venda")
+  }
+  console.log(data)
   $.post('Models/post_receivers/gerarNFe.php',data,function(ret){
 
     console.log(ret)

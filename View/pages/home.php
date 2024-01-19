@@ -53,11 +53,11 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
 <h3>Imprimir NFE</h3>
   <div class="inputs_father">
     <div class="input input_nome_cliente_nfe">
-      <label>Nome Cliente</label>
+      <label>Nome Cliente (Opcional)</label>
       <input  class="others_inputs" type="text" autocomplete="off" id="nome_cliente_nfe">
     </div>
     <div class="input input_cpf_cliente_nfe">
-      <label>CPF Cliente</label>
+      <label>CPF Cliente (Opcional)</label>
       <input class="others_inputs" type="text" autocomplete="off" id="cpf_cliente_nfe">
     </div>
     <button id="imprimir_nfe_modal_button">
@@ -128,6 +128,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
 <aside id="sidebar">
 
   <span class="princip_span" onclick="abrirModal('modal_anotar_pedido')">Anotar Pedido</span>
+  <span class="princip_span" id="abrirNFE">Notas Fiscais</span>
 
   <span class="princip_span"id="abrir_lista_pedidos"><i class="fa-solid fa-chevron-down"></i> Pedidos</span>
   <div class="lista_pedidos">
@@ -523,7 +524,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
         <div class="finalizar_venda_button_principal_father">
           <button id="finalizar_venda_button_principal" onclick="abrirModal('modal_pagamento')" class="finalizar_venda_button_principal">Finalizar Venda</button>
           <button id="imprimir_ultima_venda"  class="imprimir_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imp. Última Venda</span></button>
-          <button id="imprimir_nfe"  class="imprimir_nfe"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imp. NFe</span></button>
+          <button id="imprimir_nfe" data_venda="" class="imprimir_nfe"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Imp. NFe</span></button>
 
           <button id="cancelar_ultima_venda" confirmar=false class="cancelar_ultima_venda"> <i style="display:none;" class="fa-solid fa-spinner fa-spin"></i><span>Canc. Última Venda</span></button>
 

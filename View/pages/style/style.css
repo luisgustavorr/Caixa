@@ -1920,3 +1920,7 @@ i span {
   background: #ff2b2b;
   color: white;
 }
+.finalizar_venda_button_principal_father button
+{
+  font-size: 13px !important;
+}

@@ -74,7 +74,10 @@ $('#dividir_venda').click(function(){
     $(this).attr("dividindo",true) 
   }
  })
- 
+ $("#abrirNFE").click(function() {
+  $.post("Models/post_receivers/abrirPastaNFe.php",{})
+ })
+
 document.addEventListener("keydown", function(e) {
 
   if(e.keyCode === 13) {
@@ -606,9 +609,33 @@ function valorCaixa() {
   });
 }
 atualizarHorario();
+let vezesRepetidas = 0;
+function verificarNFePendentes(){
+  $.post("Models/post_receivers/select_NFCe.php",{},function(ret){
+    const ret_JSON = JSON.parse(ret)
+    console.log(ret_JSON)
+    if(ret_JSON.length != 0 ){
+      console.log(ret_JSON.data_venda)
+      $("#imprimir_nfe").css("animation", "hysterical_pulse 0.7s infinite");
+      $("#imprimir_nfe").attr("data_venda",ret_JSON[0]["data_venda"]);
+     
+      if(vezesRepetidas == 0){
+        alert("Solicitação de NFC-e recebida, favor gerar NFC-e")
+      }
+      vezesRepetidas +=1
+    }else{
+      vezesRepetidas = 0;
+      $("#imprimir_nfe").attr("data_venda",'');
+      $("#imprimir_nfe").css("animation", "none");
+
+    }
+  })
+}
+verificarNFePendentes()
 setInterval(function () {
   atualizarHorario();
-}, 10000);
+  verificarNFePendentes()
+}, 7000);
 
 $(".modal_sangria").submit(function (e) {
   let valor_sangria = $('#valor_sangria').val().replace("R$", "").replace(",", ".")
