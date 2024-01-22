@@ -49,7 +49,7 @@ $configJson = json_encode($arr);
 $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
 $diretorio =scandir($path);
 $arquivo = $diretorio[2];
-echo $arquivo;
+// echo $arquivo;
 $caminhoCertificado = $path.$arquivo;
 // echo $caminhoCertificado;
 $pfxcontent  = file_get_contents($caminhoCertificado);
@@ -175,7 +175,7 @@ try {
     $std->CNPJ = $caixa["CNPJ"]."";
     //$std->CPF = '12345678901'; //NÃO PASSE TAGS QUE NÃO EXISTEM NO CASO
     $emit = $make->tagemit($std);
-    
+
 
     //enderEmit OBRIGATÓRIA
     $std = new \stdClass();
@@ -421,7 +421,7 @@ try {
         $std = $st->toStd($resp);
         if ($std->cStat != 103) {
             //erro registrar e voltar
-            print_r($std);
+            // print_r($std);
              print_r(json_encode($arrayRetorno));
 
             exit();
