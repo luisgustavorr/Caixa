@@ -175,6 +175,7 @@ try {
     $std->CNPJ = $caixa["CNPJ"]."";
     //$std->CPF = '12345678901'; //NÃO PASSE TAGS QUE NÃO EXISTEM NO CASO
     $emit = $make->tagemit($std);
+    
 
     //enderEmit OBRIGATÓRIA
     $std = new \stdClass();

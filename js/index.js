@@ -831,7 +831,6 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
       data_venda:data_venda
     };
     if($("#valor_calculado_input").val() !== "NaN" && $("#valor_calculado_input").val() != ""){
-      alert("aaa")
       data["valor_troco"] =  $("#valor_calculado_input").val()
 
     }
