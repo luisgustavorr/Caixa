@@ -285,7 +285,7 @@ $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste imp
       <span> Valor Calculado:</span>
       <div class="input_money_father">
         <span class="prefix">R$</span>
-        <input readonly="readonly" type="text" class="others_inputs input_money" name="valor_calculado_input" id="valor_calculado_input">
+        <input readonly="readonly" value=0 type="text" class="others_inputs input_money" name="valor_calculado_input" id="valor_calculado_input">
       </div>
     </div>
   </div>

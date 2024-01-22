@@ -49,7 +49,7 @@ $configJson = json_encode($arr);
 $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
 $diretorio =scandir($path);
 $arquivo = $diretorio[2];
-
+echo $arquivo;
 $caminhoCertificado = $path.$arquivo;
 // echo $caminhoCertificado;
 $pfxcontent  = file_get_contents($caminhoCertificado);
@@ -65,14 +65,10 @@ if(!isset($_POST['data_venda'])){
     $data_ultima_venda = $_POST['data_venda'];
 }
 
-    $vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
-    $vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda));
-    $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
-    $n_nfe = "9841".rand(0, 999);
 
 list($dataCompra, $horaCompra) = explode(' ', $data_ultima_venda);
 
-$vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.valor,`tb_vendas`.quantidade_produto ,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
+$vendas_com_ultima_data = \MySql::conectar()->prepare("SELECT `tb_vendas`.venda_dividida_id,`tb_vendas`.valor,`tb_vendas`.quantidade_produto ,`tb_vendas`.forma_pagamento,`tb_vendas`.troco,tb_produtos.*  FROM `tb_vendas`  INNER JOIN `tb_colaboradores` ON `tb_vendas`.`colaborador` = `tb_colaboradores`.`codigo` INNER JOIN `tb_produtos` ON `tb_produtos`.`id` = `tb_vendas`.`produto` WHERE `tb_vendas`.`caixa` = `tb_colaboradores`.`caixa` AND `tb_colaboradores`.`codigo` = ? AND `tb_vendas`.`data`=? ORDER BY `data` ");
 $vendas_com_ultima_data->execute(array($cookieteste, $data_ultima_venda));
 $vendas_com_ultima_data = $vendas_com_ultima_data->fetchAll();
 // print_r($vendas_com_ultima_data);
@@ -209,9 +205,14 @@ try {
     }
     $valor_total_produtos = 0;
     $valor_total_icms = 0 ;
+    $venda_dividida = false;
     foreach ($vendas_com_ultima_data as $key => $value) {
+        if($value["venda_dividida_id"] != 0){
+            $venda_dividida = true;
+        }
         $valor_produto = $value['valor'];
-        $quantidade = $value['quantidade_produto'];
+        $quantidade = $valor_produto /str_replace(',', '.', $value["preco"]) ;
+        // echo $quantidade;
         $valor_total_produtos = $valor_produto + $valor_total_produtos;
         // print_r($vendas_com_ultima_data);
      
@@ -340,14 +341,34 @@ try {
 
     //pag OBRIGATÓRIA
     $std = new \stdClass();
-    $std->vTroco = 0;
+    $std->vTroco = $vendas_com_ultima_data[0]["troco"];
     $pag = $make->tagpag($std);
 
     //detPag OBRIGATÓRIA
+
+
+    $arrayFormaPagamento =["01" => "Dinheiro",
+    "03" => "Cartão Crédito",
+    "04" =>"Cartão Débito",
+    "17" => "Pix",
+];
+    $arrayFormaPagamento = array_flip($arrayFormaPagamento);
     $std = new \stdClass();
-    $std->indPag = 1;
-    $std->tPag = '01';
-    $std->vPag = $valor_total_produtos;
+    if($vendas_com_ultima_data[0]["forma_pagamento"] == 'Cartão Crédito'){
+        $indPag =2 ;
+
+    }else{
+        $indPag =1 ;
+
+    }
+    if($venda_dividida){
+        $tPag= 99;
+    }else{
+      $tPag= $arrayFormaPagamento[$vendas_com_ultima_data[0]["forma_pagamento"]];
+    }
+    echo "AQUI".$venda_dividida;
+    $std->tPag =  $tPag;
+    $std->vPag = $valor_total_produtos +  $vendas_com_ultima_data[0]["troco"];
     $detpag = $make->tagdetpag($std);
 
     //infadic
@@ -399,7 +420,7 @@ try {
         $std = $st->toStd($resp);
         if ($std->cStat != 103) {
             //erro registrar e voltar
-            // print_r($std);
+            print_r($std);
              print_r(json_encode($arrayRetorno));
 
             exit();

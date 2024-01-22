@@ -31,6 +31,7 @@ function resetSangria() {
   valorCaixa();
 }
 function restartVenda() {
+  $("#valor_calculado_input").val("")
   $("#metodo_pagamento_princip").val("")
   $("#metodo_pagamento_princip").css("border","1px solid #424242")
   $('.alvo_restart_venda').each(function(){
@@ -823,11 +824,17 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
       colaborador: $("#codigo_colaborador_venda").val(),
       valor: valor_compra,
       produtos: produtos,
+
       pagamento: $("#metodo_pagamento_princip").val(),
       segunda_parte:segunda_parte_divisao,
       valor_restante: valor_restante,
       data_venda:data_venda
     };
+    if($("#valor_calculado_input").val() !== "NaN" && $("#valor_calculado_input").val() != ""){
+      alert("aaa")
+      data["valor_troco"] =  $("#valor_calculado_input").val()
+
+    }
     console.log(segunda_parte_divisao)
     $.post("Models/post_receivers/insert_venda.php", data, function (ret) {
 
