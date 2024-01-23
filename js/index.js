@@ -1,5 +1,6 @@
 console.log("novíssimo")
 var segunda_parte_divisao = false;
+var metade_restante_produto = 0;
 console.log("Ultima versão da nota fiscal!")
 var produtos = []
 let valor_restante = 0
@@ -824,12 +825,13 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
       colaborador: $("#codigo_colaborador_venda").val(),
       valor: valor_compra,
       produtos: produtos,
-
+      metade_restante_produto:metade_restante_produto,
       pagamento: $("#metodo_pagamento_princip").val(),
       segunda_parte:segunda_parte_divisao,
       valor_restante: valor_restante,
       data_venda:data_venda
     };
+    console.log(data)
     if($("#valor_calculado_input").val() !== "NaN" && $("#valor_calculado_input").val() != ""){
       data["valor_troco"] =  $("#valor_calculado_input").val()
 
@@ -845,6 +847,7 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
         const ret_in_JSON = JSON.parse(ret)
         valor_restante = ret_in_JSON["resto_da_metade"]
         data_venda = ret_in_JSON["data"]
+        metade_restante_produto = ret_in_JSON["metade_produto_restante"]
         console.log(data_venda)
         esse_elemento.removeAttr("disabled")
         if(segunda_parte_divisao == true) {

@@ -83,12 +83,13 @@ $select_nfe->execute(array($data_ultima_venda,$caixa["caixa"]));
 $select_nfe = $select_nfe->fetchAll();
 
 
-//    if(count($select_nfe) !=0){
-//          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-//           $arrayRetorno['data'] = $data_formatada;
-//       print_r(json_encode($arrayRetorno));
-//        exit;
-//     }
+   if(count($select_nfe) !=0){
+         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+          $arrayRetorno['data'] = $data_formatada;
+      print_r(json_encode($arrayRetorno));
+      $arrayRetorno["retornoRecibo"] = "";
+       exit;
+    }
     if(!isset($_POST['data_venda'])){
     $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`) VALUES (NULL, ?, ?, ?,?,?);");
     $insert_nfe->execute(array($data_emissao,$data_ultima_venda,$n_nfe,1,$caixa["caixa"]));
@@ -143,7 +144,7 @@ try {
     $std->mod = 65;
     $std->serie = $n_nfe;
     // $n_nfe
-    $std->nNF = 100;
+    $std->nNF = $select_ultima_nfe["id"];
     $std->dhEmi = (new \DateTime())->format('Y-m-d\TH:i:sP');
     $std->dhSaiEnt = null;
     $std->tpNF = 1;
@@ -262,7 +263,11 @@ try {
 
     $tag = new \stdClass();
     $tag->item = $item;
-    $tag->infAdProd = 'Valor';
+        if($venda_dividida){
+            $tag->infAdProd = 'Valor pago com duas formas de pagamento.';
+        }else{
+            $tag->infAdProd = 'Valor pago integralmente com uma única forma de pagamento.';
+        }
     $make->taginfAdProd($tag);
 
     //Imposto 
@@ -367,7 +372,6 @@ try {
     }else{
       $tPag= $arrayFormaPagamento[$vendas_com_ultima_data[0]["forma_pagamento"]];
     }
-    echo "AQUI".$venda_dividida;
     $std->tPag =  $tPag;
     $std->vPag = $valor_total_produtos +  $vendas_com_ultima_data[0]["troco"];
     $detpag = $make->tagdetpag($std);
@@ -378,14 +382,14 @@ try {
     $std->infCpl = '';
     $info = $make->taginfadic($std);
 
-    $std = new stdClass();
-    $std->CNPJ = $caixa["CNPJ"]; //CNPJ da pessoa jurídica responsável pelo sistema utilizado na emissão do documento fiscal eletrônico
-    $std->xContato = 'Fulano de Tal'; //Nome da pessoa a ser contatada
-    $std->email = 'fulano@soft.com.br'; //E-mail da pessoa jurídica a ser contatada
-    $std->fone = '1155551122'; //Telefone da pessoa jurídica/física a ser contatada
-    //$std->CSRT = 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'; //Código de Segurança do Responsável Técnico
-    //$std->idCSRT = '01'; //Identificador do CSRT
-    $make->taginfRespTec($std);
+    // $std = new stdClass();
+    // $std->CNPJ = $caixa["CNPJ"]; //CNPJ da pessoa jurídica responsável pelo sistema utilizado na emissão do documento fiscal eletrônico
+    // $std->xContato = 'Fulano de Tal'; //Nome da pessoa a ser contatada
+    // $std->email = 'fulano@soft.com.br'; //E-mail da pessoa jurídica a ser contatada
+    // $std->fone = '1155551122'; //Telefone da pessoa jurídica/física a ser contatada
+    // //$std->CSRT = 'G8063VRTNDMO886SFNK5LDUDEI24XJ22YIPO'; //Código de Segurança do Responsável Técnico
+    // //$std->idCSRT = '01'; //Identificador do CSRT
+    // $make->taginfRespTec($std);
  
     $make->monta();
     $xml = $make->getXML();
@@ -422,6 +426,7 @@ try {
         if ($std->cStat != 103) {
             //erro registrar e voltar
             // print_r($std);
+            $arrayRetorno["retornoRecibo"] = $std;
              print_r(json_encode($arrayRetorno));
 
             exit();
