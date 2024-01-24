@@ -11,7 +11,7 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 1;
+$cookieteste = 9841;
 $arrayRetorno = [
     'retorno' => [],
 
@@ -83,13 +83,13 @@ $select_nfe->execute(array($data_ultima_venda,$caixa["caixa"]));
 $select_nfe = $select_nfe->fetchAll();
 
 
-   if(count($select_nfe) !=0){
-         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-          $arrayRetorno['data'] = $data_formatada;
-      print_r(json_encode($arrayRetorno));
-      $arrayRetorno["retornoRecibo"] = "";
-       exit;
-    }
+//    if(count($select_nfe) !=0){
+//          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+//           $arrayRetorno['data'] = $data_formatada;
+//       print_r(json_encode($arrayRetorno));
+//       $arrayRetorno["retornoRecibo"] = "";
+//        exit;
+//     }
     if(!isset($_POST['data_venda'])){
     $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`) VALUES (NULL, ?, ?, ?,?,?);");
     $insert_nfe->execute(array($data_emissao,$data_ultima_venda,$n_nfe,1,$caixa["caixa"]));
