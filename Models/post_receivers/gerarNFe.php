@@ -11,7 +11,7 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 9841;
+$cookieteste = 1;
 $arrayRetorno = [
     'retorno' => [],
 
@@ -153,7 +153,6 @@ try {
     $std->tpImp = 5;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 2;
     $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
