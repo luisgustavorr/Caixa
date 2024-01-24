@@ -1,4 +1,4 @@
-console.log("novíssimo")
+console.log("nbbhbvggovíssimo")
 var segunda_parte_divisao = false;
 var metade_restante_produto = 0;
 console.log("Ultima versão da nota fiscal!")
