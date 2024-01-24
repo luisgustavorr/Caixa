@@ -1,4 +1,4 @@
-console.log("nbbhbvggovíssimo")
+console.log("novo")
 
 var segunda_parte_divisao = false;
 var metade_restante_produto = 0;
