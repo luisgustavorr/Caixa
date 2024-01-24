@@ -1,3 +1,4 @@
+console.log("aaaaaaaaa")
 var segunda_parte_divisao = false;
 var produtos = []
 let valor_restante = 0
