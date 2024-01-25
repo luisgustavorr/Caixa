@@ -11,7 +11,7 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 9841;
+$cookieteste = 3;
 $arrayRetorno = [
     'retorno' => [],
 
@@ -19,15 +19,16 @@ $arrayRetorno = [
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
-
+// print_r($colab );
 $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` INNER JOIN `tb_caixas` ON  `tb_caixas`.`caixa` = `tb_equipamentos`.`caixa` WHERE `tb_equipamentos`.`caixa` = ?");
 $caixa->execute(array($colab['caixa']));
 $caixa = $caixa->fetch();
+
 $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".$caixa['CEP']),true);
 
 $arr = [
     "atualizacao" => date('Y-m-d h:i:s'),
-    "tpAmb" => 2,
+    "tpAmb" => 1,
     "razaosocial" => $caixa["caixa"],
     "cnpj" => $caixa["CNPJ"]."", // PRECISA SER VÁLIDO
     "ie" => $caixa["IE"]."", // PRECISA SER VÁLIDO
@@ -51,6 +52,7 @@ $diretorio =scandir($path);
 $arquivo = $diretorio[2];
 // echo $arquivo;
 $caminhoCertificado = $path.$arquivo;
+
 // echo $caminhoCertificado;
 $pfxcontent  = file_get_contents($caminhoCertificado);
 
@@ -123,7 +125,7 @@ function criarArquivoNFe($data_atual, $tipo, $arquivo)
 };
 
 
-$tools = new Tools($configJson, Certificate::readPfx($pfxcontent, '123456'));
+$tools = new Tools($configJson, Certificate::readPfx($pfxcontent,'Carol@22'));
 //$tools->disableCertValidation(true); //tem que desabilitar
 $tools->model('65');
 
@@ -155,7 +157,7 @@ try {
     $std->tpImp = 5;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+    $std->tpAmb = 1; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
     $std->indPres = 1;
@@ -375,6 +377,7 @@ try {
     }
     $std->tPag =  $tPag;
     $std->vPag = $valor_total_produtos +  $vendas_com_ultima_data[0]["troco"];
+    $std->tpIntegra = 2;
     $detpag = $make->tagdetpag($std);
 
     //infadic

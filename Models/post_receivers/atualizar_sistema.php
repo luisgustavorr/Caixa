@@ -1,6 +1,8 @@
 <?php
- exec('git fetch --all');
- exec('git reset --hard origin/cupom_fiscal_Branch');
+ $phpIniPath = php_ini_loaded_file();
+ echo $phpIniPath;
+//  exec('git fetch --all');
+//  exec('git reset --hard origin/cupom_fiscal_Branch');
 
 // include('../../MySql.php');
 // require __DIR__ . '/../../vendor/autoload.php';
