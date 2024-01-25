@@ -1,8 +1,8 @@
 <?php
 include('../../MySql.php');
 
-// error_reporting(E_ERROR);
-// ini_set('display_errors', 'On');
+error_reporting(E_ERROR);
+ ini_set('display_errors', 'On');
 require __DIR__ . '/../../vendor/autoload.php';
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -56,6 +56,8 @@ $pfxcontent  = file_get_contents($caminhoCertificado);
 
 $data_emissao = date('Y-m-d-H-i-s');
 $arrayRetorno['data'] = $data_emissao;
+print_r(json_encode($arrayRetorno));
+
 if(!isset($_POST['data_venda'])){
     $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas` WHERE `tb_vendas`.`colaborador` = ? AND pedido_id =0 ORDER BY `id` desc LIMIT 1;");
     $data_ultima_venda->execute(array($cookieteste));
@@ -426,7 +428,6 @@ try {
             //erro registrar e voltar
             // print_r($std);
             $arrayRetorno["retornoRecibo"] = $std;
-             print_r(json_encode($arrayRetorno));
 
             exit();
         }

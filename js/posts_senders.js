@@ -56,16 +56,16 @@ $('.modal_imp_nfe').submit(function(e){
   $.post('Models/post_receivers/gerarNFe.php',data,function(ret){
 
     console.log(ret)
+    dadosRecebidos = JSON.parse(ret)
 
-    const dadosRecebidos = JSON.parse(ret)
-    alert(dadosRecebidos.retornoRecibo)
-    if(dadosRecebidos.retornoRecibo.protNFe.infProt.cStat == 100){
+ 
+    if(dadosRecebidos.data != ""){
    
 
     $.post('Models/post_receivers/imprimirNFe.php',{data:dadosRecebidos.data},function(ret){ 
       console.log(ret)
 			if(ret = 'Sucesso!'){
-        alert('NFe gerada com sucesso! ' + dadosRecebidos.retornoRecibo.protNFe.infProt.xMotivo)
+        alert('NFe gerada com sucesso! ')
         $(".modal").each(function () {
           $(this).css("display", "none");
           $("fundo").css("display", "none");
@@ -74,7 +74,7 @@ $('.modal_imp_nfe').submit(function(e){
       }
     })
   }else{
-    alert("Erro ao gerar NFC-e: "+dadosRecebidos.retornoRecibo.protNFe.infProt.xMotivo + ". Favor tentar novamente, se o erro persistir favor contatar o suporte.")
+    alert("Erro ao gerar NFC-e. Favor tentar novamente, se o erro persistir favor contatar o suporte.")
     return
   }
   })
