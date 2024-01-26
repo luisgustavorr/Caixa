@@ -46,6 +46,8 @@ foreach($Name as $i => $n){
 $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste impressoras'));
 
 }
+if(isset($_COOKIE["caixa"])){
+
 $select_vendas_feitas = MySql::conectar()->prepare("SELECT COUNT(id) as quantidade FROM tb_vendas WHERE caixa = ? AND DATE(data) =? ");
 $select_vendas_feitas->execute(array($_COOKIE["caixa"],date("Y-m-d")));
 $select_vendas_feitas = $select_vendas_feitas->fetch();
@@ -53,6 +55,8 @@ if($select_vendas_feitas["quantidade"] == 0){
   $zerar_caixa = MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_atual` = '0' WHERE `tb_caixas`.`caixa` = ?");
 $zerar_caixa->execute(array($_COOKIE["caixa"]));
 }
+}
+
 // ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
