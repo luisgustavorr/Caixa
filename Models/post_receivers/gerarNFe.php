@@ -11,7 +11,7 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 3;
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $arrayRetorno = [
     'retorno' => [],
 
