@@ -11,11 +11,12 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 3;
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $arrayRetorno = [
     'retorno' => [],
 
 ];
+
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
@@ -50,7 +51,12 @@ $configJson = json_encode($arr);
 $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
 $diretorio =scandir($path);
 $arquivo = $diretorio[2];
-// echo $arquivo;
+
+$senha_certificado = "123456";
+if($arquivo=="Teste.pfx"){
+
+    $senha_certificado = "Carol@22";
+}
 $caminhoCertificado = $path.$arquivo;
 
 // echo $caminhoCertificado;
@@ -125,7 +131,7 @@ function criarArquivoNFe($data_atual, $tipo, $arquivo)
 };
 
 
-$tools = new Tools($configJson, Certificate::readPfx($pfxcontent,'Carol@22'));
+$tools = new Tools($configJson, Certificate::readPfx($pfxcontent,$senha_certificado ));
 //$tools->disableCertValidation(true); //tem que desabilitar
 $tools->model('65');
 
