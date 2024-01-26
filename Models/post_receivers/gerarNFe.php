@@ -16,6 +16,7 @@ $arrayRetorno = [
     'retorno' => [],
 
 ];
+
 $colab = \MySql::conectar()->prepare("SELECT * FROM `tb_colaboradores` WHERE codigo = ?");
 $colab->execute(array($cookieteste));
 $colab = $colab->fetch();
@@ -28,7 +29,7 @@ $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".
 
 $arr = [
     "atualizacao" => date('Y-m-d h:i:s'),
-    "tpAmb" => 1,
+    "tpAmb" => 2,
     "razaosocial" => $caixa["caixa"],
     "cnpj" => $caixa["CNPJ"]."", // PRECISA SER VÁLIDO
     "ie" => $caixa["IE"]."", // PRECISA SER VÁLIDO
@@ -50,7 +51,12 @@ $configJson = json_encode($arr);
 $path = "../../certificados/".strtoupper($infoEnd["street"])."/";
 $diretorio =scandir($path);
 $arquivo = $diretorio[2];
-// echo $arquivo;
+
+$senha_certificado = "123456";
+if($arquivo=="Teste.pfx"){
+
+    $senha_certificado = "Carol@22";
+}
 $caminhoCertificado = $path.$arquivo;
 
 // echo $caminhoCertificado;
@@ -125,7 +131,7 @@ function criarArquivoNFe($data_atual, $tipo, $arquivo)
 };
 
 
-$tools = new Tools($configJson, Certificate::readPfx($pfxcontent,'Carol@22'));
+$tools = new Tools($configJson, Certificate::readPfx($pfxcontent,$senha_certificado ));
 //$tools->disableCertValidation(true); //tem que desabilitar
 $tools->model('65');
 
@@ -157,7 +163,7 @@ try {
     $std->tpImp = 5;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 1; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+    $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
     $std->indPres = 1;
