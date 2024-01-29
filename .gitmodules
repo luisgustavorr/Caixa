@@ -1,24 +1,19 @@
-[submodule "vendor/justinrainbow/json-schema"]
-	path = vendor/justinrainbow/json-schema
-	url = https://github.com/justinrainbow/json-schema.git
-[submodule "vendor/mike42/escpos"]
-	path = vendor/mike42/escpos
-	url = https://github.com/mike42/escpos-php.git
-[submodule "vendor/mike42/gfx-php"]
-	path = vendor/mike42/gfx-php
-	url = https://github.com/mike42/gfx-php.git
-[submodule "vendor/nfephp-org/sped-common"]
-	path = vendor/nfephp-org/sped-common
-	url = https://github.com/nfephp-org/sped-common.git
+[submodule "vendor/mike42/escpos-php"]
+    path = vendor/mike42/escpos-php
+    url = https://github.com/mike42/escpos-php.git
+
 [submodule "vendor/nfephp-org/sped-nfe"]
-	path = vendor/nfephp-org/sped-nfe
-	url = https://github.com/nfephp-org/sped-nfe.git
-[submodule "vendor/nfephp-org/sped-gtin"]
-	path = vendor/nfephp-org/sped-gtin
-	url = https://github.com/nfephp-org/sped-gtin.git
+    path = vendor/nfephp-org/sped-nfe
+    url = https://github.com/nfephp-org/sped-nfe.git
+
+[submodule "vendor/tecnickcom/tcpdf"]
+    path = vendor/tecnickcom/tcpdf
+    url = https://github.com/tecnickcom/tcpdf.git
+
 [submodule "vendor/nfephp-org/sped-da"]
-	path = vendor/nfephp-org/sped-da
-	url = https://github.com/nfephp-org/sped-da.git
+    path = vendor/nfephp-org/sped-da
+    url = https://github.com/nfephp-org/sped-da.git
+
 [submodule "vendor/nfephp-org/sped-pos"]
-	path = vendor/nfephp-org/sped-pos
-	url = https://github.com/nfephp-org/sped-pos.git
+    path = vendor/nfephp-org/sped-pos
+    url = https://github.com/nfephp-org/sped-pos.git
