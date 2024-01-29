@@ -1,4 +1,7 @@
 [submodule "vendor/mike42/escpos-php"]
+    path = vendor/justinrainbow/json-schema
+    url =https://github.com/justinrainbow/json-schema.git
+[submodule "vendor/mike42/escpos-php"]
     path = vendor/mike42/escpos-php
     url = https://github.com/mike42/escpos-php.git
 
