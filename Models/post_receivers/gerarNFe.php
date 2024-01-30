@@ -11,7 +11,7 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = $_COOKIE['last_codigo_colaborador'];
+$cookieteste = 3;
 $arrayRetorno = [
     'retorno' => [],
 
@@ -53,7 +53,7 @@ $diretorio =scandir($path);
 $arquivo = $diretorio[2];
 
 $senha_certificado = "123456";
-if($arquivo=="Teste.pfx"){
+if($arquivo=="MIX SALGADOS VARIADOS LTDA50070086000105 - Senha Carol@22.pfx"){
 
     $senha_certificado = "Carol@22";
 }
