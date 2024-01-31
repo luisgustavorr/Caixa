@@ -11,7 +11,8 @@ use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
 
-$cookieteste = 3;
+
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $arrayRetorno = [
     'retorno' => [],
 
@@ -29,7 +30,7 @@ $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".
 
 $arr = [
     "atualizacao" => date('Y-m-d h:i:s'),
-    "tpAmb" => 2,
+    "tpAmb" => 1,
     "razaosocial" => $caixa["caixa"],
     "cnpj" => $caixa["CNPJ"]."", // PRECISA SER VÁLIDO
     "ie" => $caixa["IE"]."", // PRECISA SER VÁLIDO
@@ -163,7 +164,7 @@ try {
     $std->tpImp = 5;
     $std->tpEmis = 1;
     $std->cDV = 2;
-    $std->tpAmb = 2; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
+    $std->tpAmb = 1; // Se deixar o tpAmb como 2 você emitirá a nota em ambiente de homologação(teste) e as notas fiscais aqui não tem valor fiscal
     $std->finNFe = 1;
     $std->indFinal = 1;
     $std->indPres = 1;
