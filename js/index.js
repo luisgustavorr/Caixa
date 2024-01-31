@@ -1,4 +1,4 @@
-console.log("Versão Oficial Mais Nova!")
+console.log("Versão Oficial 100%!")
 
 var segunda_parte_divisao = false;
 var metade_restante_produto = 0;
