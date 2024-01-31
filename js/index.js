@@ -1,4 +1,4 @@
-console.log("Versão Oficial 100%!")
+console.log("Versão NFC-e 100%!")
 
 var segunda_parte_divisao = false;
 var metade_restante_produto = 0;
