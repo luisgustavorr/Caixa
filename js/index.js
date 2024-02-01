@@ -362,6 +362,7 @@ $("#codigo_produto").on("keyup", function (e) {
     };
 
     $.post("Models/post_receivers/select_pesquisa.php", data, function (ret) {
+      console.log(ret)
       row = JSON.parse(ret);
 
       if (row.length == 0) {
@@ -890,11 +891,10 @@ $("#valor_compra").text("R$"+$("#valor_compra_dividida").val())
   }
 });
 $(document).keyup(function (event) {
-
+  console.log(condicao_favoravel)
   if (
     event.code.includes("Digit") &&
-    condicao_favoravel &&
-    window.location.href.includes("https://localhost/MixSalgados/Caixa/")
+    condicao_favoravel 
   ) {
     var key = event.keyCode || event.which;
     key = String.fromCharCode(key);
@@ -956,9 +956,16 @@ function pesquisarProduto(barcode) {
       };
       var startTime = performance.now();
       $.post("Models/post_receivers/select_produto.php", data, function (ret) {
+        console.log(ret)
         var endTime = performance.now();
         var row = JSON.parse(ret);
+        produto_object = row;
+
         $("#desc_produto").val(row.nome);
+        if(row.quantidade !=""){
+        $("#quantidade_produto").val(row.quantidade)
+      }
+
         var duration = endTime - startTime;
         console.log("Requisição concluída em " + duration + "ms");
       });
