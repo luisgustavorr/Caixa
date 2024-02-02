@@ -30,6 +30,30 @@ html {
 .modal {
   z-index: 3;
 }
+
+.input_pesquisar_produto_father {
+  display: flex;
+  height: 30px;
+  border: 1px solid gray;
+  border-radius: 10px;
+}
+#pesquisar_produto {
+  border: none;
+  border-radius: 10px 0 0 10px;
+  text-align: center;
+}
+#pesquisar_produto_button {
+  width: 50px;
+  background: red;
+  color: white;
+  border-radius: 0 10px 10px 0;
+  height: 30px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 .modal_produtos {
   width: 80%;
   transform: translate(-50%, -50%);
@@ -1495,7 +1519,7 @@ input#valor_entrada {
 }
 .inputs_add_produto {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   height: 60px;
 }

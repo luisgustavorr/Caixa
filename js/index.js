@@ -58,7 +58,7 @@ $("#valor_compra").css("display","block")
 }
 $('#dividir_venda').click(function(){
   if($(this).attr("dividindo") == "true"){
-    console.log("Aaaa")
+
     $(this).attr("dividindo",false) 
   $(this).removeClass("fa-bounce")
   $("#finalizar_venda_modal_button").text("Finalizar Venda")
@@ -455,23 +455,34 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       row.id +
       "' nome_produto='" +
       row.nome +
-      "' class='preco_produto'>" +
+      "' class='preco_produto' preco_final_produto = '"+row.preco_final+"'>" +
       row.preco +
       "</td><td >" +
       quantidade +
       "</td></tr>"
   );
   $("#tabela_produtos .preco_produto").each(function () {
+    let valor_prod = parseFloat(
+      (
+        parseFloat($(this).text().toString().replace(",", ".")) *
+        parseFloat($(this).attr("quantidade_produto"))
+      ).toFixed(2)
+    )
+   if($(this).attr("preco_final_produto") != 0){
+     valor_prod = $(this).attr("preco_final_produto")
+   }
+  
     console.log("valor antigo :", parseFloat(total_valor));
     console.log("quant :", $(this).attr("quantidade_produto"));
     console.log("id :", $(this).attr("id_produto"));
     total_valor =
       parseFloat(total_valor) +
-      parseFloat($(this).text().replace(",", ".")) *
-        $(this).attr("quantidade_produto");
+      parseFloat(valor_prod )
     total_valor = isNaN(total_valor) ? 0 : total_valor;
     console.log(total_valor);
     console.log("-------------------------");
+   
+   
 
     $(".tiny_row_id" + $(this).attr("id_produto")).remove();
     $(".venda_preview_body tbody").append(
@@ -479,7 +490,7 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         $(this).attr("id_produto") +
         '"><td>' +
         $(this).attr("nome_produto") +
-        "</td><td class='quantidade_produto' preco_produto='" +
+        "</td><td class='quantidade_produto' preco_total_produto ='"+valor_prod+"' preco_produto='" +
         parseFloat($(this).text().toString().replace(",", ".")) +
         "' id_produto='" +
         $(this).attr("id_produto") +
@@ -487,14 +498,9 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
         $(this).attr("quantidade_produto") +
         "x</td><td>R$" +
         $(this).text() +
-        "</td><td>R$" +
-        parseFloat(
-          (
-            parseFloat($(this).text().toString().replace(",", ".")) *
-            parseFloat($(this).attr("quantidade_produto"))
-          ).toFixed(2)
-        ) +
-        '</td><td><i class="fa-regular fa-trash-can trash_inactive remove_item" row="tiny_row_id' +
+        "</td><td>R$" + valor_prod
+         +
+        '</td><td><i  class="fa-regular fa-trash-can trash_inactive remove_item" row="tiny_row_id' +
         $(this).attr("id_produto") +
         '" ></i></td></tr>'
     );
@@ -908,7 +914,12 @@ $(document).keyup(function (event) {
 
     pesquisarProduto(barcode);
   } else if (event.code == "Delete") {
+
     $(".trash_activated").each(function () {
+      let valor_prod =  parseFloat($(this).parent()
+      .parent()
+      .find(".quantidade_produto").attr("preco_total_produto"))
+    console.log(valor_prod)
       $(".valor_total strong").text(
         "R$:" +
           (
@@ -917,25 +928,15 @@ $(document).keyup(function (event) {
                 .text()
                 .replace("R$:", "")
                 .replace(",", ".")
-            ).toFixed(2) -
-            parseFloat(
-              $(this)
-                .parent()
-                .parent()
-                .find(".quantidade_produto")
-                .attr("preco_produto")
-            ).toFixed(2) *
-              $(this)
-                .parent()
-                .parent()
-                .find(".quantidade_produto")
-                .text()
-                .replace("x", "")
+            ).toFixed(2) - valor_prod
+       
           )
             .toFixed(2)
             .toString()
             .replace(".", ",")
       );
+      $("#valor_compra_dividida").val($(".valor_total strong").text().replace("R$:",""))
+      $("#valor_compra_dividida").attr("valor_inicial",$(".valor_total strong").text().replace("R$:",""))
       $("#valor_compra").text($(".valor_total strong").text());
       $(".venda_preview_bottom").text($(".valor_total strong").text());
       $("." + $(this).attr("row")).remove();

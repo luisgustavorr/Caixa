@@ -32,6 +32,8 @@ if (isset($_POST['editando_pedido'])) {
     $produto->execute(array($_POST['barcode']));
     $produto = $produto->fetch();
     $produto["quantidade"] = 1;
+    $produto["preco_final"] = 0;
+
     echo json_encode($produto, JSON_UNESCAPED_UNICODE);
   }
 }

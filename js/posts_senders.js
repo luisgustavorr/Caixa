@@ -16,6 +16,25 @@ $(this).val("")
 
 }
 })
+$('#pesquisar_produto_button').click(function(e){
+  e.preventDefault()
+  $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+    console.log(ret)
+    $(".modal_produtos tbody").html(ret)
+
+  })
+})
+
+$("#pesquisar_produto").keyup((e)=>{
+  if(e.keyCode == 13){
+    e.preventDefault()
+    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+      console.log(ret)
+      $(".modal_produtos tbody").html(ret)
+  
+    })
+  }
+})
 $(".modal_anotar_pedido tbody").children().remove()
 var dataAtual = new Date();
  var dataFutura = new Date();
