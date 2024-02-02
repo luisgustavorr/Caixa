@@ -1,0 +1,8 @@
+15/01/2024
+
+1.Enviar vídeos no grp da mix salgados || PENDENTE
+2.Tela add produto e editar produto || CONCLUIDO
+3.Não permitir enviar duas notas, somente imprimir || CONCLUIDO
+4.Tela emitir nota com nome e cpf do cliente || CONCLUIDO 
+5.Revisar os impostos no gerarNFe.php || CONCLUIDO 
+6.Tela add caixa e usar valores das lojas do banco de dados|| CONCLUIDO  (foi difícil kkkk)

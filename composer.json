@@ -1,0 +1,9 @@
+{
+    "require": {
+        "mike42/escpos-php": "4.0",
+        "nfephp-org/sped-nfe": "^5.1",
+        "tecnickcom/tcpdf": "^6.6",
+        "nfephp-org/sped-da": "dev-master",
+        "nfephp-org/sped-pos": "dev-master"
+    }
+}
