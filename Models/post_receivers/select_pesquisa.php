@@ -1,21 +1,23 @@
 <?php 
 include('../../MySql.php');
 if(isset($_POST['codigo'])){
-  $produto = \MySql::conectar()->prepare("SELECT *
-  FROM `tb_produtos`
-  WHERE `codigo` LIKE ? 
-  ORDER BY
-    CASE
-      WHEN `codigo` LIKE ? THEN 1 
-      WHEN `codigo` LIKE ? THEN 2 
-      ELSE 3 
-    END,
-    `codigo`;");
+  $produto = \MySql::conectar()->prepare("SELECT *, 
+  CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo
+FROM tb_produtos WHERE `codigo` LIKE ? 
+ORDER BY
+  CASE
+    WHEN `codigo` LIKE ? THEN 1 
+    WHEN `codigo` LIKE ? THEN 2 
+    ELSE 3 -- Todas as outras palavras
+  END,
+  `codigo`;
+  ");
   $produto->execute(array('%'.$_POST['pesquisa'].'%',$_POST['pesquisa'].'%','% '.$_POST['pesquisa'].'%'));
   $produto = $produto->fetchAll();
 }else{
-  $produto = \MySql::conectar()->prepare("SELECT *
-  FROM `tb_produtos`
+  $produto = \MySql::conectar()->prepare("SELECT *, 
+  CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo
+FROM tb_produtos 
   WHERE `nome` LIKE ? 
   ORDER BY
     CASE
@@ -29,4 +31,5 @@ if(isset($_POST['codigo'])){
 }
 
   echo json_encode($produto);
+
 ?>

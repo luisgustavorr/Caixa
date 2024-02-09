@@ -1,4 +1,72 @@
 console.log(TestaCPF("15483790693"))
+$('#pesquisar_produto_button').click(function(e){
+  $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+    console.log(ret)
+    $(".editar_produto").click(function() {
+      $(".modal_alterar_valor").css("display", "flex")  
+      $(".modal_produtos").css("display","none")
+      let produto = $(this).attr("produto")
+      id_produto = produto
+      let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+      $("#novo_preco").val(preco)
+    })
+    $(".modal_produtos tbody").html(ret)
+
+  })
+})
+$("#novo_preco").mask("000.00",{reverse:true})
+
+let id_produto = 0;
+let preco= 0
+$(".editar_produto").click(function() {
+  $(".modal_alterar_valor").css("display", "flex")  
+  $(".modal_produtos").css("display","none")
+  let produto = $(this).attr("produto")
+  id_produto = produto
+   preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+  console.log(preco)
+  $("#novo_preco").val(preco)
+})
+$("#novo_preco").keyup((e)=>{
+  if(e.keyCode == 13){
+    e.preventDefault()
+    console.log("aaaa")
+    console.log(preco)
+    $.post('Models/post_receivers/update_produto.php',{produto:id_produto,preco:$("#novo_preco").val()},(ret)=>{
+      $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+        console.log(ret)
+        $(".modal_produtos tbody").html(ret)
+        $(".editar_produto").click(function() {
+          $(".modal_alterar_valor").css("display", "flex")  
+          $(".modal_produtos").css("display","none")
+          let produto = $(this).attr("produto")
+          id_produto = produto
+           preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+          $("#novo_preco").val(preco)
+        })
+      })
+    })
+    $(".modal_alterar_valor").css("display", "none")  
+    $(".modal_produtos").css("display","flex")
+  }
+})
+$("#pesquisar_produto").keyup((e)=>{
+  if(e.keyCode == 13){
+    e.preventDefault()
+    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+      console.log(ret)
+      $(".modal_produtos tbody").html(ret)
+      $(".editar_produto").click(function() {
+        $(".modal_alterar_valor").css("display", "flex")  
+        $(".modal_produtos").css("display","none")
+        let produto = $(this).attr("produto")
+        id_produto = produto
+         preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+        $("#novo_preco").val(preco)
+      })
+    })
+  }
+})
 function resetPedido() {
   formatoDataHora = function (data) {
     var dia = ('0' + data.getDate()).slice(-2);
@@ -16,25 +84,7 @@ $(this).val("")
 
 }
 })
-$('#pesquisar_produto_button').click(function(e){
-  e.preventDefault()
-  $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
-    console.log(ret)
-    $(".modal_produtos tbody").html(ret)
 
-  })
-})
-
-$("#pesquisar_produto").keyup((e)=>{
-  if(e.keyCode == 13){
-    e.preventDefault()
-    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
-      console.log(ret)
-      $(".modal_produtos tbody").html(ret)
-  
-    })
-  }
-})
 $(".modal_anotar_pedido tbody").children().remove()
 var dataAtual = new Date();
  var dataFutura = new Date();

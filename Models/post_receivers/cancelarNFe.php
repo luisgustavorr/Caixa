@@ -7,7 +7,7 @@ use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
-$cookieteste = $_COOKIE['last_codigo_colaborador'];
+$cookieteste = 3;
 
 try {
 
@@ -32,7 +32,7 @@ try {
 
     $arr = [
         "atualizacao" => date('Y-m-d h:i:s'),
-        "tpAmb" => 1,
+        "tpAmb" => 2,
         "razaosocial" => $caixa["caixa"],
         "cnpj" => $caixa["CNPJ"] . "", // PRECISA SER VÁLIDO
         "ie" => $caixa["IE"] . "", // PRECISA SER VÁLIDO
@@ -57,10 +57,10 @@ try {
     $senha_certificado = "123456";
     if($select_last_venda["forma_pagamento"] == "Dinheiro"){
         $update_valor_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET `valor_no_caixa` = `valor_no_caixa` - ?, `valor_atual` = `valor_atual`-? WHERE `tb_caixas`.`caixa` = ? ");
-        $update_valor_caixa->execute(array($select_last_venda["valor"],$select_last_venda["valor"],$colab["caixa"]));
+        $update_valor_caixa->execute(array($select_last_venda["valor"],$select_last_venda["valor"],$_COOKIE["caixa"]));
     }else{
         $update_valor_caixa = \MySql::conectar()->prepare("UPDATE `tb_caixas` SET  `valor_atual` = `valor_atual`-?WHERE `tb_caixas`.`caixa` = ? ");
-        $update_valor_caixa->execute(array($select_last_venda["valor"],$colab["caixa"]));
+        $update_valor_caixa->execute(array($select_last_venda["valor"],$_COOKIE["caixa"]));
     }
         $equip = \MySql::conectar()->prepare("DELETE FROM `tb_vendas` WHERE `pedido_id` = 0 AND `caixa` = ?
         ORDER BY `tb_vendas`.`id` DESC

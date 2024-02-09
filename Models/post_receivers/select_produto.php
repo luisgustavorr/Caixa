@@ -1,7 +1,7 @@
 <?php
 include('../../MySql.php');
 if (isset($_POST['editando_pedido'])) {
-  $produto = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `codigo` = ?");
+  $produto = \MySql::conectar()->prepare("SELECT *,CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo FROM `tb_produtos` WHERE `codigo` = ?");
   $produto->execute(array($_POST['produto']));
   $produto = $produto->fetch();
   if (empty($produto)) {
@@ -16,7 +16,7 @@ if (isset($_POST['editando_pedido'])) {
     $codigo_produto = $barcode[1] . $barcode[2] . $barcode[3] . $barcode[4] . $barcode[5];
     $valorproduto = $barcode[6] . $barcode[7] . $barcode[8] . $barcode[9] . $barcode[10] . $barcode[11];
     $valorproduto = $valorproduto / 100;
-    $produto = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `codigo` = ? AND por_peso = 1");
+    $produto = \MySql::conectar()->prepare("SELECT *,CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo FROM `tb_produtos` WHERE `codigo` = ? AND por_peso = 1");
     $produto->execute(array($codigo_produto));
     $produto = $produto->fetch();
     $preco_kg = str_replace(",", ".", $produto["preco"]);
@@ -28,7 +28,7 @@ if (isset($_POST['editando_pedido'])) {
 
     echo json_encode($produto, JSON_UNESCAPED_UNICODE);
   } else {
-    $produto = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `codigo` = ?");
+    $produto = \MySql::conectar()->prepare("SELECT *,CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo FROM `tb_produtos` WHERE `codigo` = ?");
     $produto->execute(array($_POST['barcode']));
     $produto = $produto->fetch();
     $produto["quantidade"] = 1;

@@ -10,9 +10,10 @@ use NFePHP\NFe\Tools;
 use NFePHP\NFe\Make;
 use NFePHP\Common\Certificate;
 use NFePHP\DA\NFe\Danfce;
+use NFePHP\NFe\Common\Standardize;
 
 
-$cookieteste = 3;
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $arrayRetorno = [
     'retorno' => [],
 
@@ -30,7 +31,7 @@ $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/".
 
 $arr = [
     "atualizacao" => date('Y-m-d h:i:s'),
-    "tpAmb" => 1,
+    "tpAmb" => 2,
     "razaosocial" => $caixa["caixa"],
     "cnpj" => $caixa["CNPJ"]."", // PRECISA SER VÁLIDO
     "ie" => $caixa["IE"]."", // PRECISA SER VÁLIDO
@@ -65,7 +66,7 @@ $pfxcontent  = file_get_contents($caminhoCertificado);
 
 $data_emissao = date('Y-m-d-H-i-s');
 $arrayRetorno['data'] = $data_emissao;
-print_r(json_encode($arrayRetorno));
+// print_r(json_encode($arrayRetorno));
 
 if(!isset($_POST['data_venda'])){
     $data_ultima_venda = \MySql::conectar()->prepare("SELECT `tb_vendas`.`data` FROM `tb_vendas` WHERE `tb_vendas`.`colaborador` = ? AND pedido_id =0 ORDER BY `id` desc LIMIT 1;");
@@ -97,17 +98,10 @@ $select_nfe = $select_nfe->fetchAll();
 //    if(count($select_nfe) !=0){
 //          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
 //           $arrayRetorno['data'] = $data_formatada;
-//       print_r(json_encode($arrayRetorno));
 //       $arrayRetorno["retornoRecibo"] = "";
 //        exit;
 //     }
-    if(!isset($_POST['data_venda'])){
-    $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`) VALUES (NULL, ?, ?, ?,?,?);");
-    $insert_nfe->execute(array($data_emissao,$data_ultima_venda,$n_nfe,1,$caixa["caixa"]));
-    }else{
-    $update = \MySql::conectar()->prepare("UPDATE tb_nfe SET impressa = 1 WHERE data_venda = ? AND impressa = 0 AND caixa = ? ");
-    $update->execute(array($data_ultima_venda,$caixa["caixa"]));
-    }
+ 
 function criarArquivoNFe($data_atual, $tipo, $arquivo)
 {
 
@@ -408,6 +402,7 @@ try {
 
     $xml = $tools->signNFe($xml);
     criarArquivoNFe($data_emissao, 'xml', $xml);
+    print_r(json_encode($arrayRetorno));
 
     // echo $xml;
     try {
@@ -436,7 +431,18 @@ try {
         $std = $st->toStd($resp);
         if ($std->cStat != 103) {
             //erro registrar e voltar
-            // print_r($std);
+            $stdCl = new Standardize($resp);
+             $arr = $stdCl->toArray();
+             $nProt = $arr["protNFe"]["infProt"]["nProt"];
+             $chNFe = $arr["protNFe"]["infProt"]["chNFe"];
+
+             if(!isset($_POST['data_venda'])){
+                $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`,`protocolo`,`chaveNFe`) VALUES (NULL, ?, ?, ?,?,?,?,?);");
+                $insert_nfe->execute(array($data_emissao,$data_ultima_venda,$n_nfe,1,$caixa["caixa"],$nProt,$chNFe));
+                }else{
+                $update = \MySql::conectar()->prepare("UPDATE tb_nfe SET impressa = 1 WHERE data_venda = ? AND impressa = 0 AND caixa = ? ");
+                $update->execute(array($data_ultima_venda,$caixa["caixa"]));
+                }
             $arrayRetorno["retornoRecibo"] = $std;
 
             exit();

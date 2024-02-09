@@ -314,7 +314,7 @@ $("#desc_produto").on("keyup", function () {
             '<span produto="' +
               element.codigo +
               '" class="resultado_pesquisa">' +
-              element.nome + ' - R$' +element.preco +
+              element.nome + ' - R$' +element.preco_relativo +
               "</span>"
           );
         });
@@ -374,7 +374,7 @@ $("#codigo_produto").on("keyup", function (e) {
           '<span produto="' +
             element.codigo +
             '" class="resultado_pesquisa_by_barcode">' +
-            element.nome + ' - R$' +element.preco +
+            element.nome + ' - R$' +element.preco_relativo +
             "</span>"
         );
       });
@@ -456,7 +456,7 @@ function pesquisarProdutoPorCodigoDeBarras(ret) {
       "' nome_produto='" +
       row.nome +
       "' class='preco_produto' preco_final_produto = '"+row.preco_final+"'>" +
-      row.preco +
+      row.preco_relativo +
       "</td><td >" +
       quantidade +
       "</td></tr>"

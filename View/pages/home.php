@@ -60,6 +60,9 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 // ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
+<form class="modal modal_alterar_valor">
+  <input   class="others_inputs" type="text" name="novo_preco" id="novo_preco">
+</form>
 <form class="modal modal_produtos">
     <table>
         <thead>
@@ -68,31 +71,36 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
                 <th>Nome</th>
                 <th>Código de Barras</th>
                 <th>Preço</th>
-                <th>Por KG ?</th>
                 <th>Editar</th>
-                <th>Excluir</th>
+             
 
             </tr>
         </thead>
         <tbody>
 
             <?php
+
             $caixas = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos`");
             $caixas->execute();
             $caixas = $caixas->fetchAll();
             foreach ($caixas as $key => $value) {
                 $value['por_peso'] == 1 ? $pesado = 'Sim' : $pesado = 'Não';
+                $preco_relativo = json_decode($value["json_precos"],true);
+                if($preco_relativo[$_COOKIE["caixa"]] != 0){
+                  $preco_relativo =$preco_relativo[$_COOKIE["caixa"]];
+                }else{
+                  $preco_relativo =  $value["preco"];
+                }
                 echo '<tr class ="produto_' . $value['id'] . '" value="' . $value['id'] . '">
                              <td class="codigo_id">' . ucfirst($value['codigo_id']) . '</td>
 
                                 <td class="nome">' . ucfirst($value['nome']) . '</td>
                                 <td class="codigo">' . ucfirst($value['codigo']) . '</td>
 
-                                <td class="preco">' . $value["preco"] . '</td>
-                                <td class="pesado">' . $pesado . '</td>
+                                <td class="preco">' . $preco_relativo . '</td>
+                          
                                 <td ><i produto="' . $value['id'] . '" class="fa-solid editar_produto fa-pen"></i></td>
 
-                                <td><i produto="' . $value['id'] . '" class="fa-solid apagar_produto fa-trash-can"></i></td>
 
                                 </tr>';
             }
@@ -102,9 +110,8 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 
     <div class="inputs_add_produto">
 
-        <span id="add_produto_opener" onclick="abrirModal('modal_adicionar_produto')">Adicionar Produto</span>
         <div class="input_pesquisar_produto_father">
-            <input type="text" placeholder="Pesquisar Produto" id="pesquisar_produto">
+            <input class="others_inputs" type="text" placeholder="Pesquisar Produto" id="pesquisar_produto">
             <div id="pesquisar_produto_button"><i class="fa-solid fa-magnifying-glass"></i></div>
         </div>
     </div>
@@ -187,7 +194,7 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 </aside>
 <input type="hidden" id="include_path" value="<?php echo BASE_DIR_PAINEL.'\\'?>" disabled>
 <aside id="sidebar">
-<!-- <span class="princip_span" onclick="abrirModal('modal_produtos')">Produtos</span> -->
+<span class="princip_span" onclick="abrirModal('modal_produtos')">Produtos</span>
 
   <span class="princip_span" onclick="abrirModal('modal_anotar_pedido')">Anotar Pedido</span>
   <span class="princip_span" id="abrirNFE">Notas Fiscais</span>
