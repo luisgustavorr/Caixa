@@ -99,8 +99,8 @@ fundo {
   align-items: center;
 }
 .modal_adicionar_produto {
-  width: 650px;
-  height: 250px;
+  width: 70%;
+  height: auto;
   background: white;
   position: absolute;
   border-radius: 15px;
@@ -275,6 +275,12 @@ input#valor_entrada {
   display: block;
   cursor: pointer;
 }
+.modal_adicionar_produto .inputs{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin: 20px 3px;
+}
 .modal_adicionar_produto .inputs.input_codigo_produto_add {
   width: 58%;
 }
@@ -287,9 +293,10 @@ input#valor_entrada {
   justify-content: space-between;
   margin-top: 20px;
   width: 100%;
+  flex-wrap: wrap;
 }
 .modal_adicionar_produto .second_input_row .inputs {
-  width: 39%;
+  width: 28%;
 }
 .modal_adicionar_produto #finalziar_button_add {
   height: 40px;

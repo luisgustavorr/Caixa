@@ -8,11 +8,10 @@ function generateRandomCode($length = 8) {
     }
     return $randomCode;
 }
-do {
-    $codigo_id = generateRandomCode(2);
-    $result = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `codigo` = ?");
-    $result->execute(array($codigo_id));
-} while ($result->rowCount() > 0);
+
+$ultimo_id = \MySql::conectar()->prepare("SELECT `id` FROM `tb_produtos` ORDER BY `id` DESC LIMIT 1;");
+$ultimo_id->execute();
+$ultimo_id = $ultimo_id->fetch();
 
 
 // Gerar o código para a coluna "codigo_id"
@@ -23,7 +22,7 @@ do {
 } while ($row->rowCount() > 0);
 $res = [
     "codigo"=> "$codigo",
-    "codigo_id"=>"$codigo_id"
+    "codigo_id"=>$ultimo_id["id"] + 1
 ];
 print_r(json_encode($res));
 ?>

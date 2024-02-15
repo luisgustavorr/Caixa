@@ -189,26 +189,89 @@ $("#add_produto_opener").click(function () {
 });
 $(".modal_adicionar_produto").submit(function (e) {
   e.preventDefault();
-  data = {
+ let data = {
     nome: $("#nome_produto_add").val(),
     codigo: $("#codigo_barras_produto_add").val(),
     codigo_id: $("#codigo_produto_add").val(),
     preco: $("#preco_produto_add").val(),
     por_peso: $('input[name="produto_por_peso"]:checked').val(),
+    ncm:$("#ncm_produto_add").val(),
+    cst_icms:$("#cst_icms_produto_add").val(),
+    icms:$("#icms_produto_add").val(),
+    cst_pis_cofins:$("#cst_pis_cofins_produto_add").val()
   };
-  $.post("../Models/post_receivers/insert_produto.php", data, function (ret) {
-    if (ret.includes("Codigo_repetido")) {
-      alert("Codigo do produto já existente");
-    } else if (ret.includes("Codigo_barras_repetido")) {
-      alert("Codigo de barras do produto já existente");
-    } else {
-      location.reload();
+  let post_target = "Models/post_receivers/insert_produto.php"
+  
+  $.post(
+   post_target,
+    data,
+    function (ret) {
+      console.log(ret)
+      console.log(data)
+
+      if (ret.includes("Codigo_repetido")) {
+        
+        alert("Codigo do produto já existente, utilize um acima de "+$("#next_code_id").val());
+      } else if (ret.includes("Codigo_barras_repetido")) {
+        alert("Codigo de barras do produto já existente");
+      } else {
+  if(editando_produto){
+    $(".modal_produtos").css("display","flex")
+    $(".modal_adicionar_produto").css("display","none")
+        $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+      console.log(ret)
+      $(".modal_produtos tbody").html(ret)
+  editarProduto()
+  
+    })
+  }else{
+    alert("Produto salvo, já pode cadastrar outro, ou fechar esta janela !")
+    $(".modal_adicionar_produto input").val("")
+
+    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+      console.log(ret)
+      $(".editar_produto").click(function() {
+        $(".modal_alterar_valor").css("display", "flex")  
+        $(".modal_produtos").css("display","none")
+        let produto = $(this).attr("produto")
+        id_produto = produto
+        let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+        $("#novo_preco").val(preco)
+      })
+      $(".modal_produtos tbody").html(ret)
+      $(".editar_produto").click(function() {
+        $(".modal_alterar_valor").css("display", "flex")  
+        $(".modal_produtos").css("display","none")
+        let produto = $(this).attr("produto")
+        id_produto = produto
+        let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+        $("#novo_preco").val(preco)
+      })
+    })
+
+  }
+      }
     }
-  });
+  );
 });
 
 $(".modal_adicionar_produto").submit(function () {});
-
+$("#add_produto_opener").click(function () {
+  editando_produto = false
+  $(".modal_adicionar_produto input[type='text']").val("")
+  data = {};
+  $.post(
+    include_path + "Models/post_receivers/gerar_codigos.php",
+    data,
+    function (ret) {
+      $(".modal_produtos").css("display", "none");
+      console.log(ret);
+      let res = JSON.parse(ret);
+      $("#codigo_barras_produto_add").val(res.codigo);
+      $("#codigo_produto_add").val(res.codigo_id);
+    }
+  );
+})
 $(".modal_funcionarios").submit(function (e) {
   e.preventDefault();
   data = {

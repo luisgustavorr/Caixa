@@ -60,6 +60,65 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 // ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
+<form class="modal modal_adicionar_produto">
+    <div class="first_input_row">
+        <div class="inputs input_nome_produto_add">
+            <label for="">Nome do produto:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite o nome do Produto" name="nome_produto_add" id="nome_produto_add" required>
+        </div>
+        <div class="inputs input_codigo_produto_add">
+            <label for="">Código de barras do produto:</label><br />
+            <input maxlength="13" class="others_inputs" type="text" placeholder="Digite ou leia o Código de barras do Produto" name="codigo_barras_produto_add" id="codigo_barras_produto_add" required>
+        </div>
+
+
+    </div>
+    <div class="second_input_row">
+    <?php  
+
+                $ultimo_id = \MySql::conectar()->prepare("SELECT `id` FROM `tb_produtos` ORDER BY `id` DESC LIMIT 1;");
+                $ultimo_id->execute();
+                $ultimo_id = $ultimo_id->fetch()?>
+                <input type="hidden" id="next_code_id" name=""  value="<?php echo $ultimo_id["id"]?>">
+        <div class="inputs input_codigo_produto_add">
+            <label for="">Código do produto:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite o Código de barras do Produto" name="codigo_produto_add" id="codigo_produto_add" required>
+        </div>
+        <div class="inputs input_preco_produto_add">
+            <label for="">Valor por UN ou KG:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite o preço do Produto"  name="preco_produto_add" id="preco_produto_add" required>
+        </div>
+        <div class="inputs input_codigo_produto_add">
+            <label for="">NCM:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite a porcentagem o NCM" name="ncm_produto_add" id="ncm_produto_add" required>
+        </div>
+        <div class="inputs input_codigo_produto_add">
+            <label for="">CST ICMS:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite o CST do ICMS" name="cst_icms_produto_add" id="cst_icms_produto_add" required>
+        </div>
+        <div class="inputs input_codigo_produto_add">
+            <label for="">ICMS:</label><br />
+            <input class="others_inputs" type="text" placeholder="Pocentagem ICMS. Ex: 18 para 18%" name="icms_produto_add" id="icms_produto_add" required>
+        </div>
+        <div class="inputs input_codigo_produto_add">
+            <label for="">CST PIS COFINS:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite o CST do PIS e COFINS" name="cst_pis_cofins_produto_add" id="cst_pis_cofins_produto_add" required>
+        </div>
+ 
+
+        <div class="inputs input_por_peso">
+            <label for="">É por quilo?</label><br />
+            <div class="inputs_radio_father">
+                <label for="sim">Sim</label>
+                <input class="others_inputs" type="radio" name="produto_por_peso"  value="1" required="" id="sim">
+                <label for="nao">Não</label>
+                <input class="others_inputs" type="radio" name="produto_por_peso" value="0" id="nao">
+            </div>
+
+        </div>
+        <button id="finalziar_button_add">Finalizar</button>
+    </div>
+</form>
 <form class="modal modal_alterar_valor">
   <input   class="others_inputs" type="text" name="novo_preco" id="novo_preco">
 </form>
@@ -109,7 +168,7 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
     </table>
 
     <div class="inputs_add_produto">
-
+    <span id="add_produto_opener" onclick="abrirModal('modal_adicionar_produto')">Adicionar Produto</span>
         <div class="input_pesquisar_produto_father">
             <input class="others_inputs" type="text" placeholder="Pesquisar Produto" id="pesquisar_produto">
             <div id="pesquisar_produto_button"><i class="fa-solid fa-magnifying-glass"></i></div>
