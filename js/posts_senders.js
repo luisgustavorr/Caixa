@@ -2,6 +2,8 @@ console.log(TestaCPF("15483790693"))
 $('#pesquisar_produto_button').click(function(e){
   $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
     console.log(ret)
+   
+    $(".modal_produtos tbody").html(ret)
     $(".editar_produto").click(function() {
       $(".modal_alterar_valor").css("display", "flex")  
       $(".modal_produtos").css("display","none")
@@ -9,9 +11,8 @@ $('#pesquisar_produto_button').click(function(e){
       id_produto = produto
       let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
       $("#novo_preco").val(preco)
+      
     })
-    $(".modal_produtos tbody").html(ret)
-
   })
 })
 $("#novo_preco").mask("000.00",{reverse:true})
