@@ -14,7 +14,7 @@ use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
 
 
-$cookieteste = 3;
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 $arrayRetorno = [
     'retorno' => [],
 
@@ -96,12 +96,12 @@ $select_nfe->execute(array($data_ultima_venda, $caixa["caixa"]));
 $select_nfe = $select_nfe->fetchAll();
 
 
-//    if(count($select_nfe) !=0){
-//          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-//           $arrayRetorno['data'] = $data_formatada;
-//       $arrayRetorno["retornoRecibo"] = "";
-//        exit;
-//     }
+   if(count($select_nfe) !=0){
+         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+          $arrayRetorno['data'] = $data_formatada;
+      $arrayRetorno["retornoRecibo"] = "";
+       exit;
+    }
 
 function criarArquivoNFe($data_atual, $tipo, $arquivo)
 {
