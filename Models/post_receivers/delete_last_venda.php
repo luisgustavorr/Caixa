@@ -7,7 +7,7 @@ use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
-$cookieteste = 3;
+$cookieteste = $_COOKIE['last_codigo_colaborador'];
 
 try {
 
