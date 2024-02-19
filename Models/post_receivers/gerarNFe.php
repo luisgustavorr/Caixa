@@ -151,7 +151,7 @@ try {
     $std->mod = 65;
     $std->serie = $n_nfe;
     // $n_nfe
-    $std->nNF = 1000;
+    $std->nNF = $n_nfE;
     $std->dhEmi = (new \DateTime())->format('Y-m-d\TH:i:sP');
     $std->dhSaiEnt = null;
     $std->tpNF = 1;
