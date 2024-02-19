@@ -413,7 +413,7 @@ try {
             //erro registrar e voltar
             $stdCl = new Standardize($resp);
             $arr = $stdCl->toArray();
-            print_r($arr);
+     
             $nProt = $arr["protNFe"]["infProt"]["nProt"];
             $chNFe = $arr["protNFe"]["infProt"]["chNFe"];
 
