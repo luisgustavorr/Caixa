@@ -7,7 +7,7 @@ use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
 use NFePHP\NFe\Complements;
-$cookieteste = $_COOKIE['last_codigo_colaborador'];
+$cookieteste = 3;
 
 try {
 
@@ -19,15 +19,16 @@ try {
     $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` INNER JOIN `tb_caixas` ON  `tb_caixas`.`caixa` = `tb_equipamentos`.`caixa` WHERE `tb_equipamentos`.`caixa` = ?");
     $caixa->execute(array($colab['caixa']));
     $caixa = $caixa->fetch();
-    $select_last_venda = \MySql::conectar()->prepare("SELECT * FROM `tb_vendas` WHERE `pedido_id` = 0 AND `caixa` = ?
+    $select_last_venda = \MySql::conectar()->prepare("SELECT * FROM `tb_vendas` WHERE `pedido_id` = 0 AND `colaborador` = ?
     ORDER BY `tb_vendas`.`id` DESC
     LIMIT 1;");
-        $select_last_venda->execute(array($caixa["caixa"]));
+        $select_last_venda->execute(array($cookieteste));
         $select_last_venda = $select_last_venda->fetch();
         $select_nfce = \MySql::conectar()->prepare("SELECT * FROM `tb_nfe` WHERE data_venda = ?");
         $select_nfce->execute(array($select_last_venda["data"]));
         $select_nfce = $select_nfce->fetch();
-        print_r($select_nfce);
+   
+
     $infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/" . $caixa['CEP']), true);
 
     $arr = [
@@ -65,7 +66,7 @@ try {
         $equip = \MySql::conectar()->prepare("DELETE FROM `tb_vendas` WHERE `pedido_id` = 0 AND `caixa` = ?
         ORDER BY `tb_vendas`.`id` DESC
         LIMIT 1;");
-        $equip->execute(array($_COOKIE["caixa"]));
+        $equip->execute(array($caixa["caixa"]));
     if ($arquivo == "MIX SALGADOS VARIADOS LTDA50070086000105 - Senha Carol@22.pfx") {
 
         $senha_certificado = "Carol@22";
@@ -95,8 +96,8 @@ try {
     $json = $stdCl->toJson();
 
     //verifique se o evento foi processado
-    if ($std->cStat != 128) {
-        print_r($std);
+    if ($std->cStat != 501) {
+        echo "Tempo de Cancelamento Expirado, Impossível Cancelar Nota Fiscal. Chave Nota Fiscal => ",$chave;
         //houve alguma falha e o evento não foi processado
         //TRATAR
     } else {
@@ -105,11 +106,12 @@ try {
             //SUCESSO PROTOCOLAR A SOLICITAÇÂO ANTES DE GUARDAR
             $xml = Complements::toAuthorize($tools->lastRequest, $response);
             //grave o XML protocolado 
-            print_r($xml);
+            echo "Sucesso";
         } else {
             //houve alguma falha no evento 
             //TRATAR
-            print_r($std);
+            echo "Erro ao cancelar Nota Fiscal, Status do Erro : ".  $cStat ;
+
         }
     }
 } catch (\Exception $e) {
