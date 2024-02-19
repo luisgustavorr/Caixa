@@ -100,6 +100,7 @@ $select_nfe = $select_nfe->fetchAll();
          $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
           $arrayRetorno['data'] = $data_formatada;
       $arrayRetorno["retornoRecibo"] = "";
+      print_r(json_encode($arrayRetorno));
        exit;
     }
 
