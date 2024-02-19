@@ -96,13 +96,13 @@ $select_nfe->execute(array($data_ultima_venda, $caixa["caixa"]));
 $select_nfe = $select_nfe->fetchAll();
 
 
-   if(count($select_nfe) !=0){
-         $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-          $arrayRetorno['data'] = $data_formatada;
-      $arrayRetorno["retornoRecibo"] = "";
-      print_r(json_encode($arrayRetorno));
-       exit;
-    }
+if (count($select_nfe) != 0) {
+    $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+    $arrayRetorno['data'] = $data_formatada;
+    $arrayRetorno["retornoRecibo"] = "";
+    print_r(json_encode($arrayRetorno));
+    exit;
+}
 
 function criarArquivoNFe($data_atual, $tipo, $arquivo)
 {
@@ -398,37 +398,37 @@ try {
 
 
     $xml = $tools->signNFe($xml);
- 
+
 
     // echo $xml;
 
 
     try {
-        $idLote = substr(str_replace('.','',$caixa["CNPJ"]),0,3).date('ymdHis');
-        $resp = $tools->sefazEnviaLote([$xml], $idLote,1);
+        $idLote = substr(str_replace('.', '', $caixa["CNPJ"]), 0, 3) . date('ymdHis');
+        $resp = $tools->sefazEnviaLote([$xml], $idLote, 1);
 
         $st = new NFePHP\NFe\Common\Standardize();
         $xmlResposta = $resp;
         $std = $st->toStd($resp);
-        
-            //erro registrar e voltar
-            $stdCl = new Standardize($resp);
-            $arr = $stdCl->toArray();
-     
-            $nProt = $arr["protNFe"]["infProt"]["nProt"];
-            $chNFe = $arr["protNFe"]["infProt"]["chNFe"];
 
-            if (!isset($_POST['data_venda'])) {
-                $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`,`protocolo`,`chaveNFe`) VALUES (NULL, ?, ?, ?,?,?,?,?);");
-                $insert_nfe->execute(array($data_emissao, $data_ultima_venda, $n_nfe, 1, $caixa["caixa"], $nProt, $chNFe));
-            } else {
-                $update = \MySql::conectar()->prepare("UPDATE tb_nfe SET impressa = 1 WHERE data_venda = ? AND impressa = 0 AND caixa = ? ");
-                $update->execute(array($data_ultima_venda, $caixa["caixa"]));
-            }
-            $arrayRetorno["retornoRecibo"] = $std;
+        //erro registrar e voltar
+        $stdCl = new Standardize($resp);
+        $arr = $stdCl->toArray();
 
-      
-        
+        $nProt = $arr["protNFe"]["infProt"]["nProt"];
+        $chNFe = $arr["protNFe"]["infProt"]["chNFe"];
+
+        if (!isset($_POST['data_venda'])) {
+            $insert_nfe = \MySql::conectar()->prepare("INSERT INTO `tb_nfe` (`id`, `data`, `data_venda`, `numero_nfe`,`impressa`,`caixa`,`protocolo`,`chaveNFe`) VALUES (NULL, ?, ?, ?,?,?,?,?);");
+            $insert_nfe->execute(array($data_emissao, $data_ultima_venda, $n_nfe, 1, $caixa["caixa"], $nProt, $chNFe));
+        } else {
+            $update = \MySql::conectar()->prepare("UPDATE tb_nfe SET impressa = 1 WHERE data_venda = ? AND impressa = 0 AND caixa = ? ");
+            $update->execute(array($data_ultima_venda, $caixa["caixa"]));
+        }
+        $arrayRetorno["retornoRecibo"] = $std;
+
+
+
 
         $req = $xml;
         $res = $xmlResposta;
