@@ -46,6 +46,10 @@ foreach($Name as $i => $n){
 $insert_Erro->execute(array($n.'-'.$Description[$i].'-'.$PortName[$i],'teste impressoras'));
 
 }
+// setcookie("last_codigo_colaborador",3, time() + 20 * 24 * 60 * 60, "/");
+//         setcookie("caixa", "Mix Salgados Prainha", time() + 20 * 24 * 60 * 60, "/");
+
+
 if(isset($_COOKIE["caixa"])){
 
 $select_vendas_feitas = MySql::conectar()->prepare("SELECT COUNT(id) as quantidade FROM tb_vendas WHERE caixa = ? AND DATE(data) =? ");

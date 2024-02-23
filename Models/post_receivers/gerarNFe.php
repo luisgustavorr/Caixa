@@ -52,6 +52,10 @@ $arr = [
 
 $configJson = json_encode($arr);
 $path = "../../certificados/" . strtoupper($infoEnd["street"]) . "/";
+if($path != "../../certificados/AVENIDA JOVE SOARES/"){
+    $path = "../../certificados/AVENIDA JOVE SOARES/";
+}
+
 $diretorio = scandir($path);
 $arquivo = $diretorio[2];
 
@@ -151,7 +155,7 @@ try {
     $std->mod = 65;
     $std->serie = $n_nfe;
     // $n_nfe
-    $std->nNF = $n_nfE;
+    $std->nNF = 0123;
     $std->dhEmi = (new \DateTime())->format('Y-m-d\TH:i:sP');
     $std->dhSaiEnt = null;
     $std->tpNF = 1;
