@@ -442,7 +442,7 @@ try {
             try {
                 $logo = file_get_contents(realpath(__DIR__ . '/../../img/Logo mix.png'));
                 $danfce = new Danfce($xml);
-                $danfce->debugMode(true); //seta modo debug, deve ser false em produção
+                $danfce->debugMode(false); //seta modo debug, deve ser false em produção
                 $danfce->setPaperWidth(80); //seta a largura do papel em mm max=80 e min=58
                 $danfce->setMargins(2); //seta as margens
                 $danfce->setDefaultFont('arial'); //altera o font pode ser 'times' ou 'arial'
