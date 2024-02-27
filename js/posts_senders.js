@@ -5,6 +5,7 @@ $('#pesquisar_produto_button').click(function(e){
    
     $(".modal_produtos tbody").html(ret)
     $(".editar_produto").click(function() {
+        $("#novo_preco").focus()
       $(".modal_alterar_valor").css("display", "flex")  
       $(".modal_produtos").css("display","none")
       let produto = $(this).attr("produto")
@@ -16,7 +17,6 @@ $('#pesquisar_produto_button').click(function(e){
   })
 })
 $("#novo_preco").mask("000.00",{reverse:true})
-
 let id_produto = 0;
 let preco= 0
 $(".editar_produto").click(function() {
@@ -24,8 +24,11 @@ $(".editar_produto").click(function() {
   $(".modal_produtos").css("display","none")
   let produto = $(this).attr("produto")
   id_produto = produto
+
    preco = $(".produto_"+produto+" .preco").text().replace(",",".")
   console.log(preco)
+  $("#novo_preco").focus()
+
   $("#novo_preco").val(preco)
 })
 $("#novo_preco").keyup((e)=>{
@@ -38,6 +41,7 @@ $("#novo_preco").keyup((e)=>{
         console.log(ret)
         $(".modal_produtos tbody").html(ret)
         $(".editar_produto").click(function() {
+            $("#novo_preco").focus()
           $(".modal_alterar_valor").css("display", "flex")  
           $(".modal_produtos").css("display","none")
           let produto = $(this).attr("produto")
@@ -51,13 +55,23 @@ $("#novo_preco").keyup((e)=>{
     $(".modal_produtos").css("display","flex")
   }
 })
+$("#export_db").click(()=>{
+  $.post("Models/post_receivers/generateTXITENS.php",{},(ret)=>{
+    console.log(ret)
+      alert("Sucesso ! Arquivo pronto para ser importado pelo qendra!")
+    		
+  })
+})
 $("#pesquisar_produto").keyup((e)=>{
   if(e.keyCode == 13){
+    $("#novo_preco").focus()
+
     e.preventDefault()
     $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
       console.log(ret)
       $(".modal_produtos tbody").html(ret)
       $(".editar_produto").click(function() {
+          $("#novo_preco").focus()
         $(".modal_alterar_valor").css("display", "flex")  
         $(".modal_produtos").css("display","none")
         let produto = $(this).attr("produto")
@@ -188,6 +202,7 @@ $("#add_produto_opener").click(function () {
     $("#codigo_produto_add").val(res.codigo_id);
   });
 });
+
 $(".modal_adicionar_produto").submit(function (e) {
   e.preventDefault();
  let data = {
@@ -232,6 +247,7 @@ $(".modal_adicionar_produto").submit(function (e) {
     $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
       console.log(ret)
       $(".editar_produto").click(function() {
+          $("#novo_preco").focus()
         $(".modal_alterar_valor").css("display", "flex")  
         $(".modal_produtos").css("display","none")
         let produto = $(this).attr("produto")
@@ -241,6 +257,7 @@ $(".modal_adicionar_produto").submit(function (e) {
       })
       $(".modal_produtos tbody").html(ret)
       $(".editar_produto").click(function() {
+          $("#novo_preco").focus()
         $(".modal_alterar_valor").css("display", "flex")  
         $(".modal_produtos").css("display","none")
         let produto = $(this).attr("produto")

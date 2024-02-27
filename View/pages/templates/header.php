@@ -50,6 +50,7 @@ WHERE codigo = ?");
 object-fit: contain;" />
       <div class="right_side">
         <span><i class="fa-regular fa-clock"></i> <date_now class=" horario_atual_finder">Seg: 10/07/2023 10h40</date_now></span>
+        <i id="export_db" class="fa-solid fa-file-export"></i>
         <i class="fa-solid fa-bars menu"></i>
       </div>
     </header>

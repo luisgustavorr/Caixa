@@ -64,6 +64,7 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 // ReportError::conectar('t4este',"ahristocrat4@gmail.com")
 ?>
 <fundo></fundo>
+
 <form class="modal modal_adicionar_produto">
     <div class="first_input_row">
         <div class="inputs input_nome_produto_add">
