@@ -16,6 +16,8 @@ $('#pesquisar_produto_button').click(function(e){
     })
   })
 })
+$("#codigo_produto_add").mask("0000")
+
 $("#novo_preco").mask("000.00",{reverse:true})
 let id_produto = 0;
 let preco= 0
@@ -195,13 +197,14 @@ $("#imprimir_ultima_venda").click(function () {
 $("#add_produto_opener").click(function () {
   $(".modal_produtos").css("display", "none");
   data = {};
-  $.post("../Models/post_receivers/gerar_codigos.php", data, function (ret) {
+  $.post("/Models/post_receivers/gerar_codigos.php", data, function (ret) {
     console.log(ret);
     let res = JSON.parse(ret);
     $("#codigo_barras_produto_add").val(res.codigo);
     $("#codigo_produto_add").val(res.codigo_id);
   });
 });
+$("#ncm_produto_add").mask("0000.00.00")
 
 $(".modal_adicionar_produto").submit(function (e) {
   e.preventDefault();
@@ -214,7 +217,9 @@ $(".modal_adicionar_produto").submit(function (e) {
     ncm:$("#ncm_produto_add").val(),
     cst_icms:$("#cst_icms_produto_add").val(),
     icms:$("#icms_produto_add").val(),
-    cst_pis_cofins:$("#cst_pis_cofins_produto_add").val()
+    cst_pis_cofins:$("#cst_pis_cofins_produto_add").val(),
+    validade:$("#validade_produto_add").val()
+
   };
   let post_target = "Models/post_receivers/insert_produto.php"
   
@@ -242,6 +247,14 @@ $(".modal_adicionar_produto").submit(function (e) {
     })
   }else{
     alert("Produto salvo, já pode cadastrar outro, ou fechar esta janela !")
+    $.post("Models/post_receivers/gerar_codigos.php", {}, (ret) => {
+      console.log(ret)
+      let retJSON = JSON.parse(ret)
+      $("#codigo_barras_produto_add").val(retJSON.codigo)
+      $("#codigo_produto_add").val(retJSON.codigo_id)
+  
+    })
+
     $(".modal_adicionar_produto input").val("")
 
     $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
@@ -272,14 +285,53 @@ $(".modal_adicionar_produto").submit(function (e) {
     }
   );
 });
+$(".inputs_radio_father #sim").click(function() {
+  $.post("Models/post_receivers/gerar_codigos_balanca.php", {
+    codigo: $("#codigo_produto_add").val()
+  }, (ret) => {
+    $("#codigo_barras_produto_add").val(ret)
 
+
+
+  })
+})
+$("#codigo_produto_add").blur(function(){
+  let por_peso = $('input[name="produto_por_peso"]:checked').val()
+  if(por_peso == 1){
+  $.post("Models/post_receivers/gerar_codigos_balanca.php", {
+    codigo: $("#codigo_produto_add").val()
+  }, (ret) => {
+    $("#codigo_barras_produto_add").val(ret)
+
+
+
+  })
+  }else{
+  $.post("Models/post_receivers/gerar_codigos.php", {codigo : $("#codigo_produto_add").val() }, (ret) => {
+    console.log(ret)
+    let retJSON = JSON.parse(ret)
+    $("#codigo_barras_produto_add").val(retJSON.codigo)
+    $("#codigo_produto_add").val(retJSON.codigo_id)
+
+  })
+  }
+})
+$(".inputs_radio_father #nao").click(function() {
+  $.post("Models/post_receivers/gerar_codigos.php", {codigo: $("#codigo_produto_add").val()}, (ret) => {
+    console.log(ret)
+    let retJSON = JSON.parse(ret)
+    $("#codigo_barras_produto_add").val(retJSON.codigo)
+    $("#codigo_produto_add").val(retJSON.codigo_id)
+
+  })
+})
 $(".modal_adicionar_produto").submit(function () {});
 $("#add_produto_opener").click(function () {
   editando_produto = false
   $(".modal_adicionar_produto input[type='text']").val("")
   data = {};
   $.post(
-    include_path + "Models/post_receivers/gerar_codigos.php",
+    "Models/post_receivers/gerar_codigos.php",
     data,
     function (ret) {
       $(".modal_produtos").css("display", "none");

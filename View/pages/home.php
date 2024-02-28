@@ -110,7 +110,10 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
             <input class="others_inputs" type="text" placeholder="Digite o CST do PIS e COFINS" name="cst_pis_cofins_produto_add" id="cst_pis_cofins_produto_add" required>
         </div>
  
-
+        <div class="inputs input_codigo_produto_add">
+            <label for="">Validade em dias:</label><br />
+            <input class="others_inputs" type="text" placeholder="Digite os dias que esse produto possui de validade" name="validade_produto_add" id="validade_produto_add" >
+        </div>
         <div class="inputs input_por_peso">
             <label for="">É por quilo?</label><br />
             <div class="inputs_radio_father">

@@ -43,13 +43,24 @@ $ultimo_id = $ultimo_id->fetch();
 
 
 // Gerar o código para a coluna "codigo_id"
-
-do {
+if(isset($_POST["codigo"])){
+    $codigo = $_POST["codigo"];
+}else{
     $codigo = generateRandomCode(4);
+}
+$repeticoes = 0;
+do {
     $codigo_barras = "789".$primeiros5Digitos.$codigo;
     $codigo_barras =IncluiDigito($codigo_barras);
     $row = \MySql::conectar()->prepare("SELECT * FROM `tb_produtos` WHERE `codigo_id` = ?");
     $row->execute(array($codigo));
+    if($repeticoes >= 1){
+        $codigo ++;
+        $codigo_barras = "789".$primeiros5Digitos.$codigo;
+        $codigo_barras =IncluiDigito($codigo_barras);
+    }
+    $repeticoes ++;
+
 } while ($row->rowCount() > 0);
 $res = [
     "codigo"=> "$codigo_barras",
@@ -58,4 +69,3 @@ $res = [
 
 print_r(json_encode($res));
 ?>
-GERAL_200_ROSQUINHA DA VOVO_200_5,9_5,90_UNIDAD   _3_""_0_0_""_""_""_N_0_1_100_""_0_0_0_0_0_0_0_0_0_0_G_""_""_""_5,9_0_5,9_0_0_0_0_0_0_0
