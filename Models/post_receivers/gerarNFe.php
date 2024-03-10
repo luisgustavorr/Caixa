@@ -1,7 +1,6 @@
 <?php
 include('../../MySql.php');
 
-error_reporting(E_ERROR);
 ini_set('display_errors', 'On');
 require __DIR__ . '/../../vendor/autoload.php';
 date_default_timezone_set('America/Sao_Paulo');
@@ -28,15 +27,14 @@ $caixa = \MySql::conectar()->prepare("SELECT * FROM `tb_equipamentos` INNER JOIN
 $caixa->execute(array($colab['caixa']));
 $caixa = $caixa->fetch();
 
-$infoEnd = json_decode(file_get_contents("https://brasilapi.com.br/api/cep/v1/" . $caixa['CEP']), true);
-
+$infoEnd = json_decode(file_get_contents("https://viacep.com.br/ws/". $caixa['CEP']."/json/" ), true);
 $arr = [
     "atualizacao" => date('Y-m-d h:i:s'),
     "tpAmb" => 1,
     "razaosocial" => $caixa["caixa"],
     "cnpj" => $caixa["CNPJ"] . "", // PRECISA SER VÁLIDO
     "ie" => $caixa["IE"] . "", // PRECISA SER VÁLIDO
-    "siglaUF" => $infoEnd["state"],
+    "siglaUF" => $infoEnd["uf"],
     "schemes" => "PL_009_V4",
     "versao" => '4.00',
     "tokenIBPT" => "AAAAAAA",
@@ -51,7 +49,7 @@ $arr = [
 ];
 
 $configJson = json_encode($arr);
-$path = "../../certificados/" . strtoupper($infoEnd["street"]) . "/";
+$path = "../../certificados/" . strtoupper($infoEnd["logradouro"]) . "/";
 if($path != "../../certificados/AVENIDA JOVE SOARES/"){
     $path = "../../certificados/AVENIDA JOVE SOARES/";
 }
@@ -100,13 +98,13 @@ $select_nfe->execute(array($data_ultima_venda, $caixa["caixa"]));
 $select_nfe = $select_nfe->fetchAll();
 
 
-if (count($select_nfe) != 0) {
-    $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
-    $arrayRetorno['data'] = $data_formatada;
-    $arrayRetorno["retornoRecibo"] = "";
-    print_r(json_encode($arrayRetorno));
-    exit;
-}
+// if (count($select_nfe) != 0) {
+//     $data_formatada = date("Y-m-d-H-i-s", strtotime($select_nfe[0]['data']));
+//     $arrayRetorno['data'] = $data_formatada;
+//     $arrayRetorno["retornoRecibo"] = "";
+//     print_r(json_encode($arrayRetorno));
+//     exit;
+// }
 
 function criarArquivoNFe($data_atual, $tipo, $arquivo)
 {
@@ -190,14 +188,14 @@ try {
 
     //enderEmit OBRIGATÓRIA
     $std = new \stdClass();
-    $std->xLgr = $infoEnd["street"];
+    $std->xLgr = $infoEnd["logradouro"];
     $std->nro = $caixa["numero"];
     $std->xCpl = ' ';
-    $std->xBairro = $infoEnd["neighborhood"];
+    $std->xBairro = $infoEnd["bairro"];
     $std->cMun = 3133808;
-    $std->xMun = $infoEnd["city"];
-    $std->UF = $infoEnd["state"];
-    $std->CEP = $caixa["CEP"];
+    $std->xMun = $infoEnd["localidade"];
+    $std->UF = $infoEnd["uf"];
+    $std->CEP = str_replace("-","",$caixa["CEP"]);
     $std->cPais = 1058;
     $std->xPais = 'Brasil';
     $std->fone = '3799510441';
@@ -365,8 +363,10 @@ try {
         "04" => "Cartão Débito",
         "17" => "Pix",
     ];
+
     $arrayFormaPagamento = array_flip($arrayFormaPagamento);
     $std = new \stdClass();
+
     if ($vendas_com_ultima_data[0]["forma_pagamento"] == 'Cartão Crédito') {
         $indPag = 2;
     } else {
@@ -377,6 +377,7 @@ try {
     } else {
         $tPag = $arrayFormaPagamento[$vendas_com_ultima_data[0]["forma_pagamento"]];
     }
+
     $std->tPag =  $tPag;
     $std->vPag = $valor_total_produtos +  $vendas_com_ultima_data[0]["troco"];
     $std->tpIntegra = 2;
@@ -398,6 +399,7 @@ try {
     // $make->taginfRespTec($std);
 
     $make->monta();
+
     $xml = $make->getXML();
 
 
