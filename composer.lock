@@ -266,12 +266,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nfephp-org/sped-da.git",
-                "reference": "e2727f74a8da8e96454a1efe4f2c1e172d15e513"
+                "reference": "6b7f513912dd76034f02e752db4d18747b6a157c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nfephp-org/sped-da/zipball/e2727f74a8da8e96454a1efe4f2c1e172d15e513",
-                "reference": "e2727f74a8da8e96454a1efe4f2c1e172d15e513",
+                "url": "https://api.github.com/repos/nfephp-org/sped-da/zipball/6b7f513912dd76034f02e752db4d18747b6a157c",
+                "reference": "6b7f513912dd76034f02e752db4d18747b6a157c",
                 "shasum": ""
             },
             "require": {
@@ -335,7 +335,7 @@
                 "issues": "https://github.com/nfephp-org/sped-da/issues",
                 "source": "https://github.com/nfephp-org/sped-da/tree/master"
             },
-            "time": "2023-11-28T13:47:51+00:00"
+            "time": "2024-01-30T12:13:57+00:00"
         },
         {
             "name": "nfephp-org/sped-gtin",
@@ -421,16 +421,16 @@
         },
         {
             "name": "nfephp-org/sped-nfe",
-            "version": "v5.1.19",
+            "version": "v5.1.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nfephp-org/sped-nfe.git",
-                "reference": "a423a321e3fa84842b693d6c2f4e88404ce49cbd"
+                "reference": "ab03aef87b561d523aeefc6972fbebfea435ddce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nfephp-org/sped-nfe/zipball/a423a321e3fa84842b693d6c2f4e88404ce49cbd",
-                "reference": "a423a321e3fa84842b693d6c2f4e88404ce49cbd",
+                "url": "https://api.github.com/repos/nfephp-org/sped-nfe/zipball/ab03aef87b561d523aeefc6972fbebfea435ddce",
+                "reference": "ab03aef87b561d523aeefc6972fbebfea435ddce",
                 "shasum": ""
             },
             "require": {
@@ -497,9 +497,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nfephp-org/sped-nfe/issues",
-                "source": "https://github.com/nfephp-org/sped-nfe/tree/v5.1.19"
+                "source": "https://github.com/nfephp-org/sped-nfe/tree/v5.1.22"
             },
-            "time": "2023-12-19T20:23:23+00:00"
+            "time": "2024-03-08T11:55:09+00:00"
         },
         {
             "name": "nfephp-org/sped-pos",

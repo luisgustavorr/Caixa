@@ -21,7 +21,9 @@ WHERE codigo = ?");
     <link rel="stylesheet" href="<?php echo INCLUDE_PATH?>View/pages/style/style.css" />
 
     <link rel="stylesheet" href="<?php echo INCLUDE_PATH?>fontawesome-free-6.4.2-web/css/all.min.css" />
-
+    <script src= 
+"https://cdnjs.cloudflare.com/ajax/libs/usb/1.4.0/usb.js"> 
+    </script> 
     <title>MixSalgados PDV</title>
     <script type="text/javascript" src="<?php echo INCLUDE_PATH?>js/jquery.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">

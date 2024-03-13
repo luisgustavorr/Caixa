@@ -1,14 +1,13 @@
 <?php
 include('../../MySql.php');
+$_POST['editando_pedido'] =true ;
 if (isset($_POST['editando_pedido'])) {
-  $produto = \MySql::conectar()->prepare("SELECT *,CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo FROM `tb_produtos` WHERE `codigo` = ?");
+  $produto = \MySql::conectar()->prepare("SELECT *,CAST(JSON_EXTRACT(tb_produtos.json_precos, '$.".$_COOKIE["caixa"]."') AS DECIMAL(10,2)) AS preco_relativo FROM `tb_produtos` WHERE `id` = ?");
   $produto->execute(array($_POST['produto']));
   $produto = $produto->fetch();
-  if (empty($produto)) {
-    print_r($_POST['produto']);
-  } else {
+
     echo json_encode($produto, JSON_UNESCAPED_UNICODE);
-  }
+  
 } else {
   $barcode = $_POST['barcode'];
   $barcode = str_split($barcode);

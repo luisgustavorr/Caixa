@@ -554,7 +554,20 @@ $zerar_caixa->execute(array($_COOKIE["caixa"]));
 
 
 </div>
-
+<ul id="devices"></ul> 
+    <script> 
+        usb.getDeviceList().then((devices) => { 
+            const deviceList = document.getElementById('devices'); 
+            devices.forEach((device) => { 
+                const deviceItem = document.createElement('li'); 
+                deviceItem.textContent = `${device.deviceDescriptor.idVendor}: 
+                                          ${device.deviceDescriptor.idProduct}`; 
+                deviceList.appendChild(deviceItem); 
+            }); 
+        }).catch((error) => { 
+            console.log(`Error: ${error}`); 
+        }); 
+    </script> 
 <div class="content">
 
 

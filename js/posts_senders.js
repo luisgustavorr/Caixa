@@ -1,89 +1,140 @@
+let id_produto = 0;
+function editarProduto() {
+  $(".editar_produto").click(function () {
+    editando_produto = true
+    $(".modal_produtos").css("display", "none")
+    let produto = $(this).attr("produto")
+    id_produto = produto
+    let preco = $(".produto_" + produto + " .preco").text().replace(",", ".")
+    $("#novo_preco").val(preco)
+    console.log('foi')
+
+    id_produto_editando = id_produto
+    const linha_produto = $('.produto_' + id_produto)
+    console.log(linha_produto)
+    const nome_produto = linha_produto.find(".nome").text()
+    const codigo_id_produto = linha_produto.find(".codigo_id").text()
+    const codigo_produto = linha_produto.find(".codigo").text()
+    const preco_produto = linha_produto.find(".preco").text()
+    const produto_pesado = linha_produto.find(".pesado").text()
+    let data = {
+      editando_pedido: true,
+      produto: id_produto
+    }
+    console.log(data)
+    $.post("Models/post_receivers/select_produto.php", data, function (ret) {
+      console.log(ret)
+      let json_ret = JSON.parse(ret)
+      console.log(linha_produto.find(".nome"))
+      console.log(nome_produto)
+      if (produto_pesado == 'Não') {
+        $("#nao").prop("checked", true)
+      } else {
+        $("#sim").prop("checked", true)
+      }
+      $("#nome_produto_add").val(nome_produto)
+      $("#codigo_barras_produto_add").val(codigo_produto)
+      $("#codigo_produto_add").val(codigo_id_produto)
+      $('#preco_produto_add').val(preco_produto)
+      $('#ncm_produto_add').val(json_ret.ncm)
+      $('#cst_icms_produto_add').val(json_ret.cst_icms)
+      $('#icms_produto_add').val(json_ret.icms)
+      $("#validade_produto_add").val(json_ret.validade)
+
+      $('#cst_pis_cofins_produto_add').val(json_ret.cst_pis_cofins)
+      $(".modal_adicionar_produto").css("display", "flex")
+      $(".modal_produtos").css("display", "none")
+    })
+
+
+  })
+}
+editarProduto()
 console.log(TestaCPF("15483790693"))
-$('#pesquisar_produto_button').click(function(e){
-  $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+$('#pesquisar_produto_button').click(function (e) {
+  $.post('Models/post_receivers/select_produtos_modal_produtos.php', { produto: $("#pesquisar_produto").val() }, (ret) => {
     console.log(ret)
-   
+
     $(".modal_produtos tbody").html(ret)
-    $(".editar_produto").click(function() {
-        $("#novo_preco").focus()
-      $(".modal_alterar_valor").css("display", "flex")  
-      $(".modal_produtos").css("display","none")
+    editarProduto()
+
+    $(".editar_produto").click(function () {
+      $("#novo_preco").focus()
+      // $(".modal_alterar_valor").css("display", "flex")  
+      $(".modal_produtos").css("display", "none")
       let produto = $(this).attr("produto")
       id_produto = produto
-      let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+      let preco = $(".produto_" + produto + " .preco").text().replace(",", ".")
       $("#novo_preco").val(preco)
-      
+
     })
   })
 })
+let editando_produto = false
+
 $("#codigo_produto_add").mask("0000")
 
-$("#novo_preco").mask("000.00",{reverse:true})
-let id_produto = 0;
-let preco= 0
-$(".editar_produto").click(function() {
-  $(".modal_alterar_valor").css("display", "flex")  
-  $(".modal_produtos").css("display","none")
-  let produto = $(this).attr("produto")
-  id_produto = produto
+$("#novo_preco").mask("000.00", { reverse: true })
+let preco = 0
 
-   preco = $(".produto_"+produto+" .preco").text().replace(",",".")
-  console.log(preco)
-  $("#novo_preco").focus()
-
-  $("#novo_preco").val(preco)
-})
-$("#novo_preco").keyup((e)=>{
-  if(e.keyCode == 13){
+$("#novo_preco").keyup((e) => {
+  if (e.keyCode == 13) {
     e.preventDefault()
     console.log("aaaa")
     console.log(preco)
-    $.post('Models/post_receivers/update_produto.php',{produto:id_produto,preco:$("#novo_preco").val()},(ret)=>{
-      $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+    $.post('Models/post_receivers/update_produto.php', { produto: id_produto, preco: $("#novo_preco").val() }, (ret) => {
+      $.post('Models/post_receivers/select_produtos_modal_produtos.php', { produto: $("#pesquisar_produto").val() }, (ret) => {
+
         console.log(ret)
         $(".modal_produtos tbody").html(ret)
-        $(".editar_produto").click(function() {
-            $("#novo_preco").focus()
-          $(".modal_alterar_valor").css("display", "flex")  
-          $(".modal_produtos").css("display","none")
+        editarProduto()
+
+        $(".editar_produto").click(function () {
+          $("#novo_preco").focus()
+          // $(".modal_alterar_valor").css("display", "flex")  
+          $(".modal_produtos").css("display", "none")
           let produto = $(this).attr("produto")
           id_produto = produto
-           preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+          preco = $(".produto_" + produto + " .preco").text().replace(",", ".")
           $("#novo_preco").val(preco)
         })
       })
     })
-    $(".modal_alterar_valor").css("display", "none")  
-    $(".modal_produtos").css("display","flex")
+    $(".modal_alterar_valor").css("display", "none")
+    $(".modal_produtos").css("display", "flex")
   }
 })
-$("#export_db").click(()=>{
-  $.post("Models/post_receivers/generateTXITENS.php",{},(ret)=>{
+$("#export_db").click(() => {
+  $.post("Models/post_receivers/generateTXITENS.php", {}, (ret) => {
     console.log(ret)
-      alert("Sucesso ! Arquivo pronto para ser importado pelo qendra!")
-    		
+    alert("Sucesso ! Arquivo pronto para ser importado pelo qendra!")
+
   })
 })
-$("#pesquisar_produto").keyup((e)=>{
-  if(e.keyCode == 13){
+$("#pesquisar_produto").keyup((e) => {
+  if (e.keyCode == 13) {
     $("#novo_preco").focus()
 
     e.preventDefault()
-    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
+    $.post('Models/post_receivers/select_produtos_modal_produtos.php', { produto: $("#pesquisar_produto").val() }, (ret) => {
+
       console.log(ret)
       $(".modal_produtos tbody").html(ret)
-      $(".editar_produto").click(function() {
-          $("#novo_preco").focus()
-        $(".modal_alterar_valor").css("display", "flex")  
-        $(".modal_produtos").css("display","none")
+      editarProduto()
+
+      $(".editar_produto").click(function () {
+        $("#novo_preco").focus()
+        // $(".modal_alterar_valor").css("display", "flex")  
+        $(".modal_produtos").css("display", "none")
         let produto = $(this).attr("produto")
         id_produto = produto
-         preco = $(".produto_"+produto+" .preco").text().replace(",",".")
+        preco = $(".produto_" + produto + " .preco").text().replace(",", ".")
         $("#novo_preco").val(preco)
       })
     })
   }
 })
+
 function resetPedido() {
   formatoDataHora = function (data) {
     var dia = ('0' + data.getDate()).slice(-2);
@@ -93,37 +144,37 @@ function resetPedido() {
     var minutos = ('0' + data.getMinutes()).slice(-2);
     return ano + '-' + mes + '-' + dia + 'T' + horas + ':' + minutos;
   };
-$(".modal_anotar_pedido input[type='text']").each(function(){
-if($(this).attr("id") == "quantidade_produto_pedido") {
-$(this).val(1)
-}else{
-$(this).val("")
+  $(".modal_anotar_pedido input[type='text']").each(function () {
+    if ($(this).attr("id") == "quantidade_produto_pedido") {
+      $(this).val(1)
+    } else {
+      $(this).val("")
 
-}
-})
+    }
+  })
 
-$(".modal_anotar_pedido tbody").children().remove()
-var dataAtual = new Date();
- var dataFutura = new Date();
+  $(".modal_anotar_pedido tbody").children().remove()
+  var dataAtual = new Date();
+  var dataFutura = new Date();
   dataFutura.setMinutes(dataFutura.getMinutes() + 30);
-$('#data_pedido').val(formatoDataHora(dataAtual))
-$('#data_entrega').val(formatoDataHora(dataFutura))
-$("#finaliza_sangria_button").text("Finalizar Operação")
-$("#finaliza_sangria_button").removeAttr("disabled")
-$(".modal").css("display",'none')
-$("fundo").css("display",'none')
+  $('#data_pedido').val(formatoDataHora(dataAtual))
+  $('#data_entrega').val(formatoDataHora(dataFutura))
+  $("#finaliza_sangria_button").text("Finalizar Operação")
+  $("#finaliza_sangria_button").removeAttr("disabled")
+  $(".modal").css("display", 'none')
+  $("fundo").css("display", 'none')
 }
-$("#imprimir_nfe").click(function(){
-  $(".modal_imp_nfe").css("display","flex")
-  $("fundo").css("display","flex")
+$("#imprimir_nfe").click(function () {
+  $(".modal_imp_nfe").css("display", "flex")
+  $("fundo").css("display", "flex")
 
 })
 $("#cpf_cliente_nfe").mask("000.000.000-00");
 
-$('.modal_imp_nfe').submit(function(e){
+$('.modal_imp_nfe').submit(function (e) {
   e.preventDefault()
-  
-  if( $("#cpf_cliente_nfe").val() != "" &&!(TestaCPF($("#cpf_cliente_nfe").val().replace(/[.-]/g, '')))){
+
+  if ($("#cpf_cliente_nfe").val() != "" && !(TestaCPF($("#cpf_cliente_nfe").val().replace(/[.-]/g, '')))) {
     alert("CPF inválido!")
     return
   }
@@ -132,40 +183,40 @@ $('.modal_imp_nfe').submit(function(e){
   let nome_nfe = $("#nome_cliente_nfe").val()
   let cpf_nfe = $("#cpf_cliente_nfe").val()
   data = {
-    nome_cliente : nome_nfe,
-    cpf_nfe:cpf_nfe
+    nome_cliente: nome_nfe,
+    cpf_nfe: cpf_nfe
   }
-  if($("#imprimir_nfe").attr("data_venda") !=''){
+  if ($("#imprimir_nfe").attr("data_venda") != '') {
     data["data_venda"] = $("#imprimir_nfe").attr("data_venda")
   }
   console.log(data)
-  $.post('Models/post_receivers/gerarNFe.php',data,function(ret){
+  $.post('Models/post_receivers/gerarNFe.php', data, function (ret) {
 
     console.log(ret)
     dadosRecebidos = JSON.parse(ret)
 
- 
-    if(dadosRecebidos.data != ""){
-   
 
-    $.post('Models/post_receivers/imprimirNFe.php',{data:dadosRecebidos.data},function(ret){ 
-      console.log(ret)
-			if(ret = 'Sucesso!'){
-        alert('NFe gerada com sucesso! ')
-        $(".modal").each(function () {
-          $(this).css("display", "none");
-          $("fundo").css("display", "none");
-        });
-        $(".modal_imp_nfe button").html('IMPRIMIR')
-      }
-    })
-  }else{
-    alert("Erro ao gerar NFC-e. Favor tentar novamente, se o erro persistir favor contatar o suporte.")
-    return
-  }
+    if (dadosRecebidos.data != "") {
+
+
+      $.post('Models/post_receivers/imprimirNFe.php', { data: dadosRecebidos.data }, function (ret) {
+        console.log(ret)
+        if (ret = 'Sucesso!') {
+          alert('NFe gerada com sucesso! ')
+          $(".modal").each(function () {
+            $(this).css("display", "none");
+            $("fundo").css("display", "none");
+          });
+          $(".modal_imp_nfe button").html('IMPRIMIR')
+        }
+      })
+    } else {
+      alert("Erro ao gerar NFC-e. Favor tentar novamente, se o erro persistir favor contatar o suporte.")
+      return
+    }
   })
 })
-function cancelarUltimaVenda(){
+function cancelarUltimaVenda() {
   $.post("Models/post_receivers/delete_last_venda.php", data, function (ret) {
     console.log(ret)
   })
@@ -208,84 +259,78 @@ $("#ncm_produto_add").mask("0000.00.00")
 
 $(".modal_adicionar_produto").submit(function (e) {
   e.preventDefault();
- let data = {
+
+  let data = {
     nome: $("#nome_produto_add").val(),
     codigo: $("#codigo_barras_produto_add").val(),
     codigo_id: $("#codigo_produto_add").val(),
     preco: $("#preco_produto_add").val(),
     por_peso: $('input[name="produto_por_peso"]:checked').val(),
-    ncm:$("#ncm_produto_add").val(),
-    cst_icms:$("#cst_icms_produto_add").val(),
-    icms:$("#icms_produto_add").val(),
-    cst_pis_cofins:$("#cst_pis_cofins_produto_add").val(),
-    validade:$("#validade_produto_add").val()
+    ncm: $("#ncm_produto_add").val(),
+    cst_icms: $("#cst_icms_produto_add").val(),
+    icms: $("#icms_produto_add").val(),
+    cst_pis_cofins: $("#cst_pis_cofins_produto_add").val(),
+    validade: $("#validade_produto_add").val()
 
   };
-  let post_target = "Models/post_receivers/insert_produto.php"
-  
+  let post_target = ""
+  console.log(editando_produto)
+  if (editando_produto) {
+    data["produto"] = id_produto_editando
+    post_target = "Models/post_receivers/update_produto.php"
+  } else {
+    post_target = "Models/post_receivers/insert_produto.php"
+
+  }
   $.post(
-   post_target,
+    post_target,
     data,
     function (ret) {
       console.log(ret)
       console.log(data)
 
       if (ret.includes("Codigo_repetido")) {
-        
-        alert("Codigo do produto já existente, utilize um acima de "+$("#next_code_id").val());
+
+        alert("Codigo do produto já existente, utilize um acima de " + $("#next_code_id").val());
       } else if (ret.includes("Codigo_barras_repetido")) {
         alert("Codigo de barras do produto já existente");
       } else {
-  if(editando_produto){
-    $(".modal_produtos").css("display","flex")
-    $(".modal_adicionar_produto").css("display","none")
-        $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
-      console.log(ret)
-      $(".modal_produtos tbody").html(ret)
-  editarProduto()
-  
-    })
-  }else{
-    alert("Produto salvo, já pode cadastrar outro, ou fechar esta janela !")
-    $.post("Models/post_receivers/gerar_codigos.php", {}, (ret) => {
-      console.log(ret)
-      let retJSON = JSON.parse(ret)
-      $("#codigo_barras_produto_add").val(retJSON.codigo)
-      $("#codigo_produto_add").val(retJSON.codigo_id)
-  
-    })
+        if (editando_produto) {
+          $(".modal_produtos").css("display", "flex")
+          $(".modal_adicionar_produto").css("display", "none")
+          $.post('Models/post_receivers/select_produtos_modal_produtos.php', { produto: $("#pesquisar_produto").val() }, (ret) => {
+            console.log(ret)
+            $(".modal_produtos tbody").html(ret)
+            editarProduto()
 
-    $(".modal_adicionar_produto input").val("")
+          })
+        } else {
+          alert("Produto salvo, já pode cadastrar outro, ou fechar esta janela !")
+          $.post("Models/post_receivers/gerar_codigos.php", {}, (ret) => {
+            console.log(ret)
+            let retJSON = JSON.parse(ret)
+            $("#codigo_barras_produto_add").val(retJSON.codigo)
+            $("#codigo_produto_add").val(retJSON.codigo_id)
 
-    $.post('Models/post_receivers/select_produtos_modal_produtos.php',{produto:$("#pesquisar_produto").val()},(ret)=>{
-      console.log(ret)
-      $(".editar_produto").click(function() {
-          $("#novo_preco").focus()
-        $(".modal_alterar_valor").css("display", "flex")  
-        $(".modal_produtos").css("display","none")
-        let produto = $(this).attr("produto")
-        id_produto = produto
-        let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
-        $("#novo_preco").val(preco)
-      })
-      $(".modal_produtos tbody").html(ret)
-      $(".editar_produto").click(function() {
-          $("#novo_preco").focus()
-        $(".modal_alterar_valor").css("display", "flex")  
-        $(".modal_produtos").css("display","none")
-        let produto = $(this).attr("produto")
-        id_produto = produto
-        let preco = $(".produto_"+produto+" .preco").text().replace(",",".")
-        $("#novo_preco").val(preco)
-      })
-    })
+          })
 
-  }
+          $(".modal_adicionar_produto input").val("")
+
+          $.post('Models/post_receivers/select_produtos_modal_produtos.php', { produto: $("#pesquisar_produto").val() }, (ret) => {
+            console.log(ret)
+
+
+            $(".modal_produtos tbody").html(ret)
+            editarProduto()
+
+          })
+
+        }
       }
     }
   );
 });
-$(".inputs_radio_father #sim").click(function() {
+$(".inputs_radio_father #sim").click(function () {
   $.post("Models/post_receivers/gerar_codigos_balanca.php", {
     codigo: $("#codigo_produto_add").val()
   }, (ret) => {
@@ -295,29 +340,29 @@ $(".inputs_radio_father #sim").click(function() {
 
   })
 })
-$("#codigo_produto_add").blur(function(){
+$("#codigo_produto_add").blur(function () {
   let por_peso = $('input[name="produto_por_peso"]:checked').val()
-  if(por_peso == 1){
-  $.post("Models/post_receivers/gerar_codigos_balanca.php", {
-    codigo: $("#codigo_produto_add").val()
-  }, (ret) => {
-    $("#codigo_barras_produto_add").val(ret)
+  if (por_peso == 1) {
+    $.post("Models/post_receivers/gerar_codigos_balanca.php", {
+      codigo: $("#codigo_produto_add").val()
+    }, (ret) => {
+      $("#codigo_barras_produto_add").val(ret)
 
 
 
-  })
-  }else{
-  $.post("Models/post_receivers/gerar_codigos.php", {codigo : $("#codigo_produto_add").val() }, (ret) => {
-    console.log(ret)
-    let retJSON = JSON.parse(ret)
-    $("#codigo_barras_produto_add").val(retJSON.codigo)
-    $("#codigo_produto_add").val(retJSON.codigo_id)
+    })
+  } else {
+    $.post("Models/post_receivers/gerar_codigos.php", { codigo: $("#codigo_produto_add").val() }, (ret) => {
+      console.log(ret)
+      let retJSON = JSON.parse(ret)
+      $("#codigo_barras_produto_add").val(retJSON.codigo)
+      $("#codigo_produto_add").val(retJSON.codigo_id)
 
-  })
+    })
   }
 })
-$(".inputs_radio_father #nao").click(function() {
-  $.post("Models/post_receivers/gerar_codigos.php", {codigo: $("#codigo_produto_add").val()}, (ret) => {
+$(".inputs_radio_father #nao").click(function () {
+  $.post("Models/post_receivers/gerar_codigos.php", { codigo: $("#codigo_produto_add").val() }, (ret) => {
     console.log(ret)
     let retJSON = JSON.parse(ret)
     $("#codigo_barras_produto_add").val(retJSON.codigo)
@@ -325,7 +370,7 @@ $(".inputs_radio_father #nao").click(function() {
 
   })
 })
-$(".modal_adicionar_produto").submit(function () {});
+$(".modal_adicionar_produto").submit(function () { });
 $("#add_produto_opener").click(function () {
   editando_produto = false
   $(".modal_adicionar_produto input[type='text']").val("")
@@ -467,24 +512,24 @@ $("#salvar_caixa").click(function () {
 $(".modal_anotar_pedido").submit(function (e) {
   let permitir_pedido = true
   let esse_elemento = $(this)
-  $(".modal_anotar_pedido tbody input").each(function(){
-    if($(this).val() == ""){
+  $(".modal_anotar_pedido tbody input").each(function () {
+    if ($(this).val() == "") {
       alert("ERRO: Existem produtos sem valor!")
       permitir_pedido = false
     }
   })
-  if(!permitir_pedido){
+  if (!permitir_pedido) {
     console.log("val")
     return false
   }
 
-  if($(this).attr('fazendo_pedido') == "true"){
+  if ($(this).attr('fazendo_pedido') == "true") {
     console.log("fazendo_pedido")
 
     return false
   }
   $(this).attr("fazendo_pedido", true);
-  
+
   $("#finaliza_sangria_button").html(
     '<i class="fa-solid fa-spinner fa-spin-pulse"></i>'
   );
@@ -533,7 +578,7 @@ $(".modal_anotar_pedido").submit(function (e) {
     $.post("Models/post_receivers/insert_pedido.php", data, function (ret) {
       console.log(ret);
       $(esse_elemento).attr("fazendo_pedido", false);
-      
+
       resetPedido()
     });
   }
@@ -565,28 +610,27 @@ function editarPedido(esse) {
     // Construir a linha da tabela da modal com as informações do produto
     const newRow = `
         <tr preco_produto="${produto.preco
-          .toString()
-          .replace(",", ".")}" produto="${produto.id}" quantidade="${$(
-      "#quantidade_produto_pedido"
-    ).val()}" class="produto_pedido${produto.id}">
+        .toString()
+        .replace(",", ".")}" produto="${produto.id}" quantidade="${$(
+          "#quantidade_produto_pedido"
+        ).val()}" class="produto_pedido${produto.id}">
           <td>${$("#quantidade_produto_pedido").val()}</td>
           <td>${produto.id}</td>
-          <td><input value='${
-            produto.preco
-          }' type='text'class='oders_inputs input_valor_pedido_produto' produto='${produto.id.replace(
-      " ",
-      "_"
-    )}' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_${produto.id.replace(
-      " ",
-      "_"
-    )}'></td>
+          <td><input value='${produto.preco
+      }' type='text'class='oders_inputs input_valor_pedido_produto' produto='${produto.id.replace(
+        " ",
+        "_"
+      )}' onKeyUp='mascaraMoeda(this, event)' id='preco_produto_${produto.id.replace(
+        " ",
+        "_"
+      )}'></td>
           <td id='valor_produto_total_${produto.id}'>R$ ${(
-      parseFloat(produto.preco.replace(",", ".")) *
-      parseFloat(produto.quantidade)
-    )
-      .toFixed(2)
-      .toString()
-      .replace(".", ",")}</td>
+        parseFloat(produto.preco.replace(",", ".")) *
+        parseFloat(produto.quantidade)
+      )
+        .toFixed(2)
+        .toString()
+        .replace(".", ",")}</td>
           <td produto="${produto.id}" class="remove_item_pedido">-</td>
         </tr>
       `;
@@ -682,8 +726,8 @@ function alterarTabela() {
           var novaDataFormatada = novaData.format("DD/MM/YYYY");
           $(".tabela_header span").html(
             "Vendas no dia: <yellow>" +
-              novaDataFormatada +
-              "</yellow> <i onclick='gerarPDFFullFunction(this)' class='gerar_pdf fa-regular fa-file-pdf'></i>"
+            novaDataFormatada +
+            "</yellow> <i onclick='gerarPDFFullFunction(this)' class='gerar_pdf fa-regular fa-file-pdf'></i>"
           );
         } else {
           var dataMomentMAX = moment($("#data_maxima").val(), "YYYY-MM-DD");
@@ -692,10 +736,10 @@ function alterarTabela() {
           var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
           $(".tabela_header span").html(
             "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
-              dataMINFormatada +
-              "</yellow> até <yellow>" +
-              dataMAXFormatada +
-              "</yellow> <i onclick='gerarPDFFullFunction()'  class='gerar_pdf fa-regular fa-file-pdf'></i>"
+            dataMINFormatada +
+            "</yellow> até <yellow>" +
+            dataMAXFormatada +
+            "</yellow> <i onclick='gerarPDFFullFunction()'  class='gerar_pdf fa-regular fa-file-pdf'></i>"
           );
         }
       }
@@ -714,10 +758,10 @@ function alterarTabela() {
       var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
       $(".tabela_header span").html(
         "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
-          dataMINFormatada +
-          "</yellow> até <yellow>" +
-          dataMAXFormatada +
-          "</yellow> <i onclick='gerarPDFFullFunction()'class='gerar_pdf' class='fa-regular fa-file-pdf'></i>"
+        dataMINFormatada +
+        "</yellow> até <yellow>" +
+        dataMAXFormatada +
+        "</yellow> <i onclick='gerarPDFFullFunction()'class='gerar_pdf' class='fa-regular fa-file-pdf'></i>"
       );
     });
   }
@@ -740,10 +784,10 @@ $("switch").click(function () {
       var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
       $(".tabela_header span").html(
         "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
-          dataMINFormatada +
-          "</yellow> até <yellow>" +
-          dataMAXFormatada +
-          "</yellow> <i onclick='gerarPDFFullFunction()'class='gerar_pdf fa-regular fa-file-pdf'></i>"
+        dataMINFormatada +
+        "</yellow> até <yellow>" +
+        dataMAXFormatada +
+        "</yellow> <i onclick='gerarPDFFullFunction()'class='gerar_pdf fa-regular fa-file-pdf'></i>"
       );
     });
   } else {
@@ -766,10 +810,10 @@ $("switch").click(function () {
         var dataMINFormatada = dataMomentMIN.format("DD/MM/YYYY");
         $(".tabela_header span").html(
           "<i class='fa-solid fa-chart-line' id='show_graphs'></i> Vendas no período de: <yellow>" +
-            dataMINFormatada +
-            "</yellow> até <yellow>" +
-            dataMAXFormatada +
-            "</yellow> <i onclick='gerarPDFFullFunction()' class='gerar_pdf fa-regular fa-file-pdf'></i>"
+          dataMINFormatada +
+          "</yellow> até <yellow>" +
+          dataMAXFormatada +
+          "</yellow> <i onclick='gerarPDFFullFunction()' class='gerar_pdf fa-regular fa-file-pdf'></i>"
         );
       }
     );
